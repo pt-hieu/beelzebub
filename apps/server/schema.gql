@@ -1,0 +1,13 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type ConfigModel {
+  unique: Boolean!
+  display_name: String!
+  avatar: String!
+}
+
+type Query {
+  config: ConfigModel!
+}

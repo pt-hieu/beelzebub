@@ -1,14 +1,17 @@
-import { Module } from '@nestjs/common';
-import { GraphQLModule } from '@nestjs/graphql';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { Module } from '@nestjs/common'
+import { GraphQLModule } from '@nestjs/graphql'
+import { TypeOrmModule } from '@nestjs/typeorm'
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
+import { ConfigModule } from './config/config.module'
+import { isDev } from './misc/env'
 
 @Module({
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
+      autoSchemaFile: `schema.gql`,
+      debug: isDev(),
+      playground: isDev(),
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -18,12 +21,11 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
       entities: [],
-      synchronize: process.env.NODE_ENV !== 'production',
+      synchronize: isDev(),
       autoLoadEntities: true,
       logging: ['error', 'migration', 'schema'],
     }),
+    ConfigModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}

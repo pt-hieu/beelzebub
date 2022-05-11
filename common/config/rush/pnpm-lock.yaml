@@ -42,6 +42,7 @@ importers:
       '@typescript-eslint/eslint-plugin': ^5.0.0
       '@typescript-eslint/parser': ^5.0.0
       apollo-server-express: ~3.7.0
+      dotenv: ~16.0.1
       eslint: ^8.0.1
       eslint-config-prettier: ^8.3.0
       eslint-plugin-prettier: ^4.0.0
@@ -68,6 +69,7 @@ importers:
       '@nestjs/platform-express': 8.4.4_u6bxr3c7htwmhq2t5wi3k6ht4y
       '@nestjs/typeorm': 8.0.3_s6kf2wxaqx7c7ghapepprqoxna
       apollo-server-express: 3.7.0_graphql@16.5.0
+      dotenv: 16.0.1
       graphql: 16.5.0
       graphql-tools: 8.2.9_graphql@16.5.0
       pg: 8.7.3
