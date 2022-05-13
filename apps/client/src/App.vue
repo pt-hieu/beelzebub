@@ -2,8 +2,9 @@
 import { gql } from 'graphql-tag'
 import { useQuery } from '@vue/apollo-composable'
 import { RouterView } from 'vue-router'
+import type { Model } from '@black/share'
 
-const config = useQuery(gql`
+const { result } = useQuery<{ config: Model.Config }>(gql`
   query GetConfig {
     config {
       display_name
@@ -14,7 +15,7 @@ const config = useQuery(gql`
 </script>
 
 <template>
-  {{ config.result }}
+  {{ result?.config.display_name }}
   <router-view />
 </template>
 
