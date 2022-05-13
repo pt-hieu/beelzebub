@@ -11,7 +11,13 @@
   "dependencies": {
     "@tauri-apps/api": "^1.0.0-rc.5",
     "vue": "^3.2.33",
-    "vue-router": "~4.0.15"
+    "vue-router": "~4.0.15",
+    "pinia": "~2.0.14",
+    "apollo-boost": "~0.4.9",
+    "graphql": "~16.5.0",
+    "@apollo/client": "~3.6.2",
+    "graphql-tag": "~2.12.6",
+    "@vue/apollo-composable": "~4.0.0-alpha.17"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1.0.0-rc.10",
