@@ -17,4 +17,8 @@ export class ConfigModel extends BaseModel implements Model.Config {
   @Field()
   @Column()
   avatar: string
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  github_token: string
 }

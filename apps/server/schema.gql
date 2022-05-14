@@ -9,6 +9,7 @@ type ConfigModel {
   unique: Boolean!
   display_name: String!
   avatar: String!
+  github_token: String
 }
 
 """
@@ -37,9 +38,16 @@ type Query {
 }
 
 type Mutation {
+  updateConfig(updateData: UpdateConfig!): ConfigModel!
   createTodo(createTodo: CreateTodo!): TodoModel!
   updateTodo(updateTodo: UpdateTodo!, id: String!): TodoModel!
   deleteTodo(id: String!): TodoModel!
+}
+
+input UpdateConfig {
+  display_name: String
+  avatar: String
+  github_token: String
 }
 
 input CreateTodo {
