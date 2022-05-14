@@ -4,12 +4,17 @@ import router from './router'
 import { createPinia } from 'pinia'
 import { ApolloClient, InMemoryCache } from '@apollo/client/core'
 import { DefaultApolloClient } from '@vue/apollo-composable'
+import { plugin, defaultConfig } from '@formkit/vue'
+import { generateClasses } from '@formkit/themes'
+import theme from './theme'
 
 const cache = new InMemoryCache()
 const apolloClient = new ApolloClient({
   cache,
   uri: `${import.meta.env.VITE_API}/graphql`,
 })
+
+const classes = generateClasses(theme)
 
 createApp({
   setup() {
@@ -18,5 +23,13 @@ createApp({
   render: () => h(App),
 })
   .use(router)
+  .use(
+    plugin,
+    defaultConfig({
+      config: {
+        classes,
+      },
+    }),
+  )
   .use(createPinia())
   .mount('#app')
