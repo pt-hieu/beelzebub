@@ -3,8 +3,8 @@ import { BaseModel } from 'src/misc/base.model'
 import { Column, Entity } from 'typeorm'
 import { Model } from '@black/share'
 
-@Entity()
 @ObjectType()
+@Entity({ name: 'config' })
 export class ConfigModel extends BaseModel implements Model.Config {
   @Field()
   @Column({ type: 'boolean', default: true, unique: true })

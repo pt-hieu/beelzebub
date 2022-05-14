@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
 import { ConfigModule } from './config/config.module'
 import { isDev } from './misc/env'
+import { TodoModule } from './todo/todo.module'
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { isDev } from './misc/env'
       logging: ['error', 'migration', 'schema'],
     }),
     ConfigModule,
+    TodoModule,
   ],
 })
 export class AppModule {}

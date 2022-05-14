@@ -1,21 +1,22 @@
-import { Model } from '@black/share';
-import { Field } from '@nestjs/graphql';
+import { Model } from '@black/share'
+import { Field, ObjectType } from '@nestjs/graphql'
 import {
   CreateDateColumn,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-} from 'typeorm';
+} from 'typeorm'
 
+@ObjectType()
 export abstract class BaseModel implements Model.Base {
   @Field()
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id: string
 
   @Field()
   @CreateDateColumn()
-  created_at: Date;
+  created_at: Date
 
   @Field()
   @UpdateDateColumn()
-  updated_at: Date;
+  updated_at: Date
 }

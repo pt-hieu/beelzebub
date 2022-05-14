@@ -3,11 +3,55 @@
 # ------------------------------------------------------
 
 type ConfigModel {
+  id: String!
+  created_at: DateTime!
+  updated_at: DateTime!
   unique: Boolean!
   display_name: String!
   avatar: String!
 }
 
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type TodoModel {
+  id: String!
+  created_at: DateTime!
+  updated_at: DateTime!
+  title: String
+  content: String!
+  categorization: [TodoCategorization!]!
+  deadline: DateTime
+}
+
+enum TodoCategorization {
+  URGENT
+  IMPORTANT
+}
+
 type Query {
   config: ConfigModel!
+  todoes: [TodoModel!]!
+}
+
+type Mutation {
+  createTodo(createTodo: CreateTodo!): TodoModel!
+  updateTodo(updateTodo: UpdateTodo!, id: String!): TodoModel!
+  deleteTodo(id: String!): TodoModel!
+}
+
+input CreateTodo {
+  title: String
+  content: String!
+  categorization: [TodoCategorization!]!
+  deadline: DateTime
+}
+
+input UpdateTodo {
+  title: String
+  content: String
+  categorization: [TodoCategorization!]
+  deadline: DateTime
 }
