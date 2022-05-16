@@ -32,11 +32,15 @@ provide('config', result)
 @tailwind utilities;
 
 * {
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Baloo 2', sans-serif;
+}
+
+.fa {
+  @apply translate-y-[1px];
 }
 
 .button-base {
-  @apply px-3 py-2 rounded-md duration-100 border border-blue hover:border-blue-tint text-sm;
+  @apply px-5 py-3 rounded-xl duration-100 border border-blue hover:border-blue-tint text-sm;
 }
 
 .button {
@@ -45,5 +49,9 @@ provide('config', result)
 
 .button-2nd {
   @apply text-blue hover:text-blue-tint  button-base;
+}
+
+.button-3rd {
+  @apply button-2nd border-none
 }
 </style>

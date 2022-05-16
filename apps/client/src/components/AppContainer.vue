@@ -21,14 +21,14 @@ watch(configModal, () => {
 
 <template>
   <header
-    class="h-[60px] bg-blue grid grid-cols-[2fr,6fr,2fr] gap-2 place-content-center text-white px-[60px]"
+    class="h-[60px] grid grid-cols-[2fr,6fr,2fr] gap-2 place-content-center px-[60px] border-b border-blue/20"
   >
     <div></div>
     <div class="flex justify-center gap-2 h-full">
       <router-link
         v-for="route in routes"
-        :class="`py-2 px-4 hover:bg-blue-tint/40 ${
-          currentRoute.path === route.path ? `!bg-blue-tint` : ``
+        :class="`py-2 px-4 hover:bg-blue-tint/40 hover:text-white text-blue ${
+          currentRoute.path === route.path ? `!bg-blue-tint !text-white` : ``
         } rounded-md duration-100 ease-in-out`"
         :to="route.path"
         :key="route.path"
@@ -47,21 +47,23 @@ watch(configModal, () => {
         <config ref="configRef" @submit="configModal = false" />
       </modal-vue>
 
-      <div>Hi {{ config?.config.display_name }}. You look good!</div>
+      <div class="text-blue">
+        Hi {{ config?.config.display_name }}. You look good!
+      </div>
 
       <dropdown-vue>
         <img
           :src="config?.config.avatar"
-          class="w-8 aspect-square rounded-full"
+          class="w-8 aspect-square rounded-full translate-y-1"
         />
 
         <template #overlay>
           <div
-            class="min-w-[200px] rounded-md bg-blue-shade flex gap-2 flex-col py-2"
+            class="min-w-[200px] rounded-md bg-white border border-blue/30 flex gap-2 flex-col py-2 text-blue shadow"
           >
             <button
               @click="configModal = true"
-              class="py-2 px-3 w-full text-left hover:bg-blue"
+              class="py-2 px-3 w-full text-left hover:bg-blue hover:text-white duration-100"
             >
               <span class="fa fa-cog mr-2" />Settings
             </button>

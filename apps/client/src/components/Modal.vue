@@ -17,22 +17,22 @@ const emit = defineEmits(['close', 'ok'])
     >
       <div
         @click="$event.stopPropagation()"
-        class="bg-white rounded-md min-w-[450px] p-5 shadow-md"
+        class="bg-white rounded-lg min-w-[450px] p-5 shadow-md"
       >
         <slot name="header"> </slot>
 
-        <div>
+        <div class="max-h-[300px] overflow-auto px-2">
           <slot />
         </div>
 
         <slot name="footer">
-          <div class="flex gap-2 items-center justify-end mt-4">
+          <div
+            class="flex gap-2 items-center justify-end mt-4 border-t border-black/10 pt-4"
+          >
+            <button class="button-3rd" @click="emit('close')">Cancel</button>
+
             <button class="button" @click="emit('ok')">
               <span class="fa fa-check mr-2" />{{ props.okText || 'Submit' }}
-            </button>
-
-            <button class="button-2nd" @click="emit('close')">
-              <span class="fa fa-times mr-2" />Cancel
             </button>
           </div>
         </slot>
