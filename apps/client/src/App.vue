@@ -40,7 +40,7 @@ provide('config', result)
 }
 
 .button-base {
-  @apply px-5 py-3 rounded-xl duration-100 border border-blue hover:border-blue-tint text-sm;
+  @apply px-5 py-3 rounded-xl duration-100 border border-blue hover:border-blue-tint text-sm hover:shadow-md shadow-blue;
 }
 
 .button {
@@ -52,6 +52,6 @@ provide('config', result)
 }
 
 .button-3rd {
-  @apply button-2nd border-none
+  @apply button-2nd border-none;
 }
 </style>

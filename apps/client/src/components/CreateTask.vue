@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { reactive } from 'vue'
+import { reactive, unref } from 'vue'
 import { FormKit, submitForm, reset } from '@formkit/vue'
 import { useMutation } from '@vue/apollo-composable'
 import { Model } from '@black/share'
@@ -28,16 +28,12 @@ onDone(() => {
 
 const submit = (data: any) => {
   const dto: Model.Todo = data
-  dto.categorization = dto.categorization.map(
-    (e) => e.toLocaleUpperCase() as Model.TodoCategorization,
-  )
-
   mutate({ input: dto })
 }
 
 defineExpose({
   submit: () => submitForm(formId),
-  reset: () => reset(formId),
+  reset: () => reset(formId, unref(formData)),
 })
 </script>
 
