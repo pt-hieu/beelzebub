@@ -14,6 +14,7 @@ const configModal = ref(false)
 const configRef = ref<InstanceType<typeof Config> | null>(null)
 
 watch(configModal, () => {
+  if (!configModal.value) return
   configRef.value?.reset()
 })
 </script>
@@ -43,7 +44,7 @@ watch(configModal, () => {
         ok-text="Save"
         @ok="configRef?.submitConfig()"
       >
-        <config ref="configRef" />
+        <config ref="configRef" @submit="configModal = false" />
       </modal-vue>
 
       <div>Hi {{ config?.config.display_name }}. You look good!</div>
