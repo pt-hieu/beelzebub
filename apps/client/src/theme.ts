@@ -7,11 +7,11 @@ const textClassification = {
    
   `,
   input:
-    'w-full bg-transparent rounded-md outline-none focus:border-blue ring-0 formkit-invalid:border-red-500 text-gray-700 placeholder-gray-400',
+    'w-full bg-transparent rounded-md outline-none border-black/20 focus:border-blue/30 ring-0 formkit-invalid:border-red-500 text-gray-700 placeholder-gray-400',
 }
 const boxClassification = {
-  fieldset: 'max-w-md border border-gray-400 rounded-md px-2 pb-1',
-  legend: 'font-bold text-sm',
+  fieldset: '',
+  legend: 'inline-block mb-2 select-none formkit-invalid:text-red-500',
   wrapper: 'flex items-center mb-1 cursor-pointer',
   help: 'mb-2',
   input:
@@ -72,8 +72,8 @@ export default {
   text: textClassification,
   textarea: {
     ...textClassification,
-    input:
-      'block w-full h-32 px-3 border-none text-base text-gray-700 placeholder-gray-400 focus:shadow-outline',
+    // input:
+    //   'block w-full h-32 px-3 border-none text-base text-gray-700 placeholder-gray-400 focus:shadow-outline',
   },
   time: textClassification,
   url: textClassification,

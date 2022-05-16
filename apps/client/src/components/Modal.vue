@@ -21,7 +21,7 @@ const emit = defineEmits(['close', 'ok'])
       >
         <slot name="header"> </slot>
 
-        <div class="max-h-[300px] overflow-auto px-2">
+        <div class="max-h-[500px] overflow-auto px-2">
           <slot />
         </div>
 

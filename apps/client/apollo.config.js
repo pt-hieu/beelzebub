@@ -4,6 +4,6 @@ module.exports = {
       name: 'server',
       url: 'http://localhost:8000/graphql',
     },
-    includes: ['**/*.vue'],
+    includes: ['**/*.vue', './src/queries/**/*.ts'],
   },
 }

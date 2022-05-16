@@ -7,6 +7,7 @@ import { DefaultApolloClient } from '@vue/apollo-composable'
 import { plugin, defaultConfig } from '@formkit/vue'
 import { generateClasses } from '@formkit/themes'
 import theme from './theme'
+import { MotionPlugin } from '@vueuse/motion'
 
 const cache = new InMemoryCache()
 const apolloClient = new ApolloClient({
@@ -23,6 +24,7 @@ createApp({
   render: () => h(App),
 })
   .use(router)
+  .use(MotionPlugin)
   .use(
     plugin,
     defaultConfig({

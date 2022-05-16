@@ -23,7 +23,8 @@ watch(configModal, () => {
   <header
     class="h-[60px] grid grid-cols-[2fr,6fr,2fr] gap-2 place-content-center px-[60px] border-b border-blue/20"
   >
-    <div></div>
+    <div id="reserved" />
+
     <div class="flex justify-center gap-2 h-full">
       <router-link
         v-for="route in routes"
@@ -73,7 +74,7 @@ watch(configModal, () => {
     </div>
   </header>
 
-  <main class="px-[60px]">
+  <main class="px-[60px] pb-[80px]">
     <slot></slot>
   </main>
 </template>

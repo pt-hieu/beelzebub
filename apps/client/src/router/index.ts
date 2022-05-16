@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import HomeVue from '@/views/Home.vue'
+import TaskVue from '@/views/Task.vue'
 
 export const routes: RouteRecordRaw[] = [
   {
@@ -10,7 +11,7 @@ export const routes: RouteRecordRaw[] = [
   {
     path: '/tasks',
     name: 'Tasks',
-    component: HomeVue,
+    component: TaskVue,
   },
 ]
 

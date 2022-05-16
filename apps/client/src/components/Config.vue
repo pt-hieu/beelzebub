@@ -3,7 +3,7 @@ import type { Model } from '@black/share'
 import { FormKit, submitForm, reset } from '@formkit/vue'
 import { useMutation } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
-import { inject, reactive, unref, watchEffect, type Ref } from 'vue'
+import { inject, reactive, unref, type Ref } from 'vue'
 import { pick } from 'lodash'
 
 type ConfigDto = Pick<Model.Config, 'avatar' | 'display_name' | 'github_token'>
