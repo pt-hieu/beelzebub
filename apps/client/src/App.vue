@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { gql } from 'graphql-tag'
 import { useQuery } from '@vue/apollo-composable'
-import { RouterView } from 'vue-router'
 import type { Model } from '@black/share'
 import { provide } from 'vue'
-import AppContainer from './components/AppContainer.vue'
+import WelcomeVue from './components/Welcome.vue'
 
 const { result, loading } = useQuery<{ config: Model.Config }>(gql`
   query GetConfig {
@@ -21,9 +20,7 @@ provide('config', result)
 </script>
 
 <template>
-  <app-container v-if="!loading">
-    <router-view />
-  </app-container>
+  <welcome-vue v-if="!loading" />
 </template>
 
 <style>
