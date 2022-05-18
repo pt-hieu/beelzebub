@@ -1,5 +1,5 @@
 import { Model } from '@black/share'
-import { Field, InputType, PartialType } from '@nestjs/graphql'
+import { Field, InputType, PartialType, OmitType } from '@nestjs/graphql'
 import { IsDate, IsEnum, IsNotEmpty, IsOptional } from 'class-validator'
 
 @InputType()
@@ -24,4 +24,6 @@ export class CreateTodo implements Omit<Model.Todo, keyof Model.Base> {
 }
 
 @InputType()
-export class UpdateTodo extends PartialType(CreateTodo) {}
+export class UpdateTodo extends PartialType(
+  OmitType(CreateTodo, ['deadline']),
+) {}

@@ -1,9 +1,16 @@
-import { NotFoundException, ParseUUIDPipe } from '@nestjs/common'
+import {
+  NotFoundException,
+  ParseUUIDPipe,
+  UnprocessableEntityException,
+} from '@nestjs/common'
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { CreateTodo, UpdateTodo } from './todo.input'
 import { TodoModel } from './todo.model'
+import * as moment from 'moment'
+
+const EXTEND_VALUE = '2 days'
 
 @Resolver(() => TodoModel)
 export class TodoResolver {
@@ -34,6 +41,21 @@ export class TodoResolver {
     if (!todo) throw new NotFoundException('Todo not found')
 
     return this.repo.save({ ...todo, ...dto })
+  }
+
+  @Mutation(() => TodoModel)
+  async extendTodo(@Args('id', ParseUUIDPipe) id: string) {
+    const todo = await this.repo.findOne({ where: { id } })
+
+    if (!todo) throw new NotFoundException('Todo not found')
+    if (todo.extended)
+      throw new UnprocessableEntityException('Todo has already been extended')
+
+    return this.repo.save({
+      ...todo,
+      deadline: moment(todo.deadline).add(EXTEND_VALUE).toDate(),
+      extended: true,
+    })
   }
 
   @Mutation(() => TodoModel)

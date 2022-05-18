@@ -25,6 +25,7 @@ type TodoModel {
   content: String!
   categorization: [TodoCategorization!]!
   deadline: DateTime
+  extended: Boolean!
 }
 
 enum TodoCategorization {
@@ -41,6 +42,7 @@ type Mutation {
   updateConfig(updateData: UpdateConfig!): ConfigModel!
   createTodo(createTodo: CreateTodo!): TodoModel!
   updateTodo(updateTodo: UpdateTodo!, id: String!): TodoModel!
+  extendTodo(id: String!): TodoModel!
   deleteTodo(id: String!): TodoModel!
 }
 
@@ -61,5 +63,4 @@ input UpdateTodo {
   title: String
   content: String
   categorization: [TodoCategorization!]
-  deadline: DateTime
 }

@@ -25,4 +25,8 @@ export class TodoModel extends BaseModel implements Model.Todo {
   @Column({ nullable: true })
   @Field(() => Date, { nullable: true })
   deadline: Date | null
+
+  @Column({ default: false })
+  @Field({ defaultValue: false })
+  extended: boolean
 }
