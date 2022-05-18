@@ -13,7 +13,11 @@ export class TodoResolver {
 
   @Query(() => [TodoModel])
   todoes() {
-    return this.repo.find()
+    return this.repo.find({
+      order: {
+        deadline: 'ASC',
+      },
+    })
   }
 
   @Mutation(() => TodoModel)

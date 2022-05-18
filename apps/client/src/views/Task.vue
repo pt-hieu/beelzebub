@@ -1,17 +1,19 @@
 <script lang="ts" setup>
 import { useQuery } from '@vue/apollo-composable'
-import { ref, watch, watchEffect } from 'vue'
+import { ref, watch } from 'vue'
 import FooterVue from '../components/Footer.vue'
 import ModalVue from '../components/Modal.vue'
 import CreateTaskVue from '../components/CreateTask.vue'
 import { GET_TODOES, type GetTodoesRes } from '@/queries/todo'
-import { Model } from '@black/share'
-import TaskQuater from '../components/TaskQuater.vue'
+import TaskVue from '../components/Task.vue'
+import DropdownVue from '../components/Dropdown.vue'
 
 const { result } = useQuery<GetTodoesRes>(GET_TODOES)
 
 const createTask = ref(false)
 const createTaskRef = ref<InstanceType<typeof CreateTaskVue> | null>(null)
+
+const filter = ref<string[]>([])
 
 watch(createTask, () => {
   if (!createTask.value) return
@@ -20,37 +22,8 @@ watch(createTask, () => {
 </script>
 
 <template>
-  <div
-    class="grid grid-cols-[70px,1fr,1fr] grid-rows-[60px,1fr,1fr] min-h-[calc(100vh-140px)] py-8"
-  >
-    <div />
-
-    <div class="grid place-content-center">Important</div>
-    <div class="grid place-content-center">!Important</div>
-
-    <div class="grid place-content-center">Urgent</div>
-
-    <task-quater
-      :cate="[
-        Model.TodoCategorization.IMPORTANT,
-        Model.TodoCategorization.URGENT,
-      ]"
-      :todoes="result?.todoes || []"
-    />
-
-    <task-quater
-      :cate="[Model.TodoCategorization.URGENT]"
-      :todoes="result?.todoes || []"
-    />
-
-    <div class="grid place-content-center">!Urgent</div>
-
-    <task-quater
-      :cate="[Model.TodoCategorization.IMPORTANT]"
-      :todoes="result?.todoes || []"
-    />
-
-    <task-quater :cate="[]" :todoes="result?.todoes || []" />
+  <div class="py-8 grid grid-cols-[repeat(auto-fit,minmax(200px,350px))] gap-4">
+    <task-vue v-for="todo in result?.todoes" :key="todo.id" :data="todo" />
   </div>
 
   <modal-vue
@@ -63,6 +36,20 @@ watch(createTask, () => {
 
   <teleport to="#app">
     <footer-vue>
+      <dropdown-vue :hold="true">
+        <button class="button-2nd"><span class="fa fa-eye mr-2" />View</button>
+
+        <template #overlay>
+          <div class="border border-blue rounded-md bg-[#fff] shadow-sm p-4">
+            <form-kit
+              type="checkbox"
+              v-model="filter"
+              :options="['URGENT', 'IMPORTANT', '!URGENT', '!IMPORTANT']"
+            />
+          </div>
+        </template>
+      </dropdown-vue>
+
       <button @click="createTask = true" class="button-2nd">
         <span class="fa fa-plus mr-2" />Add Task
       </button>

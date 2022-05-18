@@ -1,8 +1,8 @@
 import { Base } from './base'
 
 export enum TodoCategorization {
-  URGENT = 'Urgent',
-  IMPORTANT = 'Important',
+  URGENT = 'URGENT',
+  IMPORTANT = 'IMPORTANT',
 }
 
 export interface Todo extends Base {
