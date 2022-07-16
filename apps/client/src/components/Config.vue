@@ -66,6 +66,7 @@ defineExpose({
       type="text"
     />
 
+    <form-kit label="Avatar" name="avatar" validation="required" type="text" />
     <form-kit label="Github Token" name="github_token" type="text" />
   </form-kit>
 </template>

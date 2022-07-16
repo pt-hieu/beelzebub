@@ -1,12 +1,13 @@
 <script lang="ts" setup>
 import { useQuery } from '@vue/apollo-composable'
-import { ref, watch } from 'vue'
+import { onMounted, onUnmounted, ref, watch } from 'vue'
 import FooterVue from '../components/Footer.vue'
 import ModalVue from '../components/Modal.vue'
 import CreateTaskVue from '../components/CreateTask.vue'
 import { GET_TODOES, type GetTodoesRes } from '@/queries/todo'
 import TaskVue from '../components/Task.vue'
 import DropdownVue from '../components/Dropdown.vue'
+import type { Model } from '@black/share'
 
 const { result } = useQuery<GetTodoesRes>(GET_TODOES)
 
@@ -19,11 +20,65 @@ watch(createTask, () => {
   if (!createTask.value) return
   createTaskRef.value?.reset()
 })
+
+const selectedTasks = ref<Model.Todo[]>([])
+const handleTaskClick = (
+  e: Event & { ctrlKey: boolean; altKey: boolean },
+  task: Model.Todo,
+  index: number,
+) => {
+  if (e.ctrlKey) {
+    selectedTasks.value.push(task)
+    return
+  }
+
+  if (e.altKey) {
+    selectedTasks.value = result.value?.todoes.slice(0, index + 1) || []
+    return
+  }
+
+  selectedTasks.value = [task]
+}
+
+const taskComponents = ref<Element[]>([])
+watch(
+  result,
+  () => {
+    taskComponents.value = Array.from(
+      document.querySelectorAll(`button[data-vue-type='task-component']`),
+    )
+  },
+  { flush: 'post', immediate: true },
+)
+
+const handleClickOutsideTask = (e: Event) => {
+  const target = e.target as HTMLElement
+  if (Array.from(taskComponents.value).some((comp) => comp.contains(target)))
+    return
+
+  selectedTasks.value = []
+}
+
+onMounted(() => {
+  document.addEventListener('click', handleClickOutsideTask)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleClickOutsideTask)
+})
 </script>
 
 <template>
   <div class="py-8 grid grid-cols-[repeat(auto-fit,minmax(200px,350px))] gap-4">
-    <task-vue v-for="todo in result?.todoes" :key="todo.id" :data="todo" />
+    <task-vue
+      v-for="(todo, index) in result?.todoes"
+      :key="todo.id"
+      :task-data="todo"
+      @click="handleTaskClick($event, todo, index)"
+      :is-selected="
+        selectedTasks.some((selectedTask) => selectedTask.id === todo.id)
+      "
+    />
   </div>
 
   <modal-vue

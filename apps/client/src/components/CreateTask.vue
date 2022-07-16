@@ -54,7 +54,7 @@ defineExpose({
     <form-kit
       label="Content"
       name="content"
-      validation="required|length:0,120"
+      validation="required|length:0,500"
       type="textarea"
     />
 

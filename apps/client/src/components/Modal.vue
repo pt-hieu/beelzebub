@@ -2,6 +2,7 @@
 type Props = {
   visible: boolean
   okText?: string
+  title?: string
 }
 
 const props = defineProps<Props>()
@@ -19,7 +20,13 @@ const emit = defineEmits(['close', 'ok'])
         @click="$event.stopPropagation()"
         class="bg-white rounded-lg min-w-[450px] p-5 shadow-md"
       >
-        <slot name="header"> </slot>
+        <slot name="header">
+          <div class="flex justify-between my-2 px-2">
+            <div>{{ props.title }}</div>
+
+            <button @click="emit('close')" class="fa fa-times" />
+          </div>
+        </slot>
 
         <div class="max-h-[500px] overflow-auto px-2">
           <slot />
