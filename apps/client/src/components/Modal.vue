@@ -44,12 +44,13 @@ watch(
           initial: { opacity: 0 },
           enter: {
             opacity: 1,
+            y: 0,
             transition: {
               delay: 130,
               duration: 100,
             },
           },
-          leave: { opacity: 0, transition: { duration: 100 } },
+          leave: { opacity: 0, y: 70, transition: { duration: 100 } },
         }"
       >
         <div

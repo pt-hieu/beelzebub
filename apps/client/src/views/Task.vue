@@ -67,7 +67,8 @@ const handleTaskClick = (
 const taskComponents = ref<Element[]>([])
 watch(
   result,
-  () => {
+  (newResult, oldResult) => {
+    if (newResult?.todoes.length === oldResult?.todoes.length) return
     taskComponents.value = Array.from(
       document.querySelectorAll(`button[data-vue-type='task-component']`),
     )
@@ -77,8 +78,7 @@ watch(
 
 const handleClickOutsideTask = (e: Event) => {
   const target = e.target as HTMLElement
-  if (Array.from(taskComponents.value).some((comp) => comp.contains(target)))
-    return
+  if (taskComponents.value.some((comp) => comp.contains(target))) return
 
   selectedTasks.value = []
 }
@@ -101,6 +101,7 @@ onUnmounted(() => {
       v-for="(todo, index) in result?.todoes"
       :key="todo.id"
       :task-data="todo"
+      :is-loading="loading"
       :is-selected="
         selectedTasks.some((selectedTask) => selectedTask.id === todo.id)
       "
@@ -114,7 +115,7 @@ onUnmounted(() => {
   >
     <span class="fas fa-folder-open text-4xl mb-4" />
     <span class="text-lg"> You don&apos;t have any tasks.</span>
-    <span>Enjoy the weekend bro!</span>
+    <span>Enjoy your day bro!</span>
   </div>
 
   <modal-vue
@@ -135,7 +136,11 @@ onUnmounted(() => {
         :flag="!!selectedTasks.length"
         :variants="leaveByWidthVariant"
       >
-        <button class="button-2nd danger-2nd">
+        <button
+          :class="`button-2nd danger-2nd ${
+            selectedTasks.length ? '' : 'pointer-events-none'
+          }`"
+        >
           <span class="fa fa-trash mr-2" />Delete{{
             selectedTasks.length > 1 ? ` ${selectedTasks.length}` : ''
           }}

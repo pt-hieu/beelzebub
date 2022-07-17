@@ -5,6 +5,7 @@ import moment from 'moment'
 type Props = {
   taskData: Model.Todo
   isSelected?: boolean
+  isLoading?: boolean
 }
 
 const { taskData, isSelected } = defineProps<Props>()

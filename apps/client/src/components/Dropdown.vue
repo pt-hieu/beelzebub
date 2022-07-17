@@ -29,7 +29,7 @@ const top = ref('0px')
 const left = ref('0px')
 const transform = ref('unset')
 
-watch([visible, props], ([visible, props]) => {
+watch([visible, props], ([visible]) => {
   if (!visible) return
 
   if (!target.value) return
@@ -39,6 +39,7 @@ watch([visible, props], ([visible, props]) => {
     document.documentElement.clientWidth || 0,
     window.innerWidth || 0,
   )
+
   const vh = Math.max(
     document.documentElement.clientHeight || 0,
     window.innerHeight || 0,

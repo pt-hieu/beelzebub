@@ -35,7 +35,8 @@ watch(configModal, () => {
           :to="route.path"
           :key="route.path"
         >
-          {{ route.name }}
+          <span v-if="route.name !== 'Home'">{{route.name}}</span>
+          <span v-else class="fa fa-home" />
         </router-link>
       </div>
 
