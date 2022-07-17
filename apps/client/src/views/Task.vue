@@ -4,20 +4,20 @@ import { onMounted, onUnmounted, ref, watch } from 'vue'
 import FooterVue from '../components/Footer.vue'
 import ModalVue from '../components/Modal.vue'
 import CreateTaskVue from '../components/CreateTask.vue'
-import { DELETE_TODO, GET_TODOES, type GetTodoesRes } from '@/queries/todo'
+import { DELETE_TODO, GET_TODOES, type GetTodoesRes } from '../queries/todo'
 import TaskVue from '../components/Task.vue'
 import DropdownVue from '../components/Dropdown.vue'
 import type { Model } from '@black/share'
-import ConfirmVue from '@/components/Confirm.vue'
+import ConfirmVue from '../components/Confirm.vue'
+import MotionVue from '../components/Motion.vue'
 
 const { result } = useQuery<GetTodoesRes>(GET_TODOES)
 
 const createTask = ref(false)
 const createTaskRef = ref<InstanceType<typeof CreateTaskVue> | null>(null)
-
 const selectedTasks = ref<Model.Todo[]>([])
-
 const confirmRef = ref<InstanceType<typeof ConfirmVue> | null>(null)
+
 const { mutate, onDone, loading } = useMutation(DELETE_TODO, {
   update: (cache, { data: { deleteTodo } }) => {
     let data = cache.readQuery<GetTodoesRes>({ query: GET_TODOES })
@@ -118,11 +118,35 @@ onUnmounted(() => {
       :message="`Are you sure you want to delete ${selectedTasks.length} tasks?`"
       @ok="deleteTasks"
     >
-      <button v-show="!!selectedTasks.length" class="button-2nd danger-2nd">
-        <span class="fa fa-trash mr-2" />Delete{{
-          selectedTasks.length > 1 ? ` ${selectedTasks.length}` : ''
-        }}
-      </button>
+      <motion-vue
+        :flag="!!selectedTasks.length"
+        :variants="{
+          initial: { opacity: 0, maxWidth: 0 },
+          enter: {
+            opacity: 1,
+            maxWidth: 999,
+            transition: {
+              opacity: {
+                delay: 300,
+                duration: 200,
+              },
+              maxWidth: {
+                duration: 500,
+              },
+            },
+          },
+          leave: {
+            opacity: 0,
+            maxWidth: 0,
+          },
+        }"
+      >
+        <button class="button-2nd danger-2nd">
+          <span class="fa fa-trash mr-2" />Delete{{
+            selectedTasks.length > 1 ? ` ${selectedTasks.length}` : ''
+          }}
+        </button>
+      </motion-vue>
     </confirm-vue>
 
     <dropdown-vue :hold="true">
