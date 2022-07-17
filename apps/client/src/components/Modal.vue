@@ -28,7 +28,7 @@ const emit = defineEmits(['close', 'ok'])
           </div>
         </slot>
 
-        <div class="max-h-[500px] overflow-auto px-2">
+        <div class="max-h-[500px] min-h-[40px] overflow-auto px-2">
           <slot />
         </div>
 

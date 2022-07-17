@@ -36,6 +36,10 @@ provide('config', result)
   @apply translate-y-[1px];
 }
 
+.danger-2nd {
+  @apply !text-red-600 !border-red-600 !shadow-red-200
+}
+
 .button-base {
   @apply px-5 py-3 rounded-xl duration-100 border border-blue hover:border-blue-tint text-sm hover:shadow-md shadow-blue;
 }

@@ -63,6 +63,7 @@ export class TodoResolver {
     const todo = await this.repo.findOne({ where: { id } })
     if (!todo) throw new NotFoundException('Todo not found')
 
-    return this.repo.remove(todo)
+    const result = await this.repo.remove(todo)
+    return { ...result, id }
   }
 }
