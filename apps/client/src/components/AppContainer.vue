@@ -75,7 +75,9 @@ watch(configModal, () => {
       </div>
     </header>
 
-    <main class="px-[60px] pb-[80px]">
+    <main
+      class="px-[60px] pb-[80px] h-[clamp(0px,calc(100vh-140px),calc(100vh-140px))]"
+    >
       <slot></slot>
     </main>
   </div>

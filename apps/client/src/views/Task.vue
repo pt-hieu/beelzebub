@@ -10,6 +10,7 @@ import DropdownVue from '../components/Dropdown.vue'
 import type { Model } from '@black/share'
 import ConfirmVue from '../components/Confirm.vue'
 import MotionVue from '../components/Motion.vue'
+import { leaveByWidthVariant } from '../variants/leave-by-width'
 
 const { result } = useQuery<GetTodoesRes>(GET_TODOES)
 
@@ -92,7 +93,10 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="py-8 grid grid-cols-[repeat(auto-fit,minmax(200px,350px))] gap-4">
+  <div
+    v-if="!!result?.todoes.length"
+    class="py-8 grid grid-cols-[repeat(auto-fit,minmax(200px,350px))] gap-4"
+  >
     <task-vue
       v-for="(todo, index) in result?.todoes"
       :key="todo.id"
@@ -102,6 +106,15 @@ onUnmounted(() => {
         selectedTasks.some((selectedTask) => selectedTask.id === todo.id)
       "
     />
+  </div>
+
+  <div
+    v-else
+    class="h-full grid place-content-center text-blue opacity-50 text-center"
+  >
+    <span class="fas fa-folder-open text-4xl mb-4" />
+    <span class="text-lg"> You dont have any tasks.</span>
+    <span>Enjoy the weekend bro!</span>
   </div>
 
   <modal-vue
@@ -120,26 +133,7 @@ onUnmounted(() => {
     >
       <motion-vue
         :flag="!!selectedTasks.length"
-        :variants="{
-          initial: { opacity: 0, maxWidth: 0 },
-          enter: {
-            opacity: 1,
-            maxWidth: 999,
-            transition: {
-              opacity: {
-                delay: 300,
-                duration: 200,
-              },
-              maxWidth: {
-                duration: 500,
-              },
-            },
-          },
-          leave: {
-            opacity: 0,
-            maxWidth: 0,
-          },
-        }"
+        :variants="leaveByWidthVariant"
       >
         <button class="button-2nd danger-2nd">
           <span class="fa fa-trash mr-2" />Delete{{
