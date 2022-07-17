@@ -101,10 +101,10 @@ onUnmounted(() => {
       v-for="(todo, index) in result?.todoes"
       :key="todo.id"
       :task-data="todo"
-      @click="handleTaskClick($event, todo, index)"
       :is-selected="
         selectedTasks.some((selectedTask) => selectedTask.id === todo.id)
       "
+      @click="handleTaskClick($event, todo, index)"
     />
   </div>
 
@@ -113,7 +113,7 @@ onUnmounted(() => {
     class="h-full grid place-content-center text-blue opacity-50 text-center"
   >
     <span class="fas fa-folder-open text-4xl mb-4" />
-    <span class="text-lg"> You dont have any tasks.</span>
+    <span class="text-lg"> You don&apos;t have any tasks.</span>
     <span>Enjoy the weekend bro!</span>
   </div>
 

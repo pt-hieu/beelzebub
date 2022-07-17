@@ -83,7 +83,7 @@ watch([visible, props], ([visible, props]) => {
     <div
       :style="{ top, left, transform }"
       v-show="visible"
-      class="absolute"
+      class="absolute z-[1000]"
       ref="overlay"
     >
       <slot name="overlay" />

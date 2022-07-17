@@ -13,6 +13,7 @@ const motionTarget = ref<HTMLDivElement | null>(null)
 const motion = useMotion(motionTarget, props.variants)
 
 defineExpose({ motion })
+const emit = defineEmits(['leaveDone'])
 
 watch(
   () => props.flag,
@@ -22,7 +23,7 @@ watch(
       return
     }
 
-    motion.leave(() => {})
+    motion.leave(() => emit('leaveDone'))
   },
   { immediate: true },
 )

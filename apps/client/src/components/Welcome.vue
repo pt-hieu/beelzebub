@@ -34,6 +34,7 @@ onKeyDown('Enter', () => {
       ref="nextBtn"
       @click="next = true"
       class="button w-fit mx-auto mt-6"
+      autofocus
     >
       <span class="fa fa-arrow-right" />
     </button>
