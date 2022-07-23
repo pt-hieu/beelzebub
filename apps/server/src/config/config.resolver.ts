@@ -1,22 +1,18 @@
 import { OnApplicationBootstrap } from '@nestjs/common'
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
-import { InjectRepository } from '@nestjs/typeorm'
-import { Repository } from 'typeorm'
 import { UpdateConfig } from './config.input'
 import { ConfigModel } from './config.model'
+import { ConfigService } from './config.service'
 
 @Resolver(() => ConfigModel)
 export class ConfigResolver implements OnApplicationBootstrap {
-  constructor(
-    @InjectRepository(ConfigModel)
-    private readonly repo: Repository<ConfigModel>,
-  ) {}
+  constructor(private configService: ConfigService) {}
 
   async onApplicationBootstrap() {
-    const config = await this.repo.find()
-    if (config.length) return
+    const configs = await this.configService.getMany()
+    if (configs.length) return
 
-    await this.repo.save({
+    await this.configService.save({
       display_name: 'Hieu',
       avatar: '',
     })
@@ -24,12 +20,12 @@ export class ConfigResolver implements OnApplicationBootstrap {
 
   @Query(() => ConfigModel)
   config() {
-    return this.repo.findOne({ where: { unique: true } })
+    return this.configService.get()
   }
 
   @Mutation(() => ConfigModel)
   async updateConfig(@Args('updateData') dto: UpdateConfig) {
-    const config = await this.repo.findOne({ where: { unique: true } })
-    return this.repo.save({ ...config, ...dto })
+    const config = await this.configService.get()
+    return this.configService.save({ ...config, ...dto })
   }
 }

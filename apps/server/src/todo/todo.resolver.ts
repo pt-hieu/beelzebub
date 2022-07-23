@@ -4,32 +4,23 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common'
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
-import { InjectRepository } from '@nestjs/typeorm'
-import { Repository } from 'typeorm'
 import { CreateTodo, UpdateTodo } from './todo.input'
 import { TodoModel } from './todo.model'
 import * as moment from 'moment'
-
-const EXTEND_VALUE = '2 days'
+import { TodoService } from './todo.service'
 
 @Resolver(() => TodoModel)
 export class TodoResolver {
-  constructor(
-    @InjectRepository(TodoModel) private readonly repo: Repository<TodoModel>,
-  ) {}
+  constructor(private todoService: TodoService) {}
 
   @Query(() => [TodoModel])
   todoes() {
-    return this.repo.find({
-      order: {
-        deadline: 'ASC',
-      },
-    })
+    return this.todoService.findWithDeadlineAsc()
   }
 
   @Mutation(() => TodoModel)
   createTodo(@Args('createTodo') dto: CreateTodo) {
-    return this.repo.save(dto)
+    return this.todoService.save(dto)
   }
 
   @Mutation(() => TodoModel)
@@ -37,33 +28,33 @@ export class TodoResolver {
     @Args('updateTodo') dto: UpdateTodo,
     @Args('id', ParseUUIDPipe) id: string,
   ) {
-    const todo = await this.repo.findOne({ where: { id } })
+    const todo = await this.todoService.findById(id)
     if (!todo) throw new NotFoundException('Todo not found')
 
-    return this.repo.save({ ...todo, ...dto })
+    return this.todoService.save({ ...todo, ...dto })
   }
 
   @Mutation(() => TodoModel)
   async extendTodo(@Args('id', ParseUUIDPipe) id: string) {
-    const todo = await this.repo.findOne({ where: { id } })
+    const todo = await this.todoService.findById(id)
 
     if (!todo) throw new NotFoundException('Todo not found')
     if (todo.extended)
       throw new UnprocessableEntityException('Todo has already been extended')
 
-    return this.repo.save({
+    return this.todoService.save({
       ...todo,
-      deadline: moment(todo.deadline).add(EXTEND_VALUE).toDate(),
+      deadline: moment(todo.deadline).add('2', 'days').toDate(),
       extended: true,
     })
   }
 
   @Mutation(() => TodoModel)
   async deleteTodo(@Args('id', ParseUUIDPipe) id: string) {
-    const todo = await this.repo.findOne({ where: { id } })
+    const todo = await this.todoService.findById(id)
     if (!todo) throw new NotFoundException('Todo not found')
 
-    const result = await this.repo.remove(todo)
+    const result = await this.todoService.remove(todo)
     return { ...result, id }
   }
 }
