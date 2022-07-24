@@ -72,18 +72,22 @@ importers:
     specifiers:
       '@black/share': workspace:*
       '@nestjs/apollo': ~10.0.11
+      '@nestjs/axios': ~0.1.0
       '@nestjs/cli': ^8.0.0
       '@nestjs/common': ^8.0.0
       '@nestjs/core': ^8.0.0
+      '@nestjs/event-emitter': ~1.3.0
       '@nestjs/graphql': ~10.0.11
       '@nestjs/platform-express': ^8.0.0
       '@nestjs/schematics': ^8.0.0
       '@nestjs/typeorm': ~8.0.3
+      '@types/axios': ~0.14.0
       '@types/express': ^4.17.13
       '@types/node': ^16.0.0
       '@typescript-eslint/eslint-plugin': ^5.0.0
       '@typescript-eslint/parser': ^5.0.0
       apollo-server-express: ~3.7.0
+      axios: ~0.27.2
       class-transformer: ~0.5.1
       class-validator: ~0.13.2
       dotenv: ~16.0.1
@@ -92,6 +96,7 @@ importers:
       eslint-plugin-prettier: ^4.0.0
       graphql: ~16.5.0
       graphql-tools: ~8.2.9
+      graphql-type-json: ~0.3.2
       moment: ~2.29.3
       pg: ~8.7.3
       prettier: ^2.3.2
@@ -108,17 +113,21 @@ importers:
     dependencies:
       '@black/share': link:../share
       '@nestjs/apollo': 10.0.11_ahcostka6nmyazfgkzdueia6p4
+      '@nestjs/axios': 0.1.0_ozyn6uy6pikqhtn6hfkzt5a5w4
       '@nestjs/common': 8.4.4_kgmvgmqc4iohdboj3f7yqhrie4
       '@nestjs/core': 8.4.4_wy6cne2gpevj2v6pvodnemcq2i
+      '@nestjs/event-emitter': 1.3.0_ri7uarpfhib2ateqzcw7uno7zy
       '@nestjs/graphql': 10.0.11_k3hgu2o5hgsr2u7xelgonpsove
       '@nestjs/platform-express': 8.4.4_u6bxr3c7htwmhq2t5wi3k6ht4y
       '@nestjs/typeorm': 8.0.3_s6kf2wxaqx7c7ghapepprqoxna
       apollo-server-express: 3.7.0_graphql@16.5.0
+      axios: 0.27.2
       class-transformer: 0.5.1
       class-validator: 0.13.2
       dotenv: 16.0.1
       graphql: 16.5.0
       graphql-tools: 8.2.9_graphql@16.5.0
+      graphql-type-json: 0.3.2_graphql@16.5.0
       moment: 2.29.3
       pg: 8.7.3
       reflect-metadata: 0.1.13
@@ -128,6 +137,7 @@ importers:
     devDependencies:
       '@nestjs/cli': 8.2.5
       '@nestjs/schematics': 8.0.11_typescript@4.6.4
+      '@types/axios': 0.14.0
       '@types/express': 4.17.13
       '@types/node': 16.11.34
       '@typescript-eslint/eslint-plugin': 5.23.0_c63nfttrfhylg3zmgcxfslaw44
@@ -2102,6 +2112,21 @@ packages:
       tslib: 2.4.0
     dev: false
 
+  /@nestjs/axios/0.1.0_ozyn6uy6pikqhtn6hfkzt5a5w4:
+    resolution: {integrity: sha512-b2TT2X6BFbnNoeteiaxCIiHaFcSbVW+S5yygYqiIq5i6H77yIU3IVuLdpQkHq8/EqOWFwMopLN8jdkUT71Am9w==}
+    peerDependencies:
+      '@nestjs/common': ^7.0.0 || ^8.0.0 || ^9.0.0
+      reflect-metadata: ^0.1.12
+      rxjs: ^6.0.0 || ^7.0.0
+    dependencies:
+      '@nestjs/common': 8.4.4_kgmvgmqc4iohdboj3f7yqhrie4
+      axios: 0.27.2
+      reflect-metadata: 0.1.13
+      rxjs: 7.5.5
+    transitivePeerDependencies:
+      - debug
+    dev: false
+
   /@nestjs/cli/8.2.5:
     resolution: {integrity: sha512-b5DzZ08q/6iWvLz+n2DhEyZ3rsOurN1ec1jYQaWC5DCVQoZCwyOew48bVf01kevTK4eZyQxPwuErf7HnFAc0oQ==}
     engines: {node: '>= 10.13.0', npm: '>= 6.11.0'}
@@ -2196,6 +2221,19 @@ packages:
       uuid: 8.3.2
     transitivePeerDependencies:
       - encoding
+    dev: false
+
+  /@nestjs/event-emitter/1.3.0_ri7uarpfhib2ateqzcw7uno7zy:
+    resolution: {integrity: sha512-1RrrI1wnYSDDwmp5lpPwqpicE2cx+diyDOY0cvCf/loQgcBrNCcP2MF19cbdlGKiRJBLvUDCvspPUwTrhry7Kw==}
+    peerDependencies:
+      '@nestjs/common': ^7.0.0 || ^8.0.0 || ^9.0.0
+      '@nestjs/core': ^7.0.0 || ^8.0.0 || ^9.0.0
+      reflect-metadata: ^0.1.12
+    dependencies:
+      '@nestjs/common': 8.4.4_kgmvgmqc4iohdboj3f7yqhrie4
+      '@nestjs/core': 8.4.4_wy6cne2gpevj2v6pvodnemcq2i
+      eventemitter2: 6.4.6
+      reflect-metadata: 0.1.13
     dev: false
 
   /@nestjs/graphql/10.0.11_k3hgu2o5hgsr2u7xelgonpsove:
@@ -2672,6 +2710,15 @@ packages:
     dependencies:
       '@types/node': 16.11.34
     dev: false
+
+  /@types/axios/0.14.0:
+    resolution: {integrity: sha512-KqQnQbdYE54D7oa/UmYVMZKq7CO4l8DEENzOKc4aBRwxCXSlJXGz83flFx5L7AWrOQnmuN3kVsRdt+GZPPjiVQ==}
+    deprecated: This is a stub types definition for axios (https://github.com/mzabriskie/axios). axios provides its own type definitions, so you don't need @types/axios installed!
+    dependencies:
+      axios: 0.27.2
+    transitivePeerDependencies:
+      - debug
+    dev: true
 
   /@types/babel__core/7.1.19:
     resolution: {integrity: sha512-WEOTgRsbYkvA/KCsDwVEGkd7WAr1e3g31VHQ8zy5gul/V1qKullU/BU5I68X5v7V3GnB9eotmom4v5a5gjxorw==}
@@ -4008,8 +4055,7 @@ packages:
     dev: false
 
   /asynckit/0.4.0:
-    resolution: {integrity: sha1-x57Zf380y48robyXkLzDZkdLS3k=}
-    dev: true
+    resolution: {integrity: sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==}
 
   /asyncro/3.0.0:
     resolution: {integrity: sha512-nEnWYfrBmA3taTiuiOoZYmgJ/CNrSoQLeLs29SeLcPu60yaw/mHDBHV0iOZ051fTvsTHxpCY+gXibqT9wbQYfg==}
@@ -4062,6 +4108,14 @@ packages:
     transitivePeerDependencies:
       - debug
     dev: false
+
+  /axios/0.27.2:
+    resolution: {integrity: sha512-t+yRIyySRTp/wua5xEr+z1q60QmLq8ABsS5O9Me1AsE5dfKqgnCFzwiCZZ/cGNd1lq4/7akDWMxdhVlucjmnOQ==}
+    dependencies:
+      follow-redirects: 1.15.0
+      form-data: 4.0.0
+    transitivePeerDependencies:
+      - debug
 
   /axobject-query/2.2.0:
     resolution: {integrity: sha512-Td525n+iPOOyUQIeBfcASuG6uJsDOITl7Mds5gFyerkWiX7qhUTdYUBlSgNMyVqtSJqwpt1kXGLdUt6SykLMRA==}
@@ -4678,7 +4732,6 @@ packages:
     engines: {node: '>= 0.8'}
     dependencies:
       delayed-stream: 1.0.0
-    dev: true
 
   /commander/2.20.3:
     resolution: {integrity: sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==}
@@ -4972,9 +5025,8 @@ packages:
     dev: true
 
   /delayed-stream/1.0.0:
-    resolution: {integrity: sha1-3zrhmayt+31ECqrgsp4icrJOxhk=}
+    resolution: {integrity: sha512-ZySD7Nf91aLB0RxL4KGrKHBXl7Eds1DAmEdcoVawXnLD7SDhpNgtuII2aAkg7a7QS41jxPSZ17p4VdGnMHk3MQ==}
     engines: {node: '>=0.4.0'}
-    dev: true
 
   /depd/1.1.2:
     resolution: {integrity: sha1-m81S4UwJd2PnSbJ0xDRu0uVgtak=}
@@ -5851,6 +5903,10 @@ packages:
     engines: {node: '>= 0.6'}
     dev: false
 
+  /eventemitter2/6.4.6:
+    resolution: {integrity: sha512-OHqo4wbHX5VbvlbB6o6eDwhYmiTjrpWACjF8Pmof/GTD6rdBNdZFNck3xlhqOiQFGCOoq3uzHvA0cQpFHIGVAQ==}
+    dev: false
+
   /eventemitter3/3.1.2:
     resolution: {integrity: sha512-tvtQIeLVHjDkJYnzf2dgVMxfuSGJeM/7UCG17TT4EumTfNtF+0nebF/4zWOIkCreAbtNqhGEboB6BWrwqNaw4Q==}
     dev: false
@@ -6175,7 +6231,6 @@ packages:
     peerDependenciesMeta:
       debug:
         optional: true
-    dev: false
 
   /for-in/1.0.2:
     resolution: {integrity: sha1-gQaNKVqBQuwKxybG4iAMMPttXoA=}
@@ -6228,7 +6283,6 @@ packages:
       asynckit: 0.4.0
       combined-stream: 1.0.8
       mime-types: 2.1.35
-    dev: true
 
   /formidable/2.0.1:
     resolution: {integrity: sha512-rjTMNbp2BpfQShhFbR3Ruk3qk2y9jKpvMW78nJgx8QKtxjDVrwbZG+wvDOmVbifHyOUOQJXxqEy6r0faRrPzTQ==}
@@ -6488,6 +6542,14 @@ packages:
       - graphql-ws
       - react
       - subscriptions-transport-ws
+    dev: false
+
+  /graphql-type-json/0.3.2_graphql@16.5.0:
+    resolution: {integrity: sha512-J+vjof74oMlCWXSvt0DOf2APEdZOCdubEvGDUAlqH//VBYcOYsGgRW7Xzorr44LvkjiuvecWc8fChxuZZbChtg==}
+    peerDependencies:
+      graphql: '>=0.8.0'
+    dependencies:
+      graphql: 16.5.0
     dev: false
 
   /graphql-ws/5.5.5_graphql@16.5.0:
