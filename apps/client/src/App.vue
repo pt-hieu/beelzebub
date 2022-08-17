@@ -56,3 +56,27 @@ provide('config', result)
   @apply button-2nd border-none;
 }
 </style>
+
+<style>
+/* Scroll bar stylings */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #5a7bb5;
+  border-radius: 2px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #7c95a4;
+}
+</style>

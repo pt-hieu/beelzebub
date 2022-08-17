@@ -14,7 +14,7 @@ const GETMANY_REPO_FIELDS = gql`
 `
 
 const GETONE_REPO_FIELDS = gql`
-  fragment RepoFields on RepoModel {
+  fragment GetOneRepoFields on RepoModel {
     id
     name
     data
@@ -35,7 +35,7 @@ export const GET_REPO = gql`
   ${GETONE_REPO_FIELDS}
   query GetOneRepoes($id: String!) {
     repo(id: $id) {
-      ...RepoFields
+      ...GetOneRepoFields
     }
   }
 `

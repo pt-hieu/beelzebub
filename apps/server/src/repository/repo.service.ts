@@ -18,7 +18,7 @@ export class RepoService {
   }
 
   getMany() {
-    return this.repoRepo.find()
+    return this.repoRepo.find({ order: { outdated: 'desc' } })
   }
 
   getOutdated(syncDate?: Date) {
