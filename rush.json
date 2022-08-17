@@ -394,7 +394,7 @@
     },
     {
       "packageName": "@black/share",
-      "projectFolder": "apps/share"
+      "projectFolder": "libs/share"
     },
     {
       "packageName": "@black/server",
