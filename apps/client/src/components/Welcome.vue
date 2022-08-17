@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { Model } from '@black/share'
+import type { Model } from '@beelzebub/types'
 import { inject, ref, type Ref } from 'vue'
 import { RouterView } from 'vue-router'
 import { onKeyDown } from '@vueuse/core'

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { gql } from 'graphql-tag'
 import { useQuery } from '@vue/apollo-composable'
-import type { Model } from '@black/share'
+import type { Model } from '@beelzebub/types'
 import { provide } from 'vue'
 import WelcomeVue from './components/Welcome.vue'
 
@@ -37,7 +37,7 @@ provide('config', result)
 }
 
 .danger-2nd {
-  @apply !text-red-600 !border-red-600 !shadow-red-200
+  @apply !text-red-600 !border-red-600 !shadow-red-200;
 }
 
 .button-base {

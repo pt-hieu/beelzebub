@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Model } from '@black/share'
+import type { Model } from '@beelzebub/types'
 import { inject, ref, watch, type Ref } from 'vue'
 import { useRouter, RouterLink } from 'vue-router'
 import DropdownVue from './Dropdown.vue'
@@ -35,7 +35,7 @@ watch(configModal, () => {
           :to="route.path"
           :key="route.path"
         >
-          <span v-if="route.name !== 'Home'">{{route.name}}</span>
+          <span v-if="route.name !== 'Home'">{{ route.name }}</span>
           <span v-else class="fa fa-home" />
         </router-link>
       </div>

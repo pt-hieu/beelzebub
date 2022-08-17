@@ -1,4 +1,4 @@
-import { Model } from '@black/share'
+import { Model } from '@beelzebub/types'
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql'
 import { BaseModel } from 'src/misc/base.model'
 import { Column, Entity } from 'typeorm'

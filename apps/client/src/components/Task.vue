@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { Model } from '@black/share'
+import type { Model } from '@beelzebub/types'
 import moment from 'moment'
 
 type Props = {

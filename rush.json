@@ -389,15 +389,15 @@
    */
   "projects": [
     {
-      "packageName": "@black/client",
+      "packageName": "@beelzebub/client",
       "projectFolder": "apps/client"
     },
     {
-      "packageName": "@black/share",
-      "projectFolder": "libs/share"
+      "packageName": "@beelzebub/types",
+      "projectFolder": "libs/types"
     },
     {
-      "packageName": "@black/server",
+      "packageName": "@beelzebub/server",
       "projectFolder": "apps/server"
     }
   ]

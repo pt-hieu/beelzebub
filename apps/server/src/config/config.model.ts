@@ -1,7 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql'
 import { BaseModel } from 'src/misc/base.model'
 import { Column, Entity } from 'typeorm'
-import { Model } from '@black/share'
+import { Model } from '@beelzebub/types'
 
 @ObjectType()
 @Entity({ name: 'config' })

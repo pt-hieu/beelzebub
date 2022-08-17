@@ -3,7 +3,7 @@ import { HttpService as AxiosService } from '@nestjs/axios'
 import { ConfigService } from 'src/config/config.service'
 import { catchError, first, lastValueFrom, map, Observable } from 'rxjs'
 import { AxiosResponse } from 'axios'
-import { GitHub } from '@black/share'
+import { GitHub } from '@beelzebub/types'
 
 @Injectable()
 export class GithubService {

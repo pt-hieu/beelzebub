@@ -2,7 +2,7 @@
 import { reactive, unref } from 'vue'
 import { FormKit, submitForm, reset } from '@formkit/vue'
 import { useMutation } from '@vue/apollo-composable'
-import { Model } from '@black/share'
+import { Model } from '@beelzebub/types'
 import moment from 'moment'
 import { GET_TODOES, CREATE_TODO, type GetTodoesRes } from '@/queries/todo'
 

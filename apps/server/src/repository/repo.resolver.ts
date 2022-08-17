@@ -1,4 +1,4 @@
-import { Event } from '@black/share'
+import { Event } from '@beelzebub/types'
 import { ParseUUIDPipe } from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'

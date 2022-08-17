@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { Model } from '@black/share'
+import type { Model } from '@beelzebub/types'
 import { FormKit, submitForm, reset } from '@formkit/vue'
 import { useMutation } from '@vue/apollo-composable'
 import gql from 'graphql-tag'

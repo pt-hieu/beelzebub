@@ -1,4 +1,4 @@
-import { Model } from '@black/share'
+import { Model } from '@beelzebub/types'
 import { Field, ObjectType } from '@nestjs/graphql'
 import GraphQLJSON from 'graphql-type-json'
 import { BaseModel } from 'src/misc/base.model'

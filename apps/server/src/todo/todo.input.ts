@@ -1,4 +1,4 @@
-import { Model } from '@black/share'
+import { Model } from '@beelzebub/types'
 import { Field, InputType, PartialType, OmitType } from '@nestjs/graphql'
 import { IsDate, IsEnum, IsNotEmpty, IsOptional } from 'class-validator'
 

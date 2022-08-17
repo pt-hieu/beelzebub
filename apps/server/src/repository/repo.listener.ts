@@ -1,4 +1,4 @@
-import { Event } from '@black/share'
+import { Event } from '@beelzebub/types'
 import { Injectable } from '@nestjs/common'
 import { OnEvent } from '@nestjs/event-emitter'
 import { AppSubscription } from 'src/app.subscription'

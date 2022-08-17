@@ -1,4 +1,4 @@
-import type { Model } from '@black/share'
+import type { Model } from '@beelzebub/types'
 import gql from 'graphql-tag'
 
 export type GetRepoesRes = {
