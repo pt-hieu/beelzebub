@@ -8,3 +8,7 @@ client:
 sv: server
 server:
 	cd apps/server && rushx start:dev
+
+pg: postgres
+postgres:
+	docker exec -it postgres psql -U postgres
