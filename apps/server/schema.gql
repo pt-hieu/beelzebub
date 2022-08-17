@@ -39,6 +39,8 @@ type RepoModel {
   updated_at: DateTime!
   name: String!
   data: JSON!
+  synced_at: DateTime!
+  outdated: Boolean!
 }
 
 """
@@ -60,6 +62,7 @@ type Mutation {
   extendTodo(id: String!): TodoModel!
   deleteTodo(id: String!): TodoModel!
   syncRepo: [RepoModel!]!
+  purgeOutdatedRepos: [RepoModel!]!
 }
 
 input UpdateConfig {

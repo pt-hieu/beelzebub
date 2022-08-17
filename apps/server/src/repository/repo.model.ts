@@ -19,7 +19,7 @@ export class RepoModel extends BaseModel implements Model.Repo {
   @Field()
   synced_at: Date
 
-  @Column()
+  @Column({ default: false })
   @Field()
   outdated: boolean
 }
