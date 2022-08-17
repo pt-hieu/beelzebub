@@ -15,6 +15,10 @@ export class RepoModel extends BaseModel implements Model.Repo {
   @Field(() => GraphQLJSON)
   data: Record<string, unknown>
 
+  @Column({ type: 'jsonb', default: {} })
+  @Field(() => GraphQLJSON)
+  collabs: Record<string, unknown>[]
+
   @Column()
   @Field()
   synced_at: Date

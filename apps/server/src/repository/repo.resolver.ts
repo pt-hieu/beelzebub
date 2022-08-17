@@ -1,28 +1,65 @@
 import { Event } from '@beelzebub/types'
-import { ParseUUIDPipe } from '@nestjs/common'
+import { NotFoundException, ParseUUIDPipe } from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 import { GithubService } from 'src/http/github.service'
 import { RepoSyncedEvent } from './repo.event'
+import { UpdateRepositoryDto } from './repo.input'
 import { RepoModel } from './repo.model'
 import { RepoService } from './repo.service'
 
 @Resolver(() => RepoModel)
 export class RepoResolver {
   constructor(
-    private repoSerivce: RepoService,
+    private repoService: RepoService,
     private githubService: GithubService,
     private eventEmitter: EventEmitter2,
   ) {}
 
+  private async getOneById(id: string) {
+    const repo = await this.repoService.getOneById(id)
+    if (!repo) throw new NotFoundException('Repo not found')
+
+    return repo
+  }
+
   @Query(() => [RepoModel])
   repoes() {
-    return this.repoSerivce.getMany()
+    return this.repoService.getMany()
   }
 
   @Query(() => RepoModel)
   repo(@Args('id', ParseUUIDPipe) id: string) {
-    return this.repoSerivce.getOneById(id)
+    return this.repoService.getOneById(id)
+  }
+
+  @Mutation(() => RepoModel)
+  async updateRepo(
+    @Args('id', ParseUUIDPipe) repoId: string,
+    @Args('dto') dto: UpdateRepositoryDto,
+  ) {
+    const repo = await this.getOneById(repoId)
+
+    const updatedRepo = await this.githubService.updateRepo(repo.name, dto)
+    return this.repoService.updateGitHubRepository(repoId, updatedRepo)
+  }
+
+  @Mutation(() => RepoModel)
+  async deleteRepo(@Args('id', ParseUUIDPipe) repoId: string) {
+    const repo = await this.getOneById(repoId)
+
+    await this.githubService.deleteRepository(repo.name)
+    return this.repoService.delete(repo)
+  }
+
+  @Mutation(() => RepoModel)
+  async fetchCollaborators(@Args('id', ParseUUIDPipe) repoId: string) {
+    const repo = await this.getOneById(repoId)
+    const collabs = await this.githubService.fetchCollaborators(repo.name)
+
+    return this.repoService
+      .massSave([{ ...repo, collabs: collabs.map((col) => ({ ...col })) }])
+      .then((res) => res[0])
   }
 
   @Mutation(() => [RepoModel])
@@ -30,7 +67,7 @@ export class RepoResolver {
     const repos = await this.githubService.getRepositories()
 
     const syncDate = new Date()
-    const syncResults = await this.repoSerivce.upsertOnName(
+    const syncResults = await this.repoService.upsertOnName(
       repos.map((repo) => ({
         name: repo.full_name,
         data: repo,
@@ -46,7 +83,7 @@ export class RepoResolver {
 
   @Mutation(() => [RepoModel])
   async purgeOutdatedRepos() {
-    const outdated = await this.repoSerivce.getOutdated()
-    return this.repoSerivce.massDelete(outdated)
+    const outdated = await this.repoService.getOutdated()
+    return this.repoService.massDelete(outdated)
   }
 }

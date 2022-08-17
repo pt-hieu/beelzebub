@@ -1,3 +1,5 @@
+import { License, Permissions } from './utils'
+
 export type Repository = {
   id: number
   node_id: string
@@ -86,17 +88,10 @@ export type Repository = {
   watchers: number
 }
 
-export type Permissions = {
-  admin: boolean
-  push: boolean
-  pull: boolean
+export interface MutateRepository {
+  archived: boolean
+  is_template: boolean
+  private: boolean
 }
 
-export type License = {
-  key: string
-  name: string
-  url: string
-  spdx_id: string
-  node_id: string
-  html_url: string
-}
+export interface UpdateRepository extends Partial<MutateRepository> {}

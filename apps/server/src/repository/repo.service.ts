@@ -1,3 +1,4 @@
+import { GitHub } from '@beelzebub/types'
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { In, LessThan, Repository } from 'typeorm'
@@ -19,6 +20,20 @@ export class RepoService {
 
   getMany() {
     return this.repoRepo.find({ order: { outdated: 'desc' } })
+  }
+
+  updateGitHubRepository(id: string, data: GitHub.Repository) {
+    return this.repoRepo.save({
+      id,
+      name: data.full_name,
+      data,
+      outdated: false,
+      synced_at: new Date(),
+    })
+  }
+
+  delete(dto: RepoModel) {
+    return this.repoRepo.remove(dto)
   }
 
   getOutdated(syncDate?: Date) {

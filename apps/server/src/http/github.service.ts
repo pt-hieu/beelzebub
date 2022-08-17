@@ -40,4 +40,47 @@ export class GithubService {
       ),
     )
   }
+
+  async fetchCollaborators(name: string) {
+    const token = (await this.configService.get()).github_token
+
+    return this.process(
+      this.axios.get<GitHub.Collaborator[]>(
+        `${this.GITHUB_ENDPOINT}/user/repos/${name}/collaborators`,
+        {
+          headers: {
+            authorization: `token ${token}`,
+          },
+        },
+      ),
+    )
+  }
+
+  async updateRepo(name: string, dto: GitHub.UpdateRepository) {
+    const token = (await this.configService.get()).github_token
+
+    return this.process(
+      this.axios.patch<GitHub.Repository>(
+        `${this.GITHUB_ENDPOINT}/repos/${name}`,
+        dto,
+        {
+          headers: {
+            authorization: `token ${token}`,
+          },
+        },
+      ),
+    )
+  }
+
+  async deleteRepository(name: string) {
+    const token = (await this.configService.get()).github_token
+
+    return this.process(
+      this.axios.delete<undefined>(`${this.GITHUB_ENDPOINT}/repos/${name}`, {
+        headers: {
+          authorization: `token ${token}`,
+        },
+      }),
+    )
+  }
 }

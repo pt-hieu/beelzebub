@@ -39,6 +39,7 @@ type RepoModel {
   updated_at: DateTime!
   name: String!
   data: JSON!
+  collabs: JSON!
   synced_at: DateTime!
   outdated: Boolean!
 }
@@ -61,6 +62,9 @@ type Mutation {
   updateTodo(updateTodo: UpdateTodo!, id: String!): TodoModel!
   extendTodo(id: String!): TodoModel!
   deleteTodo(id: String!): TodoModel!
+  updateRepo(id: String!, dto: UpdateRepositoryDto!): RepoModel!
+  deleteRepo(id: String!): RepoModel!
+  fetchCollaborators(id: String!): RepoModel!
   syncRepo: [RepoModel!]!
   purgeOutdatedRepos: [RepoModel!]!
 }
@@ -82,4 +86,10 @@ input UpdateTodo {
   title: String
   content: String
   categorization: [TodoCategorization!]
+}
+
+input UpdateRepositoryDto {
+  is_template: Boolean
+  archived: Boolean
+  private: Boolean
 }
