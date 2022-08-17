@@ -27,7 +27,7 @@
   },
   "name": "@beelzebub/types",
   "author": "pt-hieu",
-  "module": "dist/share.esm.js",
+  "module": "dist/types.esm.js",
   "size-limit": [
     {
       "path": "dist/share.cjs.production.min.js",
