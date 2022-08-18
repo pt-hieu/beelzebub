@@ -27,7 +27,7 @@ provide('repo', result)
       :selected-repo-id="selectedRepoId"
     />
 
-    <repo-view-vue v-show="!!result" />
+    <repo-view-vue v-if="!!result" />
   </div>
 
   <footer-vue>

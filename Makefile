@@ -11,4 +11,4 @@ server:
 
 pg: postgres
 postgres:
-	docker exec -it postgres psql -U postgres
+	docker exec -it postgres psql -U postgres -d beelzebub

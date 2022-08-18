@@ -22,9 +22,16 @@ export class RepoService {
     return this.repoRepo.find({ order: { outdated: 'desc' } })
   }
 
-  updateGitHubRepository(id: string, data: GitHub.Repository) {
+  async updateGitHubRepository(
+    repo: RepoModel | string,
+    data: GitHub.Repository,
+  ) {
+    if (typeof repo === 'string') {
+      repo = await this.getOneById(repo)
+    }
+
     return this.repoRepo.save({
-      id,
+      ...repo,
       name: data.full_name,
       data,
       outdated: false,

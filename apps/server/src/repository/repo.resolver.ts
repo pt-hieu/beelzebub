@@ -41,7 +41,7 @@ export class RepoResolver {
     const repo = await this.getOneById(repoId)
 
     const updatedRepo = await this.githubService.updateRepo(repo.name, dto)
-    return this.repoService.updateGitHubRepository(repoId, updatedRepo)
+    return this.repoService.updateGitHubRepository(repo, updatedRepo)
   }
 
   @Mutation(() => RepoModel)

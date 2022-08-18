@@ -46,7 +46,7 @@ export class GithubService {
 
     return this.process(
       this.axios.get<GitHub.Collaborator[]>(
-        `${this.GITHUB_ENDPOINT}/user/repos/${name}/collaborators`,
+        `${this.GITHUB_ENDPOINT}/repos/${name}/collaborators`,
         {
           headers: {
             authorization: `token ${token}`,

@@ -6,6 +6,7 @@ const props = defineProps<{
   trueLabel: string
   initialChecked?: boolean
   checked?: boolean
+  disabled?: boolean
 }>()
 
 const emit = defineEmits({
@@ -15,14 +16,15 @@ const emit = defineEmits({
 
 <template>
   <div class="flex gap-4 items-center">
-    <span :class="`${props.checked ? 'opacity-30' : ''}`">{{ falseLabel }}</span>
+    <span :class="`${checked || disabled ? 'opacity-30' : ''}`">{{ falseLabel }}</span>
 
     <switch-vue
       :initial-checked="initialChecked"
       :checked="checked"
+      :disabled="disabled"
       @change="(value) => emit('change', value)"
     />
 
-    <span :class="`${!props.checked ? 'opacity-30' : ''}`">{{ trueLabel }}</span>
+    <span :class="`${!checked || disabled ? 'opacity-30' : ''}`">{{ trueLabel }}</span>
   </div>
 </template>

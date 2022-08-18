@@ -19,6 +19,8 @@ const GETONE_REPO_FIELDS = gql`
     name
     data
     outdated
+    collabs
+    synced_at
   }
 `
 
@@ -54,6 +56,24 @@ export const PURGE_OUTDATED_REPOES = gql`
   mutation PurgeOutdatedRepoes {
     purgeOutdatedRepos {
       ...RepoFields
+    }
+  }
+`
+
+export const FETCH_COLLABS = gql`
+  ${GETONE_REPO_FIELDS}
+  mutation FetchCollaborators($id: String!) {
+    fetchCollaborators(id: $id) {
+      ...GetOneRepoFields
+    }
+  }
+`
+
+export const UDPATE_REPO = gql`
+  ${GETONE_REPO_FIELDS}
+  mutation UpdateRepo($id: String!, $dto: UpdateRepositoryDto!) {
+    updateRepo(id: $id, dto: $dto) {
+      ...GetOneRepoFields
     }
   }
 `

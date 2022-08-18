@@ -7,6 +7,7 @@ import RepoAdminVue from './RepoAdmin.vue'
 const repo = inject<Ref<{ repo: Model.GitHubRepo } | undefined>>('repo')
 
 const createDate = computed(() => moment(repo?.value?.repo.data.created_at))
+const syncDate = computed(() => moment(repo?.value?.repo.synced_at))
 </script>
 
 <template>
@@ -41,13 +42,15 @@ const createDate = computed(() => moment(repo?.value?.repo.data.created_at))
         </span>
       </div>
 
-      <span class="text-sm"
-        >Created {{ createDate.fromNow() }} ({{
+      <div class="text-sm">
+        Created {{ createDate.fromNow() }} ({{
           createDate.format('ddd DD/MM/yyyy')
-        }})</span
-      >
+        }})
+      </div>
+
+      <div class="text-sm">Synced {{ syncDate.fromNow() }}</div>
     </div>
 
-    <repo-admin-vue v-show="repo?.repo.data.permissions.admin" />
+    <repo-admin-vue v-if="repo?.repo.data.permissions.admin" v-motion-slide-bottom />
   </div>
 </template>

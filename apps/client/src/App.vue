@@ -33,7 +33,7 @@ provide('config', result)
 }
 
 .fa {
-  @apply translate-y-[1px];
+  @apply translate-y-[1px] text-sm;
 }
 
 .danger-2nd {
@@ -41,7 +41,7 @@ provide('config', result)
 }
 
 .button-base {
-  @apply px-5 py-3 rounded-xl duration-100 border border-blue hover:border-blue-tint text-sm hover:shadow-md shadow-blue;
+  @apply px-5 py-3 rounded-lg duration-100 border border-blue hover:border-blue-tint text-sm hover:shadow-md shadow-blue;
 }
 
 .button {
@@ -78,5 +78,48 @@ provide('config', result)
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #7c95a4;
+}
+</style>
+
+<style>
+.lds-ring {
+  display: inline-block;
+  position: relative;
+  width: 14px;
+  height: 14px;
+}
+
+.lds-ring div {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  margin: 2px;
+  border: 2px solid #5a7bb5;
+  border-radius: 50%;
+  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  border-color: #5a7bb5 transparent transparent transparent;
+}
+
+.lds-ring div:nth-child(1) {
+  animation-delay: -0.45s;
+}
+
+.lds-ring div:nth-child(2) {
+  animation-delay: -0.3s;
+}
+
+.lds-ring div:nth-child(3) {
+  animation-delay: -0.15s;
+}
+
+@keyframes lds-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>
