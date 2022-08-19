@@ -1,6 +1,6 @@
 import { GitHub } from '@beelzebub/types'
 import { Field, InputType } from '@nestjs/graphql'
-import { IsOptional } from 'class-validator'
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator'
 import { Transform } from 'class-transformer'
 
 @InputType()
@@ -19,4 +19,12 @@ export class UpdateRepositoryDto implements GitHub.UpdateRepository {
   @IsOptional()
   @Transform(({ value }) => JSON.parse(value))
   private?: boolean
+}
+
+@InputType()
+export class CreateRepositoryDto {
+  @Field()
+  @IsString()
+  @IsNotEmpty()
+  name: string
 }

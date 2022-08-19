@@ -22,6 +22,10 @@ export class RepoService {
     return this.repoRepo.find({ order: { outdated: 'desc' } })
   }
 
+  isExistedByName(name: string) {
+    return this.repoRepo.findBy({ name }).then((r) => !!r.length)
+  }
+
   async updateGitHubRepository(
     repo: RepoModel | string,
     data: GitHub.Repository,
@@ -39,8 +43,17 @@ export class RepoService {
     })
   }
 
+  async createGithubRepository(data: GitHub.Repository) {
+    return this.repoRepo.save({
+      name: data.full_name,
+      data,
+      outdated: false,
+      synced_at: new Date(),
+    })
+  }
+
   delete(dto: RepoModel) {
-    return this.repoRepo.remove(dto)
+    return this.repoRepo.remove(dto).then((r) => ({ ...r, id: dto.id }))
   }
 
   getOutdated(syncDate?: Date) {

@@ -65,6 +65,7 @@ type Mutation {
   updateRepo(id: String!, dto: UpdateRepositoryDto!): RepoModel!
   deleteRepo(id: String!): RepoModel!
   fetchCollaborators(id: String!): RepoModel!
+  createRepo(dto: CreateRepositoryDto!): RepoModel!
   syncRepo: [RepoModel!]!
   purgeOutdatedRepos: [RepoModel!]!
 }
@@ -92,4 +93,8 @@ input UpdateRepositoryDto {
   is_template: Boolean
   archived: Boolean
   private: Boolean
+}
+
+input CreateRepositoryDto {
+  name: String!
 }

@@ -18,7 +18,7 @@ export class GithubService {
   private process<T>($obs: Observable<AxiosResponse<T>>) {
     return lastValueFrom(
       $obs.pipe(
-        map((res) => this.modifyResponse(res.data)),
+        map((res) => this.modifyResponse(res.data) as T),
         first(),
         catchError((e) => {
           this.logger.error(JSON.stringify(e.response, null, 2) || e.message)
@@ -86,6 +86,25 @@ export class GithubService {
     return this.process(
       this.axios.get<GitHub.Collaborator[]>(
         `${this.GITHUB_ENDPOINT}/repos/${name}/collaborators`,
+        {
+          headers: {
+            authorization: `token ${token}`,
+          },
+        },
+      ),
+    )
+  }
+
+  async createRepo(name: string, options?: GitHub.UpdateRepository) {
+    const token = (await this.configService.get()).github_token
+
+    return this.process(
+      this.axios.post<GitHub.Repository>(
+        `${this.GITHUB_ENDPOINT}/user/repos`,
+        {
+          name,
+          ...options,
+        },
         {
           headers: {
             authorization: `token ${token}`,

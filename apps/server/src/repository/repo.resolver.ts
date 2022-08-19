@@ -1,10 +1,14 @@
 import { Event } from '@beelzebub/types'
-import { NotFoundException, ParseUUIDPipe } from '@nestjs/common'
+import {
+  NotFoundException,
+  ParseUUIDPipe,
+  UnprocessableEntityException,
+} from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 import { GithubService } from 'src/http/github.service'
 import { RepoSyncedEvent } from './repo.event'
-import { UpdateRepositoryDto } from './repo.input'
+import { CreateRepositoryDto, UpdateRepositoryDto } from './repo.input'
 import { RepoModel } from './repo.model'
 import { RepoService } from './repo.service'
 
@@ -60,6 +64,23 @@ export class RepoResolver {
     return this.repoService
       .massSave([{ ...repo, collabs: collabs.map((col) => ({ ...col })) }])
       .then((res) => res[0])
+  }
+
+  @Mutation(() => RepoModel)
+  async createRepo(@Args('dto') dto: CreateRepositoryDto) {
+    const isExisted = await this.repoService.isExistedByName(dto.name)
+    if (isExisted)
+      throw new UnprocessableEntityException(
+        `Repo with the name of ${dto.name} has already existed`,
+      )
+
+    const repo = await this.githubService.createRepo(dto.name, {
+      archived: false,
+      is_template: false,
+      private: true,
+    })
+
+    return this.repoService.createGithubRepository(repo)
   }
 
   @Mutation(() => [RepoModel])
