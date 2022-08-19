@@ -1,4 +1,4 @@
-import { HttpException, Injectable } from '@nestjs/common'
+import { HttpException, Injectable, Logger } from '@nestjs/common'
 import { HttpService as AxiosService } from '@nestjs/axios'
 import { ConfigService } from 'src/config/config.service'
 import { catchError, first, lastValueFrom, map, Observable } from 'rxjs'
@@ -8,6 +8,7 @@ import { GitHub } from '@beelzebub/types'
 @Injectable()
 export class GithubService {
   private readonly GITHUB_ENDPOINT = 'https://api.github.com'
+  private logger = new Logger(GithubService.name)
 
   constructor(
     private axios: AxiosService,
@@ -17,13 +18,51 @@ export class GithubService {
   private process<T>($obs: Observable<AxiosResponse<T>>) {
     return lastValueFrom(
       $obs.pipe(
-        map((res) => res.data),
+        map((res) => this.modifyResponse(res.data)),
         first(),
         catchError((e) => {
-          throw new HttpException(e.response?.data, e.response?.status)
+          this.logger.error(JSON.stringify(e.response, null, 2) || e.message)
+
+          throw new HttpException(
+            e.response?.data || e.message,
+            e.response?.status || 500,
+          )
         }),
       ),
     )
+  }
+
+  private modifyObject<T>(obj: T): T {
+    if (!obj) return obj
+
+    Object.entries(obj).forEach(([key, value]) => {
+      if (typeof value === 'object' && !Array.isArray(value)) {
+        this.modifyObject(value)
+      }
+
+      if (
+        typeof value === 'string' &&
+        value.startsWith('https://') &&
+        key !== 'html_url' &&
+        key !== 'avatar_url'
+      ) {
+        delete obj[key]
+      }
+    })
+
+    return obj
+  }
+
+  private modifyResponse<T>(res: T) {
+    if (Array.isArray(res)) {
+      return res.map((item) => {
+        return Array.isArray(item)
+          ? this.modifyResponse(item)
+          : this.modifyObject(item)
+      })
+    }
+
+    return this.modifyObject(res)
   }
 
   async getRepositories() {
