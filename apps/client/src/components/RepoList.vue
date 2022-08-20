@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { GET_REPOES, type GetRepoesRes } from '@/queries/repo'
 import { useQuery } from '@vue/apollo-composable'
+import CreateRepo from './CreateRepo.vue'
 
 const props = defineProps<{ selectedRepoId?: string }>()
 const emit = defineEmits({
@@ -10,18 +11,30 @@ const emit = defineEmits({
 })
 
 const { result } = useQuery<GetRepoesRes>(GET_REPOES)
+const createRepoVisible = $ref(false)
 </script>
 
 <template>
   <div class="flex flex-col gap-2 h-full overflow-auto pr-2 -mr-2">
-    <button class="sticky top-0 button !rounded-t-none shadow">
+    <create-repo
+      :visible="createRepoVisible"
+      @close="createRepoVisible = false"
+    />
+
+    <button
+      @click="createRepoVisible = true"
+      class="sticky top-0 button !rounded-t-none shadow"
+    >
       <span class="fa fa-plus mr-2" />
-      Add Repo</button>
+      Add Repo
+    </button>
 
     <button
       v-for="repo in result?.repoes"
       :class="`border rounded-md border-blue-tint px-5 py-3 text-left ${
-        props.selectedRepoId === repo.id ? 'bg-blue text-white' : ''
+        props.selectedRepoId === repo.id
+          ? 'bg-blue text-white sticky top-[55px] shadow'
+          : ''
       } duration-100`"
       @click="emit('repoSelected', repo.id)"
       :key="repo.id"

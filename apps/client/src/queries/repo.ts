@@ -77,3 +77,12 @@ export const UDPATE_REPO = gql`
     }
   }
 `
+
+export const CREATE_REPO = gql`
+  ${GETONE_REPO_FIELDS}
+  mutation CreateRepo($dto: CreateRepositoryDto!) {
+    createRepo(dto: $dto) {
+      ...GetOneRepoFields
+    }
+  }
+`

@@ -21,7 +21,7 @@ export class GithubService {
         map((res) => this.modifyResponse(res.data) as T),
         first(),
         catchError((e) => {
-          this.logger.error(JSON.stringify(e.response, null, 2) || e.message)
+          this.logger.error(e.response?.data || e.message)
 
           throw new HttpException(
             e.response?.data || e.message,

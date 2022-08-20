@@ -28,6 +28,7 @@ watchEffect(
   () => {
     payload.archived = repo?.value?.repo.data.archived || false
     payload.private = repo?.value?.repo.data.private || false
+    payload.is_template = repo?.value?.repo.data.is_template || false
   },
   { flush: 'post' },
 )

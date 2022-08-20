@@ -1,8 +1,10 @@
 <script lang="ts" setup>
 import { ref, watch } from 'vue'
 import MotionVue from './Motion.vue'
+import Loading from './Loading.vue'
 type Props = {
   visible: boolean
+  isLoading?: boolean
   okText?: string
   title?: string
 }
@@ -59,13 +61,18 @@ watch(
         >
           <slot name="header">
             <div class="flex justify-between my-2 px-2">
-              <div>{{ props.title }}</div>
+              <div class="text-blue font-medium text-lg">
+                {{ title }}
+              </div>
 
               <button @click="emit('close')" class="fa fa-times" />
             </div>
           </slot>
 
-          <div class="max-h-[500px] min-h-[40px] overflow-auto px-2">
+          <div
+            v-bind="$attrs"
+            class="max-h-[500px] min-h-[40px] overflow-auto px-2"
+          >
             <slot />
           </div>
 
@@ -76,7 +83,11 @@ watch(
               <button class="button-3rd" @click="emit('close')">Cancel</button>
 
               <button class="button" @click="emit('ok')">
-                <span class="fa fa-check mr-2" />{{ props.okText || 'Submit' }}
+                <loading :is-loading="isLoading || false">
+                  <span class="fa fa-check mr-2" />
+                </loading>
+
+                {{ props.okText || 'Submit' }}
               </button>
             </div>
           </slot>
