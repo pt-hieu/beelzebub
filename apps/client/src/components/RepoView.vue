@@ -51,6 +51,6 @@ const syncDate = computed(() => moment(repo?.value?.repo.synced_at))
       <div class="text-sm">Synced {{ syncDate.fromNow() }}</div>
     </div>
 
-    <repo-admin-vue v-if="repo?.repo.data.permissions.admin" v-motion-slide-bottom />
+    <repo-admin-vue v-if="repo?.repo.data.permissions.admin" />
   </div>
 </template>

@@ -4,7 +4,6 @@ import Confirm from './Confirm.vue'
 import { useElementHover } from '@vueuse/core'
 import Motion from './Motion.vue'
 import { enterFromLeft } from '@/variants/enter-from-left'
-import { watchEffect } from 'vue'
 
 type Props = {
   data: GitHub.Collaborator
@@ -14,10 +13,6 @@ const { data: collab } = defineProps<Props>()
 
 const element = $ref<HTMLDivElement>()
 const isHover = $(useElementHover($$(element)))
-
-watchEffect(() => {
-  console.log(isHover, collab.login)
-})
 </script>
 
 <template>

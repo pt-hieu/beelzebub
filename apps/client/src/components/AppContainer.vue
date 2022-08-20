@@ -6,6 +6,7 @@ import DropdownVue from './Dropdown.vue'
 import { routes } from '../router'
 import Config from './Config.vue'
 import ModalVue from './Modal.vue'
+import ToastHandler from './ToastHandler.vue'
 
 const { currentRoute } = useRouter()
 const config = inject<Ref<{ config: Model.Config }>>('config')
@@ -76,6 +77,8 @@ watch(configModal, () => {
         </dropdown-vue>
       </div>
     </header>
+
+    <toast-handler />
 
     <main
       class="px-[60px] pb-[20px] h-[clamp(0px,calc(100vh-140px),calc(100vh-140px))]"
