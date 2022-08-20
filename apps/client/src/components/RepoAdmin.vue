@@ -64,9 +64,11 @@ watch(payload, ({ archived, is_template, private: isPrivate }) => {
 </script>
 
 <template>
-  <div
-    class="mt-4 rounded shadow-md shadow-blue/30 p-4 grid grid-cols-[250px,1fr] gap-8"
-  >
+  <div class="mt-4 grid grid-cols-[1fr,250px] gap-8">
+    <div>
+      <repo-collab />
+    </div>
+
     <div class="flex gap-2 flex-col">
       <div class="flex gap-2 flex-col border border-blue/50 rounded-md p-2">
         <toggle-vue
@@ -121,10 +123,6 @@ watch(payload, ({ archived, is_template, private: isPrivate }) => {
           </button>
         </confirm>
       </div>
-    </div>
-
-    <div>
-      <repo-collab />
     </div>
   </div>
 </template>

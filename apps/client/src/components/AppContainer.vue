@@ -45,6 +45,7 @@ watch(configModal, () => {
           :visible="configModal"
           @close="configModal = false"
           ok-text="Save"
+          title="Settings"
           @ok="configRef?.submitConfig()"
         >
           <config ref="configRef" @submit="configModal = false" />

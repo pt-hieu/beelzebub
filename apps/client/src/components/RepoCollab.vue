@@ -42,14 +42,14 @@ const { mutate, loading } = useMutation(FETCH_COLLABS)
     </div>
 
     <div
-      v-if="!Array.isArray(repo?.repo.collabs)"
+      v-if="!repo?.repo.collabs.length"
       class="w-full text-center text-blue/50 py-5"
     >
       Collaborator list has not been fetched
     </div>
   </div>
 
-  <div class="mt-4 flex justify-end">
+  <div class="mt-4">
     <button @click="mutate({ id: repo?.repo.id })" class="button-2nd">
       <loading class="mr-2 top-0.5" :is-loading="loading">
         <span class="fa fa-sync mr-2" />

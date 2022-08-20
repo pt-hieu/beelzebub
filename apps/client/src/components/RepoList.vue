@@ -33,7 +33,7 @@ const createRepoVisible = $ref(false)
       v-for="repo in result?.repoes"
       :class="`border rounded-md border-blue-tint px-5 py-3 text-left ${
         props.selectedRepoId === repo.id
-          ? 'bg-blue text-white sticky top-[55px] shadow'
+          ? 'bg-blue text-white sticky top-[55px] bottom-0 shadow'
           : ''
       } duration-100`"
       @click="emit('repoSelected', repo.id)"
