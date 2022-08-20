@@ -29,7 +29,7 @@ defineExpose({
     {{ message }}
   </modal-vue>
 
-  <div @click="visible = true">
+  <div @click="visible = true" v-bind="$attrs">
     <slot></slot>
   </div>
 </template>
