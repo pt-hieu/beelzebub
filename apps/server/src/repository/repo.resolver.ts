@@ -6,11 +6,11 @@ import {
 } from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
-import { GithubService } from 'src/http/github.service'
-import { RepoSyncedEvent } from './repo.event'
-import { CreateRepositoryDto, UpdateRepositoryDto } from './repo.input'
-import { RepoModel } from './repo.model'
-import { RepoService } from './repo.service'
+import { GithubService } from '../http/github.service.js'
+import { RepoSyncedEvent } from './repo.event.js'
+import { CreateRepositoryDto, UpdateRepositoryDto } from './repo.input.js'
+import { RepoModel } from './repo.model.js'
+import { RepoService } from './repo.service.js'
 
 @Resolver(() => RepoModel)
 export class RepoResolver {

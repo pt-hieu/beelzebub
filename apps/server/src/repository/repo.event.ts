@@ -1,4 +1,4 @@
-import { BaseEvent } from 'src/misc/base.event'
+import { BaseEvent } from '../misc/base.event.js'
 
 export class RepoSyncedEvent extends BaseEvent {
   constructor(props: RepoSyncedEvent) {

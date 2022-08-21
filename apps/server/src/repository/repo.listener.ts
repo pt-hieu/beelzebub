@@ -1,9 +1,9 @@
 import { Event } from '@beelzebub/types'
 import { Injectable } from '@nestjs/common'
 import { OnEvent } from '@nestjs/event-emitter'
-import { AppSubscription } from 'src/app.subscription'
-import { RepoSyncedEvent } from './repo.event'
-import { RepoService } from './repo.service'
+import { AppSubscription } from '../app.subscription.js'
+import { RepoSyncedEvent } from './repo.event.js'
+import { RepoService } from './repo.service.js'
 
 @Injectable()
 export class RepoListener {
@@ -19,8 +19,11 @@ export class RepoListener {
       outdatedRepoes.map((repo) => ({ ...repo, outdated: true })),
     )
 
-    this.appSubs.emit(`${Event.RepoEvent.SYNCED}.1`, {
-      count: outdatedRepoes.length,
+    this.appSubs.emit({
+      type: `${Event.RepoEvent.SYNCED}.1`,
+      payload: {
+        count: outdatedRepoes.length,
+      },
     })
   }
 }

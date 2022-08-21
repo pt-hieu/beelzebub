@@ -1,5 +1,6 @@
 import { MessageEvent } from '@nestjs/common'
 import { Subject } from 'rxjs'
+import { Event } from '@beelzebub/types'
 
 export class AppSubscription {
   private readonly $emitter = new Subject<MessageEvent>()
@@ -8,7 +9,7 @@ export class AppSubscription {
     return this.$emitter
   }
 
-  emit(event: string, data: any) {
-    this.$emitter.next({ data: JSON.stringify(data), type: event })
+  emit({ payload, type }: Event.SSE) {
+    this.$emitter.next({ data: payload, type })
   }
 }

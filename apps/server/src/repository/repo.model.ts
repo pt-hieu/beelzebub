@@ -1,8 +1,8 @@
 import { Model } from '@beelzebub/types'
 import { Field, ObjectType } from '@nestjs/graphql'
-import GraphQLJSON from 'graphql-type-json'
-import { BaseModel } from 'src/misc/base.model'
 import { Column, Entity } from 'typeorm'
+import { GraphQLJSON } from '../json.scalar.js'
+import { BaseModel } from '../misc/base.model.js'
 
 @ObjectType()
 @Entity({ name: 'repo' })

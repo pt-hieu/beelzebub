@@ -1,9 +1,9 @@
 import { HttpException, Injectable, Logger } from '@nestjs/common'
 import { HttpService as AxiosService } from '@nestjs/axios'
-import { ConfigService } from 'src/config/config.service'
 import { catchError, first, lastValueFrom, map, Observable } from 'rxjs'
 import { AxiosResponse } from 'axios'
 import { GitHub } from '@beelzebub/types'
+import { ConfigService } from '../config/config.service.js'
 
 @Injectable()
 export class GithubService {

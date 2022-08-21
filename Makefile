@@ -1,3 +1,4 @@
+t: types
 types:
 	cd libs/types && rushx build
 

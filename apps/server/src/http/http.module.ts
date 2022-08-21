@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common'
 import { HttpModule as AxiosModule } from '@nestjs/axios'
-import { GithubService } from './github.service'
-import { ConfigModule } from 'src/config/config.module'
+import { GithubService } from './github.service.js'
+import { ConfigModule } from '../config/config.module.js'
 
 @Module({
   imports: [

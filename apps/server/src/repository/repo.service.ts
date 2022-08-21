@@ -2,7 +2,7 @@ import { GitHub } from '@beelzebub/types'
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { In, LessThan, Repository } from 'typeorm'
-import { RepoModel } from './repo.model'
+import { RepoModel } from './repo.model.js'
 
 @Injectable()
 export class RepoService {

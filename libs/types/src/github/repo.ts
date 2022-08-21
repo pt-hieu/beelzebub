@@ -1,4 +1,4 @@
-import { License, Permissions } from './utils'
+import { License, Permissions } from './utils.js'
 
 export type Repository = {
   id: number

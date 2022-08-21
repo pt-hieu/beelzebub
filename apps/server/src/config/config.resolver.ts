@@ -1,8 +1,8 @@
 import { OnApplicationBootstrap } from '@nestjs/common'
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
-import { UpdateConfig } from './config.input'
-import { ConfigModel } from './config.model'
-import { ConfigService } from './config.service'
+import { UpdateConfig } from './config.input.js'
+import { ConfigModel } from './config.model.js'
+import { ConfigService } from './config.service.js'
 
 @Resolver(() => ConfigModel)
 export class ConfigResolver implements OnApplicationBootstrap {

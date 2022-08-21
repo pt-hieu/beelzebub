@@ -1,24 +1,12 @@
 {
-  "version": "0.1.0",
-  "license": "MIT",
+  "version": "0.0.1",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
-  "files": [
-    "dist",
-    "src"
-  ],
-  "engines": {
-    "node": ">=10"
-  },
+  "type": "module",
   "scripts": {
-    "start": "tsdx watch",
-    "build": "tsdx build",
-    "test": "tsdx test",
-    "lint": "tsdx lint",
-    "size": "size-limit",
-    "analyze": "size-limit --why"
+    "prebuild": "rimraf dist",
+    "build": "tsc"
   },
-  "peerDependencies": {},
   "prettier": {
     "printWidth": 80,
     "semi": false,
@@ -27,22 +15,8 @@
   },
   "name": "@beelzebub/types",
   "author": "pt-hieu",
-  "module": "dist/types.esm.js",
-  "size-limit": [
-    {
-      "path": "dist/share.cjs.production.min.js",
-      "limit": "10 KB"
-    },
-    {
-      "path": "dist/share.esm.js",
-      "limit": "10 KB"
-    }
-  ],
-  "devDependencies": {
-    "@size-limit/preset-small-lib": "^7.0.8",
-    "size-limit": "^7.0.8",
-    "tsdx": "^0.14.1",
-    "tslib": "^2.4.0",
-    "typescript": "^4.6.4"
+  "dependencies": {
+    "typescript": "~4.7.4",
+    "rimraf": "~3.0.2"
   }
 }

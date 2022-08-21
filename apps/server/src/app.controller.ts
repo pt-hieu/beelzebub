@@ -1,5 +1,5 @@
 import { Controller, Sse } from '@nestjs/common'
-import { AppSubscription } from './app.subscription'
+import { AppSubscription } from './app.subscription.js'
 
 @Controller()
 export class AppController {

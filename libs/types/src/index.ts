@@ -1,3 +1,3 @@
-export * as Model from './models'
-export * as GitHub from './github'
-export * as Event from './event'
+export * as Model from './models/index.js'
+export * as GitHub from './github/index.js'
+export * as Event from './event/index.js'

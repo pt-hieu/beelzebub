@@ -1,5 +1,5 @@
-import { GitHub } from '..'
-import { Base } from './base'
+import { GitHub } from '../index.js'
+import { Base } from './base.js'
 
 export interface Repo extends Base {
   name: string

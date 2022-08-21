@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { TodoModel } from './todo.model'
-import { TodoResolver } from './todo.resolver'
-import { TodoService } from './todo.service'
+import { TodoModel } from './todo.model.js'
+import { TodoResolver } from './todo.resolver.js'
+import { TodoService } from './todo.service.js'
 
 @Module({
   imports: [TypeOrmModule.forFeature([TodoModel])],

@@ -1,4 +1,4 @@
-import { Permissions } from './utils'
+import { Permissions } from './utils.js'
 
 export interface Collaborator {
   login: string

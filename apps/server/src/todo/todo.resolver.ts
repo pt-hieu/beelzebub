@@ -4,10 +4,10 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common'
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
-import { CreateTodo, UpdateTodo } from './todo.input'
-import { TodoModel } from './todo.model'
-import * as moment from 'moment'
-import { TodoService } from './todo.service'
+import { CreateTodo, UpdateTodo } from './todo.input.js'
+import { TodoModel } from './todo.model.js'
+import moment from 'moment'
+import { TodoService } from './todo.service.js'
 
 @Resolver(() => TodoModel)
 export class TodoResolver {

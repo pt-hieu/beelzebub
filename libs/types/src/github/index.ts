@@ -1,4 +1,4 @@
-export * from './repo'
-export * from './collaborator'
+export * from './repo.js'
+export * from './collaborator.js'
 
-export * from './utils'
+export * from './utils.js'

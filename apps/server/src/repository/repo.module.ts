@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { AppSubscription } from 'src/app.subscription'
-import { HttpModule } from 'src/http/http.module.'
-import { RepoListener } from './repo.listener'
-import { RepoModel } from './repo.model'
-import { RepoResolver } from './repo.resolver'
-import { RepoService } from './repo.service'
+import { AppSubscription } from '../app.subscription.js'
+import { HttpModule } from '../http/http.module.js'
+import { RepoListener } from './repo.listener.js'
+import { RepoModel } from './repo.model.js'
+import { RepoResolver } from './repo.resolver.js'
+import { RepoService } from './repo.service.js'
 
 @Module({
   imports: [TypeOrmModule.forFeature([RepoModel]), HttpModule],
