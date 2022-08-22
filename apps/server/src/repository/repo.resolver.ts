@@ -96,7 +96,7 @@ export class RepoResolver {
       })),
     )
 
-    const syncedEvent = new RepoSyncedEvent({ syncDate })
+    const syncedEvent = new RepoSyncedEvent(syncDate)
     this.eventEmitter.emitAsync(Event.RepoEvent.SYNCED, syncedEvent)
 
     return syncResults

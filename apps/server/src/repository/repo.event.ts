@@ -1,9 +1,7 @@
 import { BaseEvent } from '../misc/base.event.js'
 
 export class RepoSyncedEvent extends BaseEvent {
-  constructor(props: RepoSyncedEvent) {
-    super(props)
+  constructor(readonly syncDate: Date) {
+    super()
   }
-
-  readonly syncDate: Date
 }

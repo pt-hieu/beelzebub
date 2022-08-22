@@ -3,6 +3,7 @@ import type { Model } from '@beelzebub/types'
 import moment from 'moment'
 import { computed, inject, type Ref } from 'vue'
 import RepoAdminVue from './RepoAdmin.vue'
+import Tag from './Tag.vue'
 
 const repo = inject<Ref<{ repo: Model.GitHubRepo } | undefined>>('repo')
 
@@ -17,6 +18,9 @@ const syncDate = computed(() => moment(repo?.value?.repo.synced_at))
         <span class="text-xl">
           {{ repo?.repo?.name }}
           <span class="text-blue">Panel</span>
+
+          <tag v-if="repo?.repo.outdated" class="ml-2">Outdated</tag>
+          <tag v-else class="ml-2">Up to date</tag>
         </span>
 
         <span class="flex gap-2 text-xs">

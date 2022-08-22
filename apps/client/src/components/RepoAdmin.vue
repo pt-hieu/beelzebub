@@ -64,7 +64,7 @@ watch(payload, ({ archived, is_template, private: isPrivate }) => {
 </script>
 
 <template>
-  <div class="mt-4 grid grid-cols-[1fr,250px] gap-8">
+  <div class="mt-10 grid grid-cols-[1fr,250px] gap-8">
     <div>
       <repo-collab />
     </div>

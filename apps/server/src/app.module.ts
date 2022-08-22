@@ -2,14 +2,14 @@ import { Module } from '@nestjs/common'
 import { GraphQLModule } from '@nestjs/graphql'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
+import { EventEmitterModule } from '@nestjs/event-emitter'
+
 import { ConfigModule } from './config/config.module.js'
 import { isDev } from './misc/env.js'
 import { TodoModule } from './todo/todo.module.js'
 import { RepoModule } from './repository/repo.module.js'
 import { HttpModule } from './http/http.module.js'
-import { EventEmitterModule } from '@nestjs/event-emitter'
-import { AppController } from './app.controller.js'
-import { AppSubscription } from './app.subscription.js'
+import { SseModule } from './sse/sse.module.js'
 
 @Module({
   imports: [
@@ -31,13 +31,14 @@ import { AppSubscription } from './app.subscription.js'
       autoLoadEntities: true,
       logging: ['error', 'migration', 'schema'],
     }),
-    EventEmitterModule.forRoot(),
+    EventEmitterModule.forRoot({
+      global: true,
+    }),
     ConfigModule,
     HttpModule,
     TodoModule,
     RepoModule,
+    SseModule,
   ],
-  providers: [AppSubscription],
-  controllers: [AppController],
 })
 export class AppModule {}

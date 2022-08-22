@@ -26,16 +26,24 @@ export class RepoService {
     return this.repoRepo.findBy({ name }).then((r) => !!r.length)
   }
 
+  updateGitHubRepository(
+    repoId: string,
+    data: GitHub.Repository,
+  ): Promise<RepoModel>
+  updateGitHubRepository(
+    repo: RepoModel,
+    data: GitHub.Repository,
+  ): Promise<RepoModel>
   async updateGitHubRepository(
-    repo: RepoModel | string,
+    repoData: RepoModel | string,
     data: GitHub.Repository,
   ) {
-    if (typeof repo === 'string') {
-      repo = await this.getOneById(repo)
+    if (typeof repoData === 'string') {
+      repoData = await this.getOneById(repoData)
     }
 
     return this.repoRepo.save({
-      ...repo,
+      ...repoData,
       name: data.full_name,
       data,
       outdated: false,

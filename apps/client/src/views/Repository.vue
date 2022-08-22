@@ -13,11 +13,15 @@ import { provide, ref, watch } from 'vue'
 import RepoViewVue from '@/components/RepoView.vue'
 import { useToast } from '@/stores/toast'
 import Loading from '../components/Loading.vue'
+import { useOnEvent } from '@/composables/useOnEvent'
+import CreateRepo from '../components/CreateRepo.vue'
 
 const selectedRepoId = ref<string | undefined>(undefined)
 
 const toast = useToast()
+
 const SYNC_REPO_TOAST_ID = 'sync-repo'
+const SYNC_REPO_REPORT_TOAST_ID = 'sync-repo-report'
 
 const { load, result } = useLazyQuery<{
   repo: Model.GitHubRepo
@@ -70,10 +74,21 @@ onDone((result) => {
 onError(() => {
   toast.add(`Synced failed!`, 'Error', SYNC_REPO_TOAST_ID, 2)
 })
+
+useOnEvent('repo.synced.1', (pl) => {
+  toast.add(
+    `Post sync event completed, found ${pl.count} outdated repositories!`,
+    'Info',
+    SYNC_REPO_REPORT_TOAST_ID,
+    2,
+  )
+})
+
+const createRepoVisible = $ref(false)
 </script>
 
 <template>
-  <div class="grid grid-cols-[180px,1fr] py-4 h-full gap-4">
+  <div class="grid grid-cols-[300px,1fr] py-4 h-full gap-4">
     <repo-list-vue
       @repo-selected="(id) => (selectedRepoId = id)"
       :selected-repo-id="selectedRepoId"
@@ -82,13 +97,23 @@ onError(() => {
     <repo-view-vue v-if="!!result" />
   </div>
 
+  <create-repo
+    :visible="createRepoVisible"
+    @close="createRepoVisible = false"
+  />
+
   <footer-vue>
+    <button @click="createRepoVisible = true" class="button-2nd">
+      <span class="fa fa-plus mr-2" />
+      Add A New Repository
+    </button>
+
     <button :disabled="loading" @click="syncRepo" class="button-2nd">
       <loading class="mr-2 top-0.5" :is-loading="loading">
         <span class="fa fa-sync mr-2" />
       </loading>
 
-      Sync
+      Sync All From GitHub
     </button>
   </footer-vue>
 </template>

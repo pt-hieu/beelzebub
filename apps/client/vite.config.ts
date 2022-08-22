@@ -7,7 +7,7 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 export default defineConfig({
   plugins: [vue({ reactivityTransform: true }), vueJsx()],
   server: {
-    open: true,
+    open: false,
     host: true,
   },
   resolve: {
