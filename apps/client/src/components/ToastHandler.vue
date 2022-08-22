@@ -32,14 +32,24 @@ watch(
       :key="toast.id"
       class="px-3 py-4 rounded-md shadow-md shadow-blue/30 border-t border-blue/40 w-[300px]"
     >
-      <div class="text-blue font-medium flex justify-between items-center">
-        {{ toast.type }}
+      <div class="flex items-center justify-between">
+        <div class="text-blue-shade font-medium flex gap-2">
+          {{ toast.type }}
 
-        <span v-if="toast.type === 'Success'" class="fa fa-check" />
-        <span v-else-if="toast.type === 'Error'" class="fa fa-times" />
-        <span v-else-if="toast.type === 'Info'" class="fa fa-info" />
-        <loading v-else :is-loading="true" />
+          <span v-if="toast.type === 'Success'" class="fa fa-check" />
+          <span v-else-if="toast.type === 'Error'" class="fa fa-warning" />
+          <span
+            v-else-if="toast.type === 'Info'"
+            class="fa fa-info relative bottom-[1px]"
+          />
+          <loading v-else :is-loading="true" class="relative top-0.5" />
+        </div>
+
+        <button @click="toastStore.remove(toast.id)">
+          <span class="fa fa-times text-blue-tint relative bottom-[1px]" />
+        </button>
       </div>
+
       <div class="text-sm">{{ toast.message }}</div>
     </div>
   </TransitionGroup>
