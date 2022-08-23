@@ -1,27 +1,27 @@
 <script lang="ts" setup>
-import { markRaw, onMounted, onUnmounted } from 'vue'
+import { markRaw, onUnmounted } from 'vue'
 import { useMessageEvent } from '@/stores/message-event'
 import type { Event } from '@beelzebub/types'
+import { useToast } from '../stores/toast'
 
 const messageEvent = useMessageEvent()
+const toast = useToast()
 
 let subscription = markRaw<EventSource>(
   new EventSource(`${import.meta.env.VITE_API}/subscribe`),
 )
 
 subscription.onmessage = (ev) => {
-  console.log(ev)
-
   const data = JSON.parse(ev.data) as Event.SSE
   messageEvent.set(data)
 }
 
 subscription.addEventListener('open', () => {
-  console.log('EventSource Opened')
+  toast.add('Connection to SSE server established!', 'Success', undefined, 2)
 })
 
 subscription.addEventListener('error', () => {
-  console.log('EventSource Failed')
+  toast.add('SSE server disconnected!', 'Error', undefined, 2)
 })
 
 onUnmounted(() => {

@@ -122,6 +122,7 @@ onUnmounted(() => {
     :visible="createTask"
     @close="createTask = false"
     @ok="createTaskRef?.submit()"
+    title="Create Task"
   >
     <create-task-vue @done="createTask = false" ref="createTaskRef" />
   </modal-vue>

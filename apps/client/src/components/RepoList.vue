@@ -18,7 +18,7 @@ onResult(({ data: { repoes } }) => {
 <template>
   <div class="h-full overflow-hidden relative">
     <div
-      class="w-full h-[60px] absolute top-0 left-0 gradient-mist-reversed pointer-events-none"
+      class="w-[calc(100%-5px)] h-[60px] absolute top-0 left-0 gradient-mist-reversed pointer-events-none"
     />
 
     <div class="flex flex-col h-full overflow-auto">
@@ -28,7 +28,7 @@ onResult(({ data: { repoes } }) => {
           selectedRepoId === repo.id
             ? 'bg-blue text-white sticky top-0 bottom-0 shadow z-[10]'
             : ''
-        } duration-100 flex justify-between group`"
+        } duration-100 flex justify-between group w-[calc(100%-4px)]`"
         @click="emit('repoSelected', repo.id)"
         :key="repo.id"
       >
@@ -36,14 +36,14 @@ onResult(({ data: { repoes } }) => {
 
         <span
           :class="`fa fa-caret-right -translate-x-3 group-hover:translate-x-0 ${
-            selectedRepoId === repo.id ? '' : 'opacity-0'
-          } group-hover:opacity-100 duration-150`"
+            selectedRepoId === repo.id ? '!text-white' : 'opacity-0'
+          } group-hover:opacity-100 group-hover:text-blue duration-150`"
         />
       </button>
     </div>
 
     <div
-      class="w-full h-[60px] absolute bottom-0 left-0 gradient-mist pointer-events-none"
+      class="w-[calc(100%-5px)] h-[60px] absolute bottom-0 left-0 gradient-mist pointer-events-none"
     />
   </div>
 </template>
