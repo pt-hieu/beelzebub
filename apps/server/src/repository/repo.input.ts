@@ -19,6 +19,12 @@ export class UpdateRepositoryDto implements GitHub.UpdateRepository {
   @IsOptional()
   @Transform(({ value }) => JSON.parse(value))
   private?: boolean
+
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  path?: string
 }
 
 @InputType()

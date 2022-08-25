@@ -23,6 +23,10 @@ export class RepoModel extends BaseModel implements Model.Repo {
   @Field()
   synced_at: Date
 
+  @Column({ default: null })
+  @Field({ nullable: true })
+  path: string | null
+
   @Column({ default: false })
   @Field()
   outdated: boolean

@@ -6,6 +6,7 @@ export interface Repo extends Base {
   data: Record<string, unknown>
   collabs: Record<string, unknown>[]
   synced_at: Date
+  path: string | null
   outdated: boolean
 }
 

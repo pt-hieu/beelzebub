@@ -54,6 +54,7 @@ export interface MutateRepository {
   archived: boolean
   is_template: boolean
   private: boolean
+  path: string
 }
 
 export interface UpdateRepository extends Partial<MutateRepository> {}

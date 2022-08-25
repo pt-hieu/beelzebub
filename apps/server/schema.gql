@@ -41,6 +41,7 @@ type RepoModel {
   data: JSON!
   collabs: JSON!
   synced_at: DateTime!
+  path: String
   outdated: Boolean!
 }
 
@@ -93,6 +94,7 @@ input UpdateRepositoryDto {
   is_template: Boolean
   archived: Boolean
   private: Boolean
+  path: String
 }
 
 input CreateRepositoryDto {
