@@ -6,6 +6,10 @@ cl: client
 client:
 	cd apps/client && rushx dev
 
+tc: tauri-client
+tauri-client:
+	cd apps/client && rushx tauri dev
+
 sv: server
 server:
 	cd apps/server && rushx start:dev

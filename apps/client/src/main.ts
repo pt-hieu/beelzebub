@@ -8,7 +8,6 @@ import { plugin, defaultConfig } from '@formkit/vue'
 import { generateClasses } from '@formkit/themes'
 import theme from './theme'
 import { MotionPlugin } from '@vueuse/motion'
-import VueSSE from 'vue-sse'
 
 const cache = new InMemoryCache()
 const apolloClient = new ApolloClient({

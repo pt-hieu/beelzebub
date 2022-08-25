@@ -41,15 +41,15 @@ provide('config', result)
 }
 
 .button-base {
-  @apply px-5 py-3 rounded-lg duration-100 border border-blue hover:border-blue-tint text-sm hover:shadow-md shadow-blue;
+  @apply px-5 py-3 rounded-lg duration-100 border border-blue hover:border-blue-tint text-sm hover:shadow-md shadow-blue ;
 }
 
 .button {
-  @apply bg-blue hover:bg-blue-tint text-white button-base;
+  @apply bg-blue hover:bg-blue-tint text-white button-base disabled:!bg-gray disabled:!shadow-none disabled:!border-gray;
 }
 
 .button-2nd {
-  @apply text-blue hover:text-blue-tint  button-base;
+  @apply text-blue hover:text-blue-tint button-base;
 }
 
 .button-3rd {

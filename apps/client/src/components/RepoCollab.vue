@@ -5,7 +5,7 @@ import { useMutation } from '@vue/apollo-composable'
 import { inject, type Ref } from 'vue'
 import Loading from './Loading.vue'
 import Collaborator from './Collaborator.vue'
-import { useToast } from '@/stores/toast'
+import { useToast } from '@/pinia/toast'
 
 const FETCH_COLLABS_TOAST_ID = 'fetch-collab'
 
@@ -33,12 +33,17 @@ const fetchCollaborators = () => {
 </script>
 
 <template>
+  <div class="text-blue-shade font-medium text-xl mb-4">
+    Collaborators
+  </div>
+
   <div
     v-if="!repo?.repo.collabs.length"
     class="w-full text-center text-blue/50 py-5"
   >
     Collaborator list has not been fetched
   </div>
+
 
   <div
     v-else
@@ -52,7 +57,7 @@ const fetchCollaborators = () => {
   </div>
 
   <div class="mt-4">
-    <button :disabled="loading" @click="fetchCollaborators" class="button-3rd">
+    <button :disabled="loading" @click="fetchCollaborators" class="button-3rd float-right">
       <loading class="mr-2 top-0.5" :is-loading="loading">
         <span class="fa fa-sync mr-2" />
       </loading>

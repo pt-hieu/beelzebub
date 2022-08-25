@@ -1,8 +1,8 @@
-import { useMessageEvent } from '@/stores/message-event'
+import { useMessageEvent } from '@/pinia/message-event'
 import type { Event } from '@beelzebub/types'
 import { watch } from 'vue'
 
-export function useOnEvent<E extends Event.SSE['type']>(
+export function useOnSseEvent<E extends Event.SSE['type']>(
   event: E,
   cb: (payload: Extract<Event.SSE, { type: E }>['payload']) => void,
 ) {

@@ -12,7 +12,17 @@
   },
   "tauri": {
     "allowlist": {
-      "all": true
+      "all": true,
+      "shell": {
+        "all": true,
+        "scope": [
+          {
+            "name": "clone repo",
+            "cmd": "git",
+            "args": true
+          }
+        ]
+      }
     },
     "bundle": {
       "active": true,

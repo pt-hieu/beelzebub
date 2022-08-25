@@ -11,9 +11,9 @@ import type { Model } from '@beelzebub/types'
 import { useLazyQuery, useMutation } from '@vue/apollo-composable'
 import { provide, ref, watch } from 'vue'
 import RepoViewVue from '@/components/RepoView.vue'
-import { useToast } from '@/stores/toast'
+import { useToast } from '@/pinia/toast'
 import Loading from '../components/Loading.vue'
-import { useOnEvent } from '@/composables/useOnEvent'
+import { useOnSseEvent } from '@/composables/useOnSseEvent'
 import CreateRepo from '../components/CreateRepo.vue'
 
 const selectedRepoId = ref<string | undefined>(undefined)
@@ -75,7 +75,7 @@ onError(() => {
   toast.add(`Synced failed!`, 'Error', SYNC_REPO_TOAST_ID, 2)
 })
 
-useOnEvent('repo.synced.1', (pl) => {
+useOnSseEvent('repo.synced.1', (pl) => {
   toast.add(
     `Post sync event completed, found ${pl.count} outdated repositories!`,
     'Info',

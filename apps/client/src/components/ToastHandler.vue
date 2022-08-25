@@ -1,12 +1,14 @@
 <script lang="ts" setup>
-import { useToast } from '@/stores/toast'
+import { useToast } from '@/pinia/toast'
 import { watch } from 'vue'
 import { useRouter } from 'vue-router'
+import { useDispatchPiniaEvent } from '../composables/useDispatchPiniaEvent.js'
 import Loading from './Loading.vue'
 
 const toastStore = useToast()
 const { currentRoute } = useRouter()
 
+const dispatch = useDispatchPiniaEvent()
 let hasFooter = $ref(false)
 
 watch(
@@ -15,7 +17,7 @@ watch(
     const footers = Array.from(document.getElementsByTagName('footer'))
     hasFooter = !!footers.length
   },
-  { flush: 'pre' },
+  { flush: 'post' },
 )
 </script>
 
@@ -23,7 +25,7 @@ watch(
   <TransitionGroup
     tag="div"
     name="list"
-    :class="`fixed flex flex-col-reverse gap-4 left-1/2 -translate-x-1/2 ${
+    :class="`fixed z-auto flex flex-col-reverse gap-4 left-1/2 -translate-x-1/2 ${
       hasFooter ? 'bottom-[96px]' : 'bottom-[16px]'
     }`"
   >
@@ -51,6 +53,18 @@ watch(
       </div>
 
       <div class="text-sm">{{ toast.message }}</div>
+
+      <div class="mt-2 flex justify-end gap-2 text-sm">
+        <button
+          class="button-2nd !py-1.5 rounded-sm"
+          v-for="action in toast.actions"
+          :key="action.event"
+          @click="dispatch(undefined, action.event)"
+        >
+          <span v-if="!!action.icon" :class="`${action.icon} mr-2`" />
+          {{ action.label }}
+        </button>
+      </div>
     </div>
   </TransitionGroup>
 </template>

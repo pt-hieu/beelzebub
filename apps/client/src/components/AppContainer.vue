@@ -24,7 +24,7 @@ watch(configModal, () => {
 <template>
   <div v-motion-fade>
     <header
-      class="h-[60px] grid grid-cols-[2fr,6fr,2fr] gap-2 place-content-center px-[60px] border-b border-blue/20"
+      class="h-[60px] grid grid-cols-[2fr,6fr,2fr] gap-2 place-content-center items-center px-[60px] border-b border-blue/20"
     >
       <div id="reserved" />
 

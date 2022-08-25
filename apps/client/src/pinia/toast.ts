@@ -1,9 +1,16 @@
 import { defineStore } from 'pinia'
 
+type ToastActions = {
+  label: string
+  event: keyof PiniaEvent
+  icon?: `fa fa-${string}`
+}
+
 type Toast = {
   id: number | string
   message: string
   type: 'Info' | 'Error' | 'Success' | 'Working'
+  actions?: ToastActions[]
 }
 
 type ToastStore = {
@@ -31,8 +38,9 @@ export const useToast = defineStore<
       message: Toast['message'],
       type?: Toast['type'],
       id?: Toast['id'],
-      /** in seoncds */
+      /** in seconds */
       timeout?: number,
+      actions?: Toast['actions'],
     ) => void
   }
 >('toast', {
@@ -43,7 +51,7 @@ export const useToast = defineStore<
     }
   },
   actions: {
-    add(message, type = 'Success', id, timeout) {
+    add(message, type = 'Success', id, timeout, actions = []) {
       const toastId = id || idGenerator.next().value || 0
       const toastIndex = this.items.findIndex((toast) => toast.id === toastId)
 
@@ -62,9 +70,10 @@ export const useToast = defineStore<
           message,
           type,
           id: toastId,
+          actions,
         })
       } else {
-        this.items.push({ message, type, id: toastId })
+        this.items.push({ message, type, id: toastId, actions })
       }
     },
     remove(toastId) {

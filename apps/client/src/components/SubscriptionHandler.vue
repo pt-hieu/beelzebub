@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { markRaw, onUnmounted } from 'vue'
-import { useMessageEvent } from '@/stores/message-event'
+import { useMessageEvent } from '@/pinia/message-event'
 import type { Event } from '@beelzebub/types'
-import { useToast } from '../stores/toast'
+import { useToast } from '../pinia/toast'
 
 const messageEvent = useMessageEvent()
 const toast = useToast()
