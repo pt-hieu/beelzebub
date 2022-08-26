@@ -6,22 +6,29 @@ export default {
 
 <script lang="ts" setup>
 import Dropdown from './Dropdown.vue'
+
 type Extension = {
   label: string
   icon?: `${'fa' | 'fab'} fa-${string}`
+  disabled?: boolean
 } & ({ link: string; event?: never } | { link?: never; event: string })
 
 type Props = {
   extensions?: Extension[]
+  buttonDisabled?: boolean
 }
 
-const { extensions = [] } = defineProps<Props>()
+const { extensions = [], buttonDisabled = false } = defineProps<Props>()
 const emit = defineEmits({})
 </script>
 
 <template>
   <span>
-    <button v-bind="$attrs" :class="`!rounded-r-none !border-r-0`">
+    <button
+      v-bind="$attrs"
+      :disabled="buttonDisabled"
+      :class="`!rounded-r-none !border-r-0`"
+    >
       <slot />
     </button>
 
@@ -32,8 +39,9 @@ const emit = defineEmits({})
         >
           <template v-for="ext in extensions" :key="ext.label">
             <button
+              :disabled="ext.disabled"
               v-if="!!ext.event"
-              class="py-2 px-3 w-full text-left hover:bg-blue hover:text-white duration-100 grid grid-cols-[30px,1fr] gap-2 items-center"
+              class="py-2 px-3 w-full text-left hover:bg-blue hover:text-white duration-100 grid grid-cols-[30px,1fr] gap-2 items-center disabled:!bg-gray disabled:!text-white"
               @click="ext.event && emit(ext.event)"
             >
               <span
@@ -45,12 +53,12 @@ const emit = defineEmits({})
 
             <a
               v-else-if="!!ext.link"
-              :href="ext.link"
+              :href="ext.disabled ? undefined : ext.link"
               target="_blank"
               rel="noopener noreferrer"
             >
               <button
-                class="py-2 px-3 w-full text-left hover:bg-blue hover:text-white duration-100 grid grid-cols-[30px,1fr] gap-2 items-center"
+                class="py-2 px-3 w-full text-left hover:bg-blue hover:text-white duration-100 grid grid-cols-[30px,1fr] gap-2 items-center disabled:!bg-gray disabled:!text-white"
               >
                 <span
                   v-if="!!ext.icon"

@@ -20,6 +20,11 @@
             "name": "clone repo",
             "cmd": "git",
             "args": true
+          },
+          {
+            "name": "open vscode",
+            "cmd": "code",
+            "args": true
           }
         ]
       }

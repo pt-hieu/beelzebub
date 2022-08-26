@@ -4,7 +4,7 @@ import moment from 'moment'
 import { computed, inject, type Ref } from 'vue'
 import RepoAdminVue from './RepoAdmin.vue'
 import { open } from '@tauri-apps/api/dialog'
-import { Command, Child } from '@tauri-apps/api/shell'
+import { Command, Child, open as openFile } from '@tauri-apps/api/shell'
 import { removeDir } from '@tauri-apps/api/fs'
 import Tag from './Tag.vue'
 import { isWeb } from '../libs/platform'
@@ -85,11 +85,36 @@ useOnPiniaEvent('abort-cloning', async () => {
       recursive: true,
     })
 
-    toast.add('Done cleaning up clone mess', 'Info', undefined, 2)
+    toast.add('Cleaned up', 'Info', undefined, 2)
   }
 })
 
-const foo = () => alert('a')
+const openRepoInExplorer = async () => {
+  if (repo?.value?.repo.path) {
+    await openFile(repo.value.repo.path)
+    return
+  }
+
+  toast.add('Path has not been configured', 'Error', undefined, 2)
+}
+
+const OPEN_VSCODE_TOAST_ID = 'open vscode'
+const openInVsCode = async () => {
+  if (isWeb()) return
+  const path = repo?.value?.repo.path
+
+  if (!path) {
+    toast.add('Path has not been configured', 'Error', undefined, 2)
+    return
+  }
+
+  const cmd = new Command('open vscode', ['.'], { cwd: path })
+  cmd.on('error', () => {
+    toast.add('Open repo in Vs Code failed!', 'Error', OPEN_VSCODE_TOAST_ID, 2)
+  })
+
+  await cmd.execute()
+}
 </script>
 
 <template>
@@ -106,12 +131,15 @@ const foo = () => alert('a')
 
         <extend-button
           class="button-2nd"
-          @open-folder="foo"
+          @open-folder="openRepoInExplorer"
+          @click="openInVsCode"
+          :button-disabled="isWeb()"
           :extensions="[
             {
               label: 'Open Folder',
               icon: 'fa fa-folder',
               event: 'open-folder',
+              disabled: isWeb(),
             },
             {
               label: 'Open in GitHub',
