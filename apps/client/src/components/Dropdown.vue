@@ -57,7 +57,7 @@ watch([visible, props], ([visible]) => {
   }
 
   if (isSecondQuater) {
-    top.value = `calc(100%)`
+    top.value = `calc(100% + 4px)`
     left.value = `calc(100%)`
     transform.value = `translateX(-100%)`
   }

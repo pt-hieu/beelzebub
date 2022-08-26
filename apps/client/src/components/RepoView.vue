@@ -10,6 +10,7 @@ import Tag from './Tag.vue'
 import { isWeb } from '../libs/platform'
 import { useToast } from '../pinia/toast.js'
 import { useOnPiniaEvent } from '../composables/useOnPiniaEvent.js'
+import ExtendButton from './ExtendButton.vue'
 
 const CLONING_REPO_TOAST_ID = 'cloning-repo'
 
@@ -87,6 +88,8 @@ useOnPiniaEvent('abort-cloning', async () => {
     toast.add('Done cleaning up clone mess', 'Info', undefined, 2)
   }
 })
+
+const foo = () => alert('a')
 </script>
 
 <template>
@@ -101,27 +104,29 @@ useOnPiniaEvent('abort-cloning', async () => {
           <tag v-else class="ml-2">Up to date</tag>
         </span>
 
-        <span class="flex gap-2 text-xs">
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            :href="`https://github.dev/${repo?.repo.name}`"
-          >
-            <button class="button-2nd px-2 py-0 -translate-y-0.5">
-              <span class="fa fa-edit" />
-            </button>
-          </a>
-
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            :href="repo?.repo?.data.html_url"
-          >
-            <button class="button-2nd px-2 py-0 -translate-y-0.5">
-              <span class="fa fa-external-link" />
-            </button>
-          </a>
-        </span>
+        <extend-button
+          class="button-2nd"
+          @open-folder="foo"
+          :extensions="[
+            {
+              label: 'Open Folder',
+              icon: 'fa fa-folder',
+              event: 'open-folder',
+            },
+            {
+              label: 'Open in GitHub',
+              link: repo?.repo.data.html_url || '',
+              icon: 'fab fa-github',
+            },
+            {
+              label: 'Edit in GitHub',
+              link: `https://github.dev/${repo?.repo.name}`,
+              icon: 'fa fa-edit',
+            },
+          ]"
+        >
+          <span class="fa fa-code mr-2" />Open In VS Code</extend-button
+        >
       </div>
 
       <div class="text-sm">
