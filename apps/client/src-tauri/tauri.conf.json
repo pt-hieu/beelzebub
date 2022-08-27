@@ -17,13 +17,13 @@
         "all": true,
         "scope": [
           {
-            "name": "clone repo",
+            "name": "git",
             "cmd": "git",
             "args": true
           },
           {
-            "name": "open vscode",
-            "cmd": "code",
+            "name": "code",
+            "cmd": "code.cmd",
             "args": true
           }
         ]

@@ -6,11 +6,15 @@ import {
 } from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
+import lodash from 'lodash'
+
 import { GithubService } from '../http/github.service.js'
 import { RepoSyncedEvent } from './repo.event.js'
 import { CreateRepositoryDto, UpdateRepositoryDto } from './repo.input.js'
 import { RepoModel } from './repo.model.js'
 import { RepoService } from './repo.service.js'
+
+const { omitBy, isUndefined } = lodash
 
 @Resolver(() => RepoModel)
 export class RepoResolver {
@@ -43,6 +47,13 @@ export class RepoResolver {
     @Args('dto') dto: UpdateRepositoryDto,
   ) {
     const repo = await this.getOneById(repoId)
+
+    const keys = Object.keys(omitBy(dto, isUndefined))
+    if (keys.length === 1 && keys[0] === 'path') {
+      return this.repoService
+        .massSave([{ ...repo, path: dto.path }])
+        .then((r) => r[0])
+    }
 
     const updatedRepo = await this.githubService.updateRepo(repo.name, dto)
     return this.repoService.updateGitHubRepository(repo, updatedRepo)

@@ -11,8 +11,11 @@ import { isWeb } from '../libs/platform'
 import { useToast } from '../pinia/toast.js'
 import { useOnPiniaEvent } from '../composables/useOnPiniaEvent.js'
 import ExtendButton from './ExtendButton.vue'
+import { useMutation } from '@vue/apollo-composable'
+import { UDPATE_REPO } from '../queries/repo.js'
 
 const CLONING_REPO_TOAST_ID = 'cloning-repo'
+const UPDATE_PATH_TOAST_ID = 'update-path'
 
 const repo = inject<Ref<{ repo: Model.GitHubRepo } | undefined>>('repo')
 const toast = useToast()
@@ -22,6 +25,12 @@ const syncDate = computed(() => moment(repo?.value?.repo.synced_at))
 
 let child = $ref<Child>()
 let dirPath = $ref<string | undefined>()
+
+const { mutate, onDone } = useMutation(UDPATE_REPO)
+
+onDone(() => {
+  toast.add('Path is well configured', 'Info', UPDATE_PATH_TOAST_ID, 2)
+})
 
 const cloneRepo = async () => {
   if (isWeb()) return
@@ -34,11 +43,9 @@ const cloneRepo = async () => {
   })) as string
 
   if (repo?.value?.repo.data.git_url && dirPath) {
-    const cmd = new Command(
-      'clone repo',
-      ['clone', repo.value.repo.data.html_url],
-      { cwd: dirPath },
-    )
+    const cmd = new Command('git', ['clone', repo.value.repo.data.html_url], {
+      cwd: dirPath,
+    })
 
     cmd.on('close', () => {
       toast.add(
@@ -47,6 +54,14 @@ const cloneRepo = async () => {
         CLONING_REPO_TOAST_ID,
         2,
       )
+
+      toast.add('Updating path property', 'Working', UPDATE_PATH_TOAST_ID)
+      mutate({
+        id: repo.value?.repo.id || '',
+        dto: {
+          path: `${dirPath}/${repo.value?.repo.data.name}`,
+        },
+      })
     })
 
     cmd.on('error', () => {
@@ -85,7 +100,7 @@ useOnPiniaEvent('abort-cloning', async () => {
       recursive: true,
     })
 
-    toast.add('Cleaned up', 'Info', undefined, 2)
+    toast.add('Repo is cleaned up', 'Info', undefined, 2)
   }
 })
 
@@ -101,19 +116,21 @@ const openRepoInExplorer = async () => {
 const OPEN_VSCODE_TOAST_ID = 'open vscode'
 const openInVsCode = async () => {
   if (isWeb()) return
-  const path = repo?.value?.repo.path
 
+  const path = repo?.value?.repo.path
   if (!path) {
     toast.add('Path has not been configured', 'Error', undefined, 2)
     return
   }
 
-  const cmd = new Command('open vscode', ['.'], { cwd: path })
+  const cmd = new Command('code', path)
   cmd.on('error', () => {
     toast.add('Open repo in Vs Code failed!', 'Error', OPEN_VSCODE_TOAST_ID, 2)
   })
 
-  await cmd.execute()
+  await cmd.spawn().catch((e) => {
+    alert(e)
+  })
 }
 </script>
 

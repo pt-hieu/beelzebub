@@ -5,6 +5,7 @@ export default {
 </script>
 
 <script lang="ts" setup>
+import { useAttrs } from 'vue'
 import Dropdown from './Dropdown.vue'
 
 type Extension = {
@@ -20,6 +21,7 @@ type Props = {
 
 const { extensions = [], buttonDisabled = false } = defineProps<Props>()
 const emit = defineEmits({})
+const attrs = useAttrs()
 </script>
 
 <template>
@@ -71,7 +73,7 @@ const emit = defineEmits({})
         </div>
       </template>
 
-      <button v-bind="$attrs" class="!rounded-l-none !px-3">
+      <button :class="`!rounded-l-none !px-3 ${attrs.class}`">
         <span class="fa fa-caret-down" />
       </button>
     </dropdown>
