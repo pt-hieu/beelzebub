@@ -13,6 +13,8 @@ import { useOnPiniaEvent } from '../composables/useOnPiniaEvent.js'
 import ExtendButton from './ExtendButton.vue'
 import { useMutation } from '@vue/apollo-composable'
 import { UDPATE_REPO } from '../queries/repo.js'
+import Confirm from './Confirm.vue'
+import SetRepoPath from './SetRepoPath.vue'
 
 const CLONING_REPO_TOAST_ID = 'cloning-repo'
 const UPDATE_PATH_TOAST_ID = 'update-path'
@@ -25,6 +27,8 @@ const syncDate = computed(() => moment(repo?.value?.repo.synced_at))
 
 let child = $ref<Child>()
 let dirPath = $ref<string | undefined>()
+
+let setPathModalVisible = $ref(false)
 
 const { mutate, onDone } = useMutation(UDPATE_REPO)
 
@@ -150,23 +154,25 @@ const openInVsCode = async () => {
           class="button-2nd"
           @open-folder="openRepoInExplorer"
           @click="openInVsCode"
-          :button-disabled="isWeb()"
+          :button-disabled="isWeb() || !repo?.repo.path"
           :extensions="[
             {
               label: 'Open Folder',
               icon: 'fa fa-folder',
               event: 'open-folder',
-              disabled: isWeb(),
+              disabled: isWeb() || !repo?.repo.path,
             },
             {
               label: 'Open in GitHub',
               link: repo?.repo.data.html_url || '',
               icon: 'fab fa-github',
+              disabled: repo?.repo.outdated,
             },
             {
               label: 'Edit in GitHub',
               link: `https://github.dev/${repo?.repo.name}`,
               icon: 'fa fa-edit',
+              disabled: repo?.repo.outdated,
             },
           ]"
         >
@@ -182,14 +188,32 @@ const openInVsCode = async () => {
 
       <div class="text-sm">Synced {{ syncDate.fromNow() }}</div>
 
-      <div class="mt-4">
-        <button :disabled="isWeb()" @click="cloneRepo" class="button">
-          <span class="fa fa-copy mr-2" />
-          Clone this repo
+      <div class="mt-4 flex gap-2">
+        <confirm
+          :ok-text="'Yes'"
+          message="It looks like you have already cloned this repo! Do you still want to clone it, again?"
+          :disabled="!repo?.repo.path"
+          @ok="cloneRepo"
+        >
+          <button :disabled="isWeb() || repo?.repo.outdated" class="button">
+            <span class="fa fa-copy mr-2" />
+            Clone this repo
+          </button>
+        </confirm>
+
+        <button @click="setPathModalVisible = true" class="button-2nd">
+          <span class="fa fa-wrench mr-2" />
+          {{ repo?.repo.path ? 'Update' : 'Set' }} Local Path
         </button>
       </div>
     </div>
 
     <repo-admin-vue v-if="repo?.repo.data.permissions.admin" />
+
+    <set-repo-path
+      :visible="setPathModalVisible"
+      @close="setPathModalVisible = false"
+      :path="repo?.repo.path || ''"
+    />
   </div>
 </template>

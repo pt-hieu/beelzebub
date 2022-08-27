@@ -1,35 +1,54 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
 import ModalVue from './Modal.vue'
 
 type Props = {
   okText?: string
   title?: string
+  disabled?: boolean
   message: string
 }
 
-const { okText, title, message } = defineProps<Props>()
+const {
+  okText = 'Ok',
+  title = 'Warning',
+  message,
+  disabled = false,
+} = defineProps<Props>()
 const emit = defineEmits(['ok'])
 
-const visible = ref(false)
+let visible = $ref(false)
 
 defineExpose({
-  close: () => (visible.value = false),
+  close: () => (visible = false),
 })
+
+const handleContainerClick = () => {
+  if (disabled) {
+    emit('ok')
+    return
+  }
+
+  visible = true
+}
+
+const handleOkButtonClick = () => {
+  emit('ok')
+  visible = false
+}
 </script>
 
 <template>
   <modal-vue
     :visible="visible"
-    :title="title || 'Warning'"
-    :ok-text="okText || 'Ok'"
-    @ok="emit('ok')"
+    :title="title"
+    :ok-text="okText"
+    @ok="handleOkButtonClick"
     @close="visible = false"
   >
     {{ message }}
   </modal-vue>
 
-  <div @click="visible = true" v-bind="$attrs">
+  <div @click="handleContainerClick" v-bind="$attrs">
     <slot></slot>
   </div>
 </template>

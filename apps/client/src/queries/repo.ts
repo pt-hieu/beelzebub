@@ -9,6 +9,7 @@ const GETMANY_REPO_FIELDS = gql`
   fragment RepoFields on RepoModel {
     id
     name
+    outdated
   }
 `
 

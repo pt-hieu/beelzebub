@@ -19,7 +19,7 @@ export class RepoService {
   }
 
   getMany() {
-    return this.repoRepo.find({ order: { outdated: 'desc' } })
+    return this.repoRepo.find({ order: { name: 'asc', outdated: 'desc' } })
   }
 
   isExistedByName(name: string) {

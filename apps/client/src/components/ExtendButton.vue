@@ -60,6 +60,7 @@ const attrs = useAttrs()
               rel="noopener noreferrer"
             >
               <button
+                :disabled="ext.disabled"
                 class="py-2 px-3 w-full text-left hover:bg-blue hover:text-white duration-100 grid grid-cols-[30px,1fr] gap-2 items-center disabled:!bg-gray disabled:!text-white"
               >
                 <span

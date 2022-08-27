@@ -32,7 +32,15 @@ onResult(({ data: { repoes } }) => {
         @click="emit('repoSelected', repo.id)"
         :key="repo.id"
       >
-        {{ repo.name.split('/')[1] }}
+        <span>
+          {{ repo.name.split('/')[1] }}
+          <span
+            v-if="repo.outdated"
+            :class="`fa fa-warning ml-2 relative z-[-1] ${
+              selectedRepoId === repo.id ? 'text-white' : 'text-blue'
+            }`"
+          />
+        </span>
 
         <span
           :class="`fa fa-caret-right -translate-x-3 group-hover:translate-x-0 ${
