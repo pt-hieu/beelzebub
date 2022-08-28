@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common'
 import { HttpModule as AxiosModule } from '@nestjs/axios'
-import { GithubService } from './github.service.js'
+import { GithubRestService } from './github-rest.service.js'
 import { ConfigModule } from '../config/config.module.js'
+import { GitHubGraphService } from './github-graphql.service.js'
 
 @Module({
   imports: [
@@ -14,7 +15,7 @@ import { ConfigModule } from '../config/config.module.js'
       },
     }),
   ],
-  providers: [GithubService],
-  exports: [GithubService],
+  providers: [GithubRestService, GitHubGraphService],
+  exports: [GithubRestService, GitHubGraphService],
 })
 export class HttpModule {}

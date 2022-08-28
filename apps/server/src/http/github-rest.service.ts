@@ -6,9 +6,9 @@ import { GitHub } from '@beelzebub/types'
 import { ConfigService } from '../config/config.service.js'
 
 @Injectable()
-export class GithubService {
+export class GithubRestService {
   private readonly GITHUB_ENDPOINT = 'https://api.github.com'
-  private logger = new Logger(GithubService.name)
+  private logger = new Logger(GithubRestService.name)
 
   constructor(
     private axios: AxiosService,

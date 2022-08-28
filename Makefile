@@ -17,3 +17,7 @@ server:
 pg: postgres
 postgres:
 	docker exec -it postgres psql -U postgres -d beelzebub
+
+isv: install-server
+install-server:
+	cd apps/server && rush add -p ${1} ${2}

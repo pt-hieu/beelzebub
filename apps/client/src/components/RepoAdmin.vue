@@ -85,7 +85,7 @@ watch(payload, ({ archived, is_template, private: isPrivate }) => {
           false-label="Unarchived"
           true-label="Archived"
           :checked="payload.archived"
-          :disabled="loading || payload.archived"
+          :disabled="loading"
           @change="(value) => (payload.archived = value)"
         />
 
@@ -97,19 +97,6 @@ watch(payload, ({ archived, is_template, private: isPrivate }) => {
           :disabled="loading || payload.archived"
           @change="(value) => (payload.is_template = value)"
         />
-      </div>
-
-      <div class="!text-xs">
-        <span class="fa fa-info text-blue mr-2" />
-        You cannot
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          :href="`https://github.com/${repo?.repo.name}/settings`"
-          class="text-blue"
-          >unarchive</a
-        >
-        the repo from here
       </div>
 
       <div class="mt-3">

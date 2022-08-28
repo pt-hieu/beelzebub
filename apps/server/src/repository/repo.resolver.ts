@@ -7,8 +7,9 @@ import {
 import { EventEmitter2 } from '@nestjs/event-emitter'
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 import lodash from 'lodash'
+import { GitHubGraphService } from '../http/github-graphql.service.js'
 
-import { GithubService } from '../http/github.service.js'
+import { GithubRestService } from '../http/github-rest.service.js'
 import { RepoSyncedEvent } from './repo.event.js'
 import { CreateRepositoryDto, UpdateRepositoryDto } from './repo.input.js'
 import { RepoModel } from './repo.model.js'
@@ -20,7 +21,8 @@ const { omitBy, isUndefined } = lodash
 export class RepoResolver {
   constructor(
     private repoService: RepoService,
-    private githubService: GithubService,
+    private githubRestService: GithubRestService,
+    private githubGraphService: GitHubGraphService,
     private eventEmitter: EventEmitter2,
   ) {}
 
@@ -55,7 +57,13 @@ export class RepoResolver {
         .then((r) => r[0])
     }
 
-    const updatedRepo = await this.githubService.updateRepo(repo.name, dto)
+    if (dto.archived === false) {
+      await this.githubGraphService.unarchiveRepository(
+        repo.data.node_id as string,
+      )
+    }
+
+    const updatedRepo = await this.githubRestService.updateRepo(repo.name, dto)
     return this.repoService.updateGitHubRepository(repo, updatedRepo)
   }
 
@@ -63,14 +71,14 @@ export class RepoResolver {
   async deleteRepo(@Args('id', ParseUUIDPipe) repoId: string) {
     const repo = await this.getOneById(repoId)
 
-    await this.githubService.deleteRepository(repo.name)
+    await this.githubRestService.deleteRepository(repo.name)
     return this.repoService.delete(repo)
   }
 
   @Mutation(() => RepoModel)
   async fetchCollaborators(@Args('id', ParseUUIDPipe) repoId: string) {
     const repo = await this.getOneById(repoId)
-    const collabs = await this.githubService.fetchCollaborators(repo.name)
+    const collabs = await this.githubRestService.fetchCollaborators(repo.name)
 
     return this.repoService
       .massSave([{ ...repo, collabs: collabs.map((col) => ({ ...col })) }])
@@ -85,7 +93,7 @@ export class RepoResolver {
         `Repo with the name of ${dto.name} has already existed`,
       )
 
-    const repo = await this.githubService.createRepo(dto.name, {
+    const repo = await this.githubRestService.createRepo(dto.name, {
       archived: false,
       is_template: false,
       private: true,
@@ -96,7 +104,7 @@ export class RepoResolver {
 
   @Mutation(() => [RepoModel])
   async syncRepo() {
-    const repos = await this.githubService.getRepositories()
+    const repos = await this.githubRestService.getRepositories()
 
     const syncDate = new Date()
     const syncResults = await this.repoService.upsertOnName(
