@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Model } from '@beelzebub/types'
 import { inject, ref, watch, type Ref } from 'vue'
+import { appWindow } from '@tauri-apps/api/window'
 import { useRouter, RouterLink } from 'vue-router'
 import DropdownVue from './Dropdown.vue'
 import { routes } from '../router'
@@ -8,6 +9,8 @@ import Config from './Config.vue'
 import ModalVue from './Modal.vue'
 import ToastHandler from './ToastHandler.vue'
 import SubscriptionHandler from './SubscriptionHandler.vue'
+import { isTauri } from '../libs/platform.js'
+import Confirm from './Confirm.vue'
 
 const { currentRoute } = useRouter()
 const config = inject<Ref<{ config: Model.Config }>>('config')
@@ -25,24 +28,9 @@ watch(configModal, () => {
   <div v-motion-fade>
     <header
       class="h-[60px] grid grid-cols-[2fr,6fr,2fr] gap-2 place-content-center items-center px-[60px] border-b border-blue/20"
+      data-tauri-drag-region
     >
-      <div id="reserved" />
-
-      <div class="flex justify-center gap-2 h-full">
-        <router-link
-          v-for="route in routes"
-          :class="`py-2 px-4 hover:bg-blue-tint/40 hover:text-white text-blue ${
-            currentRoute.path === route.path ? `!bg-blue-tint !text-white` : ``
-          } rounded-md duration-100 ease-in-out`"
-          :to="route.path"
-          :key="route.path"
-        >
-          <span v-if="route.name !== 'Home'">{{ route.name }}</span>
-          <span v-else class="fa fa-home" />
-        </router-link>
-      </div>
-
-      <div class="flex items-center gap-2 justify-end">
+      <div class="flex items-center gap-2">
         <modal-vue
           :visible="configModal"
           @close="configModal = false"
@@ -52,10 +40,6 @@ watch(configModal, () => {
         >
           <config ref="configRef" @submit="configModal = false" />
         </modal-vue>
-
-        <div class="text-blue">
-          Hi {{ config?.config.display_name }}. You look good!
-        </div>
 
         <dropdown-vue>
           <img
@@ -76,6 +60,40 @@ watch(configModal, () => {
             </div>
           </template>
         </dropdown-vue>
+
+        <div class="text-blue">
+          Hi {{ config?.config.display_name }}. You look good!
+        </div>
+      </div>
+
+      <div class="flex justify-center gap-2 h-full items-center">
+        <router-link
+          v-for="route in routes"
+          :class="`py-2 px-4 hover:bg-blue-tint/40 hover:text-white text-blue ${
+            currentRoute.path === route.path ? `!bg-blue-tint !text-white` : ``
+          } rounded-md duration-100 ease-in-out`"
+          :to="route.path"
+          :key="route.path"
+        >
+          <span v-if="route.name !== 'Home'">{{ route.name }}</span>
+          <span v-else class="fa fa-home" />
+        </router-link>
+      </div>
+
+      <div v-if="isTauri()" class="flex gap-2 justify-end items-center">
+        <button @click="appWindow.minimize()" class="button-3rd">
+          <span class="fa fa-window-minimize" />
+        </button>
+
+        <button @click="appWindow.toggleMaximize()" class="button-3rd">
+          <span class="fa fa-window-restore" />
+        </button>
+
+        <confirm message="You are exitting!" @ok="appWindow.close()" ok-text="Exit">
+          <button class="button-3rd">
+            <span class="fa fa-window-close" />
+          </button>
+        </confirm>
       </div>
     </header>
 

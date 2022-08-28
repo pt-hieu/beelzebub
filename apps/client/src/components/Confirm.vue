@@ -20,6 +20,7 @@ let visible = $ref(false)
 
 defineExpose({
   close: () => (visible = false),
+  open: () => (visible = true),
 })
 
 const handleContainerClick = () => {

@@ -71,10 +71,13 @@
     "windows": [
       {
         "fullscreen": false,
-        "height": 600,
+        "height": 720,
         "resizable": true,
         "title": "Beelzebub",
-        "width": 800
+        "width": 1280,
+        "center": true,
+        "fileDropEnabled": true,
+        "decorations": false
       }
     ]
   }
