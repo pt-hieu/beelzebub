@@ -16,6 +16,7 @@ importers:
       '@tauri-apps/cli': ^1.0.0-rc.10
       '@trivago/prettier-plugin-sort-imports': ~3.2.0
       '@types/lodash': ~4.14.182
+      '@types/string-similarity': ~4.0.0
       '@vitejs/plugin-vue': ^2.3.1
       '@vitejs/plugin-vue-jsx': ~1.3.10
       '@vue/apollo-composable': ~4.0.0-alpha.17
@@ -30,6 +31,8 @@ importers:
       moment: ~2.29.3
       pinia: ~2.0.20
       postcss: ~8.4.13
+      prettier: ~2.7.1
+      string-similarity: ~4.0.4
       tailwindcss: ~3.0.24
       typescript: ^4.5.4
       vite: ^2.9.7
@@ -51,18 +54,21 @@ importers:
       lodash: 4.17.21
       moment: 2.29.3
       pinia: 2.0.20_ytvqwwdyss532bvoq2clv4ed5m
+      string-similarity: 4.0.4
       vue: 3.2.33
       vue-router: 4.0.15_vue@3.2.33
     devDependencies:
       '@beelzebub/types': link:../../libs/types
-      '@tailwindcss/forms': 0.5.1_tailwindcss@3.0.24
+      '@tailwindcss/forms': 0.5.2_tailwindcss@3.0.24
       '@tauri-apps/cli': 1.0.0-rc.10
-      '@trivago/prettier-plugin-sort-imports': 3.2.0
+      '@trivago/prettier-plugin-sort-imports': 3.2.0_prettier@2.7.1
+      '@types/string-similarity': 4.0.0
       '@vitejs/plugin-vue': 2.3.2_vite@2.9.8+vue@3.2.33
       '@vitejs/plugin-vue-jsx': 1.3.10
       '@vue/tsconfig': 0.1.3
       autoprefixer: 10.4.7_postcss@8.4.13
       postcss: 8.4.13
+      prettier: 2.7.1
       tailwindcss: 3.0.24
       typescript: 4.6.4
       vite: 2.9.8
@@ -100,7 +106,7 @@ importers:
       lodash: ~4.17.21
       moment: ~2.29.3
       pg: ~8.7.3
-      prettier: ^2.3.2
+      prettier: ~2.7.1
       reflect-metadata: ^0.1.13
       rimraf: ^3.0.2
       rxjs: ^7.2.0
@@ -146,8 +152,8 @@ importers:
       '@typescript-eslint/parser': 5.23.0_4hx5bygx4rxgd7xwyndf6ymwce
       eslint: 8.15.0
       eslint-config-prettier: 8.5.0_eslint@8.15.0
-      eslint-plugin-prettier: 4.0.0_iqftbjqlxzn3ny5nablrkczhqi
-      prettier: 2.6.2
+      eslint-plugin-prettier: 4.0.0_ezgvvxzptmos5ckwl7flqtxi6i
+      prettier: 2.7.1
       source-map-support: 0.5.21
       supertest: 6.2.3
       ts-loader: 9.3.0_typescript@4.7.4
@@ -1379,8 +1385,8 @@ packages:
     resolution: {integrity: sha512-O3uyB/JbkAEMZaP3YqyHH7TMnex7tWyCbCI4EfJdOCoN6HIhqdJBWTM6aCCiWQ/5f5wxjgU735QAIpJbjDvmzg==}
     dev: false
 
-  /@tailwindcss/forms/0.5.1_tailwindcss@3.0.24:
-    resolution: {integrity: sha512-QSwsFORnC2BAP0lRzQkz1pw+EzIiiPdk4e27vGQjyXkwJPeC7iLIRVndJzf9CJVbcrrIcirb/TfxF3gRTyFEVA==}
+  /@tailwindcss/forms/0.5.2_tailwindcss@3.0.24:
+    resolution: {integrity: sha512-pSrFeJB6Bg1Mrg9CdQW3+hqZXAKsBrSG9MAfFLKy1pVA4Mb4W7C0k7mEhlmS2Dfo/otxrQOET7NJiJ9RrS563w==}
     peerDependencies:
       tailwindcss: '>=3.0.0 || >= 3.0.0-alpha.1'
     dependencies:
@@ -1492,7 +1498,7 @@ packages:
       '@tauri-apps/cli-win32-x64-msvc': 1.0.0-rc.10
     dev: true
 
-  /@trivago/prettier-plugin-sort-imports/3.2.0:
+  /@trivago/prettier-plugin-sort-imports/3.2.0_prettier@2.7.1:
     resolution: {integrity: sha512-DnwLe+z8t/dZX5xBbYZV1+C5STkyK/P6SSq3Nk6NXlJZsgvDZX2eN4ND7bMFgGV/NL/YChWzcNf6ziGba1ktQQ==}
     peerDependencies:
       prettier: 2.x
@@ -1504,6 +1510,7 @@ packages:
       '@babel/types': 7.13.0
       javascript-natural-sort: 0.7.1
       lodash: 4.17.21
+      prettier: 2.7.1
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -1623,6 +1630,10 @@ packages:
     dependencies:
       '@types/mime': 1.3.2
       '@types/node': 16.11.34
+
+  /@types/string-similarity/4.0.0:
+    resolution: {integrity: sha512-dMS4S07fbtY1AILG/RhuwmptmzK1Ql8scmAebOTJ/8iBtK/KI17NwGwKzu1uipjj8Kk+3mfPxum56kKZE93mzQ==}
+    dev: true
 
   /@types/zen-observable/0.8.3:
     resolution: {integrity: sha512-fbF6oTd4sGGy0xjHPKAt+eS2CrxJ3+6gQ3FGcBoIJR2TLAyCkCyI8JqZNy+FeON0AhVgNJoUumVoZQjBFUqHkw==}
@@ -3387,7 +3398,7 @@ packages:
       eslint: 8.15.0
     dev: true
 
-  /eslint-plugin-prettier/4.0.0_iqftbjqlxzn3ny5nablrkczhqi:
+  /eslint-plugin-prettier/4.0.0_ezgvvxzptmos5ckwl7flqtxi6i:
     resolution: {integrity: sha512-98MqmCJ7vJodoQK359bqQWaxOE0CS8paAz/GgjaZLyex4TTk3g9HugoO89EqWCrFiOqn9EVvcoo7gZzONCWVwQ==}
     engines: {node: '>=6.0.0'}
     peerDependencies:
@@ -3400,7 +3411,7 @@ packages:
     dependencies:
       eslint: 8.15.0
       eslint-config-prettier: 8.5.0_eslint@8.15.0
-      prettier: 2.6.2
+      prettier: 2.7.1
       prettier-linter-helpers: 1.0.0
     dev: true
 
@@ -4838,8 +4849,8 @@ packages:
       fast-diff: 1.2.0
     dev: true
 
-  /prettier/2.6.2:
-    resolution: {integrity: sha512-PkUpF+qoXTqhOeWL9fu7As8LXsIUZ1WYaJiY/a7McAQzxjk82OF0tibkFXVCDImZtWxbvojFjerkiLb0/q8mew==}
+  /prettier/2.7.1:
+    resolution: {integrity: sha512-ujppO+MkdPqoVINuDFDRLClm7D78qbDt0/NR+wp5FqEZOoTNAjPHWj17QRhu7geIHJfcNhRk1XVQmF8Bp3ye+g==}
     engines: {node: '>=10.13.0'}
     hasBin: true
     dev: true
@@ -5241,6 +5252,10 @@ packages:
   /streamsearch/0.1.2:
     resolution: {integrity: sha1-gIudDlb8Jz2Am6VzOOkpkZoanxo=}
     engines: {node: '>=0.8.0'}
+    dev: false
+
+  /string-similarity/4.0.4:
+    resolution: {integrity: sha512-/q/8Q4Bl4ZKAPjj8WerIBJWALKkaPRfrvhfF8k/B23i4nzrlRj2/go1m90In7nG/3XDSbOo0+pu6RvCTM9RGMQ==}
     dev: false
 
   /string-width/4.2.3:

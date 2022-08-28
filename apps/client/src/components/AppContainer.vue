@@ -80,7 +80,10 @@ watch(configModal, () => {
         </router-link>
       </div>
 
-      <div v-if="isTauri()" class="flex gap-2 justify-end items-center">
+      <div
+        v-if="isTauri()"
+        class="flex gap-2 justify-end items-center -mr-[48px]"
+      >
         <button @click="appWindow.minimize()" class="button-3rd">
           <span class="fa fa-window-minimize" />
         </button>
@@ -89,7 +92,11 @@ watch(configModal, () => {
           <span class="fa fa-window-restore" />
         </button>
 
-        <confirm message="You are exitting!" @ok="appWindow.close()" ok-text="Exit">
+        <confirm
+          message="You are exitting!"
+          @ok="appWindow.close()"
+          ok-text="Exit"
+        >
           <button class="button-3rd">
             <span class="fa fa-window-close" />
           </button>

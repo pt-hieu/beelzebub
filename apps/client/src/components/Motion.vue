@@ -12,7 +12,7 @@ const props = defineProps<Props>()
 const motionTarget = ref<HTMLDivElement | null>(null)
 const motion = useMotion(motionTarget, props.variants)
 
-defineExpose({ motion })
+defineExpose({ motion, motionTarget })
 const emit = defineEmits(['leaveDone'])
 
 watch(

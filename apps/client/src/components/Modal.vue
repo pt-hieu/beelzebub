@@ -2,6 +2,8 @@
 import { ref, watch } from 'vue'
 import MotionVue from './Motion.vue'
 import Loading from './Loading.vue'
+import { useTrapFocus } from '../composables/useTrapFocus.js'
+
 type Props = {
   visible: boolean
   isLoading?: boolean
@@ -13,10 +15,21 @@ const props = defineProps<Props>()
 const emit = defineEmits(['close', 'ok'])
 
 const internalVisible = ref(props.visible)
+
+let motionRef = $ref<InstanceType<typeof MotionVue> | null>(null)
+const { trapRef } = useTrapFocus()
+
 watch(
   () => props.visible,
   (visible) => {
-    if (visible) internalVisible.value = visible
+    if (visible) {
+      internalVisible.value = visible
+      trapRef.value = motionRef?.motionTarget || null
+    }
+
+    if (!visible) {
+      trapRef.value = null
+    }
   },
 )
 </script>
@@ -24,6 +37,7 @@ watch(
 <template>
   <teleport to="body">
     <motion-vue
+      ref="motionRef"
       v-show="internalVisible"
       :flag="props.visible"
       :variants="{

@@ -15,6 +15,7 @@ import { useToast } from '@/pinia/toast'
 import Loading from '../components/Loading.vue'
 import { useOnSseEvent } from '@/composables/useOnSseEvent'
 import CreateRepo from '../components/CreateRepo.vue'
+import SearchRepoModal from '../components/SearchRepoModal.vue'
 
 const selectedRepoId = ref<string | undefined>(undefined)
 
@@ -85,6 +86,7 @@ useOnSseEvent('repo.synced.1', (pl) => {
 })
 
 const createRepoVisible = $ref(false)
+const searchRepoVisible = $ref(false)
 </script>
 
 <template>
@@ -102,10 +104,21 @@ const createRepoVisible = $ref(false)
     @close="createRepoVisible = false"
   />
 
+  <search-repo-modal
+    :visible="searchRepoVisible"
+    @close="searchRepoVisible = false"
+    @found="(repoId) => (selectedRepoId = repoId)"
+  />
+
   <footer-vue>
+    <button @click="searchRepoVisible = true" class="button-2nd">
+      <span class="fa fa-search mr-2" />
+      Search
+    </button>
+
     <button @click="createRepoVisible = true" class="button-2nd">
       <span class="fa fa-plus mr-2" />
-      Add A New Repository
+      Add New
     </button>
 
     <button :disabled="loading" @click="syncRepo" class="button-2nd">

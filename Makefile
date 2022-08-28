@@ -21,3 +21,7 @@ postgres:
 isv: install-server
 install-server:
 	cd apps/server && rush add -p ${1} ${2}
+
+icl: install-client
+install-client:
+	cd apps/client && rush add -p ${1} ${2}
