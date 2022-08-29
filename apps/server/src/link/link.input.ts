@@ -1,4 +1,4 @@
-import { Field, PartialType } from '@nestjs/graphql'
+import { Field, InputType, PartialType } from '@nestjs/graphql'
 import {
   IsNotEmpty,
   IsOptional,
@@ -7,6 +7,7 @@ import {
   ValidateIf,
 } from 'class-validator'
 
+@InputType()
 export class CreateLinkDto {
   @Field()
   @IsUrl()
@@ -20,4 +21,5 @@ export class CreateLinkDto {
   alias: string | null
 }
 
+@InputType()
 export class UpdateLinkDto extends PartialType(CreateLinkDto) {}

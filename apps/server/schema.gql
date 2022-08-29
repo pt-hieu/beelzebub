@@ -17,20 +17,16 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type TodoModel {
+type LinkModel {
   id: String!
   created_at: DateTime!
   updated_at: DateTime!
+  url: String!
+  alias: String!
   title: String
-  content: String!
-  categorization: [TodoCategorization!]!
-  deadline: DateTime
-  extended: Boolean!
-}
-
-enum TodoCategorization {
-  URGENT
-  IMPORTANT
+  image: String
+  description: String
+  scrapeStatus: String!
 }
 
 type RepoModel {
@@ -50,11 +46,28 @@ The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://
 """
 scalar JSON
 
+type TodoModel {
+  id: String!
+  created_at: DateTime!
+  updated_at: DateTime!
+  title: String
+  content: String!
+  categorization: [TodoCategorization!]!
+  deadline: DateTime
+  extended: Boolean!
+}
+
+enum TodoCategorization {
+  URGENT
+  IMPORTANT
+}
+
 type Query {
   config: ConfigModel!
   todoes: [TodoModel!]!
   repoes: [RepoModel!]!
   repo(id: String!): RepoModel!
+  getAll: [LinkModel!]!
 }
 
 type Mutation {
@@ -69,6 +82,9 @@ type Mutation {
   createRepo(dto: CreateRepositoryDto!): RepoModel!
   syncRepo: [RepoModel!]!
   purgeOutdatedRepos: [RepoModel!]!
+  createLink(dto: CreateLinkDto!): LinkModel!
+  updateLink(id: String!, dto: UpdateLinkDto!): LinkModel!
+  deleteLink(id: String!): LinkModel!
 }
 
 input UpdateConfig {
@@ -99,4 +115,14 @@ input UpdateRepositoryDto {
 
 input CreateRepositoryDto {
   name: String!
+}
+
+input CreateLinkDto {
+  url: String!
+  alias: String
+}
+
+input UpdateLinkDto {
+  url: String
+  alias: String
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Repository } from 'typeorm'
+import { DeepPartial, Repository } from 'typeorm'
 
 import { LinkModel } from './link.model.js'
 
@@ -36,9 +36,15 @@ export class LinkService {
   }
 
   update(datas: LinkModelWithoutMethod[]): Promise<LinkModel[]>
+  update(data: LinkModelWithoutMethod): Promise<LinkModel>
   update(data: LinkModelWithoutMethod | LinkModelWithoutMethod[]) {
-    // @ts-ignore
-    return this.linkRepo.save(data)
+    if (Array.isArray(data)) {
+      return this.linkRepo.save(data)
+    }
+
+    if (!Array.isArray(data)) {
+      return this.linkRepo.save(data)
+    }
   }
 
   del(data: LinkModelWithoutMethod) {

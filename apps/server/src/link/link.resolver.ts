@@ -22,7 +22,7 @@ export class LinkResolver {
   }
 
   @Mutation(() => LinkModel)
-  async create(@Args('dto') dto: CreateLinkDto) {
+  async createLink(@Args('dto') dto: CreateLinkDto) {
     const result = await this.linkService.create(dto.url, dto.alias)
 
     const crawlEvent = new CrawlLinkEvent(result.url)
@@ -32,7 +32,7 @@ export class LinkResolver {
   }
 
   @Mutation(() => LinkModel)
-  async update(
+  async updateLink(
     @Args('id', ParseUUIDPipe) id: string,
     @Args('dto') dto: UpdateLinkDto,
   ) {
@@ -43,7 +43,7 @@ export class LinkResolver {
   }
 
   @Mutation(() => LinkModel)
-  async delete(@Args('id', ParseUUIDPipe) id: string) {
+  async deleteLink(@Args('id', ParseUUIDPipe) id: string) {
     const link = await this.linkService.getOne(id)
     if (!link) throw new NotFoundException()
 
