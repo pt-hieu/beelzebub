@@ -28,7 +28,7 @@ const submit = (data: any) => {
   mutate({
     id: repo?.value?.repo.id,
     dto: {
-      path: data.path,
+      path: data.path || null,
     },
   })
 }
@@ -83,7 +83,7 @@ watch(formData, () => {
       type="form"
     >
       <div class="grid grid-cols-[1fr,60px] gap-2 items-center">
-        <form-kit type="text" value="asdasdasd" label="Path" name="path" />
+        <form-kit type="text" label="Path" name="path" />
 
         <button
           @click="browse"
