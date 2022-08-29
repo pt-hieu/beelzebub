@@ -1,13 +1,13 @@
+import { ApolloClient, InMemoryCache } from '@apollo/client/core'
+import { generateClasses } from '@formkit/themes'
+import { defaultConfig, plugin } from '@formkit/vue'
+import { DefaultApolloClient } from '@vue/apollo-composable'
+import { MotionPlugin } from '@vueuse/motion'
+import { createPinia } from 'pinia'
 import { createApp, h, provide } from 'vue'
 import App from './App.vue'
 import router from './router'
-import { createPinia } from 'pinia'
-import { ApolloClient, InMemoryCache } from '@apollo/client/core'
-import { DefaultApolloClient } from '@vue/apollo-composable'
-import { plugin, defaultConfig } from '@formkit/vue'
-import { generateClasses } from '@formkit/themes'
 import theme from './theme'
-import { MotionPlugin } from '@vueuse/motion'
 
 const cache = new InMemoryCache()
 const apolloClient = new ApolloClient({
