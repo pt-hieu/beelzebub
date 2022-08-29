@@ -1,7 +1,8 @@
 import { GitHub } from '@beelzebub/types'
+
 import { Field, InputType } from '@nestjs/graphql'
-import { IsNotEmpty, IsOptional, IsString, ValidateIf } from 'class-validator'
 import { Transform } from 'class-transformer'
+import { IsNotEmpty, IsOptional, IsString, ValidateIf } from 'class-validator'
 
 @InputType()
 export class UpdateRepositoryDto implements GitHub.UpdateRepository {

@@ -1,4 +1,4 @@
-import { Kind, print, GraphQLScalarType } from 'graphql'
+import { GraphQLScalarType, Kind, print } from 'graphql'
 
 function identity(value: any) {
   return value

@@ -1,4 +1,5 @@
 import { Model } from '@beelzebub/types'
+
 import { Field, ObjectType } from '@nestjs/graphql'
 import {
   CreateDateColumn,

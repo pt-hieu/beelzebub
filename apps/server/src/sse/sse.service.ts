@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common'
-import { Subject } from 'rxjs'
 import { Event } from '@beelzebub/types'
+
+import { Injectable } from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
+import { Subject } from 'rxjs'
 
 type Listener = Extract<ReturnType<EventEmitter2['on']>, { off: () => void }>
 

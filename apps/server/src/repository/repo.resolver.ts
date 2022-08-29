@@ -1,4 +1,5 @@
 import { Event } from '@beelzebub/types'
+
 import {
   NotFoundException,
   ParseUUIDPipe,
@@ -7,13 +8,14 @@ import {
 import { EventEmitter2 } from '@nestjs/event-emitter'
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 import lodash from 'lodash'
-import { GitHubGraphService } from '../http/github-graphql.service.js'
 
-import { GithubRestService } from '../http/github-rest.service.js'
 import { RepoSyncedEvent } from './repo.event.js'
 import { CreateRepositoryDto, UpdateRepositoryDto } from './repo.input.js'
 import { RepoModel } from './repo.model.js'
 import { RepoService } from './repo.service.js'
+
+import { GitHubGraphService } from '../http/github-graphql.service.js'
+import { GithubRestService } from '../http/github-rest.service.js'
 
 const { omitBy, isUndefined } = lodash
 

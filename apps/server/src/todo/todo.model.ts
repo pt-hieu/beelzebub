@@ -1,6 +1,8 @@
 import { Model } from '@beelzebub/types'
+
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql'
 import { Column, Entity } from 'typeorm'
+
 import { BaseModel } from '../misc/base.model.js'
 
 registerEnumType(Model.TodoCategorization, {

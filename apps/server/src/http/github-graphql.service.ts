@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { graphql } from '@octokit/graphql'
+
 import { ConfigService } from '../config/config.service.js'
 
 @Injectable()

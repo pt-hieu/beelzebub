@@ -1,5 +1,6 @@
 import { Model } from '@beelzebub/types'
-import { Field, InputType, PartialType, OmitType } from '@nestjs/graphql'
+
+import { Field, InputType, OmitType, PartialType } from '@nestjs/graphql'
 import { IsDate, IsEnum, IsNotEmpty, IsOptional } from 'class-validator'
 
 @InputType()

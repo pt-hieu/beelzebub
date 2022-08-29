@@ -1,6 +1,8 @@
+import { Model } from '@beelzebub/types'
+
 import { Field, ObjectType } from '@nestjs/graphql'
 import { Column, Entity } from 'typeorm'
-import { Model } from '@beelzebub/types'
+
 import { BaseModel } from '../misc/base.model.js'
 
 @ObjectType()

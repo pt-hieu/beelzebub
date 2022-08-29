@@ -1,10 +1,12 @@
 import { Event } from '@beelzebub/types'
+
 import { Injectable } from '@nestjs/common'
 import { OnEvent } from '@nestjs/event-emitter'
 
-import { SseService } from '../sse/sse.service.js'
 import { RepoSyncedEvent } from './repo.event.js'
 import { RepoService } from './repo.service.js'
+
+import { SseService } from '../sse/sse.service.js'
 
 @Injectable()
 export class RepoListener {
