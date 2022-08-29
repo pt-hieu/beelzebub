@@ -1,13 +1,20 @@
+import { Event } from '@beelzebub/types'
+
 import { NotFoundException, ParseUUIDPipe } from '@nestjs/common'
+import { EventEmitter2 } from '@nestjs/event-emitter'
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 
+import { CrawlLinkEvent } from './link.event.js'
 import { CreateLinkDto, UpdateLinkDto } from './link.input.js'
 import { LinkModel } from './link.model.js'
 import { LinkService } from './link.service.js'
 
 @Resolver(() => LinkModel)
 export class LinkResolver {
-  constructor(private linkService: LinkService) {}
+  constructor(
+    private linkService: LinkService,
+    private emitter: EventEmitter2,
+  ) {}
 
   @Query(() => [LinkModel])
   getAll() {
@@ -15,8 +22,13 @@ export class LinkResolver {
   }
 
   @Mutation(() => LinkModel)
-  create(@Args('dto') dto: CreateLinkDto) {
-    return this.linkService.create(dto.url, dto.alias)
+  async create(@Args('dto') dto: CreateLinkDto) {
+    const result = await this.linkService.create(dto.url, dto.alias)
+
+    const crawlEvent = new CrawlLinkEvent(result.url)
+    this.emitter.emitAsync(Event.LinkEvent.CRAWL, crawlEvent)
+
+    return result
   }
 
   @Mutation(() => LinkModel)

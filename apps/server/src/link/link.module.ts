@@ -6,10 +6,13 @@ import { LinkModel } from './link.model.js'
 import { LinkResolver } from './link.resolver.js'
 import { LinkService } from './link.service.js'
 
+import { ScraperService } from '../misc/scaper.service.js'
+import { SseModule } from '../sse/sse.module.js'
+
 @Module({
-  imports: [TypeOrmModule.forFeature([LinkModel])],
+  imports: [TypeOrmModule.forFeature([LinkModel]), SseModule],
   controllers: [LinkController],
-  providers: [LinkService, LinkResolver],
+  providers: [LinkService, LinkResolver, ScraperService],
   exports: [LinkService],
 })
 export class LinkModule {}

@@ -1,4 +1,6 @@
+import { LinkEvent } from './link.js'
 import { RepoEvent } from './repo.js'
+import { Link } from '../models/link.js'
 
 export type SSE =
   | {
@@ -8,6 +10,6 @@ export type SSE =
       }
     }
   | {
-      type: `Hello world`
-      payload: string
+      type: `${LinkEvent.CRAWL}.1`
+      payload: Link[]
     }

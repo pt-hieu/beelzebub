@@ -17,6 +17,22 @@ export class LinkModel extends BaseModel implements Model.Link {
   @Column({ unique: true })
   alias: string
 
+  @Field({ nullable: true })
+  @Column()
+  title: string | null
+
+  @Field({ nullable: true })
+  @Column()
+  image: string | null
+
+  @Field({ nullable: true })
+  @Column()
+  description: string | null
+
+  @Field()
+  @Column({ default: 'WIP', enum: ['Done', 'WIP', 'Error'] })
+  scrapeStatus: 'Done' | 'WIP' | 'Error'
+
   @BeforeInsert()
   generateId() {
     if (this.alias) return

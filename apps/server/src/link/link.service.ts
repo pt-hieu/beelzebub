@@ -12,8 +12,15 @@ export class LinkService {
     @InjectRepository(LinkModel) private linkRepo: Repository<LinkModel>,
   ) {}
 
-  getAll() {
-    return this.linkRepo.find({ order: { created_at: 'desc' } })
+  getAll(): Promise<LinkModel[]>
+  getAll(url: string): Promise<LinkModel[]>
+  getAll(url?: string) {
+    return this.linkRepo.find({
+      where: {
+        ...(url && { url }),
+      },
+      order: { created_at: 'desc' },
+    })
   }
 
   getOne(id: string) {
@@ -28,7 +35,9 @@ export class LinkService {
     return this.linkRepo.save({ alias, url })
   }
 
-  update(data: LinkModelWithoutMethod) {
+  update(datas: LinkModelWithoutMethod[]): Promise<LinkModel[]>
+  update(data: LinkModelWithoutMethod | LinkModelWithoutMethod[]) {
+    // @ts-ignore
     return this.linkRepo.save(data)
   }
 
