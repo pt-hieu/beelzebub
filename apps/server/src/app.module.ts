@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 
 import { ConfigModule } from './config/config.module.js'
 import { HttpModule } from './http/http.module.js'
+import { LinkModule } from './link/link.module.js'
 import { isDev } from './misc/env.js'
 import { RepoModule } from './repository/repo.module.js'
 import { SseModule } from './sse/sse.module.js'
@@ -38,6 +39,7 @@ import { TodoModule } from './todo/todo.module.js'
     HttpModule,
     TodoModule,
     RepoModule,
+    LinkModule,
     SseModule,
   ],
 })
