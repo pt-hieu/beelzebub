@@ -17,7 +17,7 @@ export class LinkResolver {
   ) {}
 
   @Query(() => [LinkModel])
-  getAll() {
+  links() {
     return this.linkService.getAll()
   }
 
@@ -47,6 +47,6 @@ export class LinkResolver {
     const link = await this.linkService.getOne(id)
     if (!link) throw new NotFoundException()
 
-    return this.linkService.del(link)
+    return this.linkService.del(link).then((r) => ({ ...r, id }))
   }
 }

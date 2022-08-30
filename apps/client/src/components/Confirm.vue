@@ -4,6 +4,7 @@ import ModalVue from './Modal.vue'
 type Props = {
   okText?: string
   title?: string
+  disabledModal?: boolean
   disabled?: boolean
   message: string
 }
@@ -12,6 +13,7 @@ const {
   okText = 'Ok',
   title = 'Warning',
   message,
+  disabledModal = false,
   disabled = false,
 } = defineProps<Props>()
 const emit = defineEmits(['ok'])
@@ -24,7 +26,9 @@ defineExpose({
 })
 
 const handleContainerClick = () => {
-  if (disabled) {
+  if (disabled) return
+
+  if (disabledModal) {
     emit('ok')
     return
   }

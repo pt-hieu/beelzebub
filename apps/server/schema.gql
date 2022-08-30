@@ -67,7 +67,7 @@ type Query {
   todoes: [TodoModel!]!
   repoes: [RepoModel!]!
   repo(id: String!): RepoModel!
-  getAll: [LinkModel!]!
+  links: [LinkModel!]!
 }
 
 type Mutation {
@@ -119,10 +119,10 @@ input CreateRepositoryDto {
 
 input CreateLinkDto {
   url: String!
-  alias: String
+  alias: String = "Udi"
 }
 
 input UpdateLinkDto {
   url: String
-  alias: String
+  alias: String = "lUl"
 }

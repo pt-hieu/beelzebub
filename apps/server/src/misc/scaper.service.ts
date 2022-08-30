@@ -28,7 +28,7 @@ export class ScraperService {
     } else if (Array.isArray(typeCastedOgImage)) {
       finalOgImage = typeCastedOgImage[0].url
     } else {
-      finalOgImage = typeCastedOgImage.url
+      finalOgImage = typeCastedOgImage?.url
     }
 
     return { ...rest, ogImage: finalOgImage }

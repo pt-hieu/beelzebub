@@ -2,7 +2,7 @@ import { Model } from '@beelzebub/types'
 
 import { Field, ObjectType } from '@nestjs/graphql'
 import { nanoid } from 'nanoid'
-import { BeforeInsert, Column, Entity } from 'typeorm'
+import { Column, Entity } from 'typeorm'
 
 import { BaseModel } from '../misc/base.model.js'
 
@@ -18,24 +18,18 @@ export class LinkModel extends BaseModel implements Model.Link {
   alias: string
 
   @Field({ nullable: true })
-  @Column()
+  @Column({ nullable: true })
   title: string | null
 
   @Field({ nullable: true })
-  @Column()
+  @Column({ nullable: true })
   image: string | null
 
   @Field({ nullable: true })
-  @Column()
+  @Column({ nullable: true })
   description: string | null
 
   @Field()
   @Column({ default: 'WIP', enum: ['Done', 'WIP', 'Error'] })
   scrapeStatus: 'Done' | 'WIP' | 'Error'
-
-  @BeforeInsert()
-  generateId() {
-    if (this.alias) return
-    this.alias = nanoid(6)
-  }
 }

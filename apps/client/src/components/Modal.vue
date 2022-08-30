@@ -9,6 +9,7 @@ type Props = {
   isLoading?: boolean
   okText?: string
   title?: string
+  id?: string
 }
 
 const props = defineProps<Props>()
@@ -38,6 +39,7 @@ watch(
   <teleport to="body">
     <motion-vue
       ref="motionRef"
+      :id="id"
       v-show="internalVisible"
       :flag="props.visible"
       :variants="{
@@ -93,10 +95,11 @@ watch(
           <slot name="footer">
             <div
               class="flex gap-2 items-center justify-end mt-4 border-t border-black/10 pt-4"
+              id="footer-container"
             >
-              <button class="button-3rd" @click="emit('close')">Cancel</button>
+              <button class="button-3rd order-2" @click="emit('close')">Cancel</button>
 
-              <button class="button" @click="emit('ok')">
+              <button class="button order-3" @click="emit('ok')">
                 <loading :is-loading="isLoading || false">
                   <span class="fa fa-check mr-2" />
                 </loading>

@@ -192,7 +192,7 @@ const openInVsCode = async () => {
         <confirm
           :ok-text="'Yes'"
           message="It looks like you have already cloned this repo! Do you still want to clone it, again?"
-          :disabled="!repo?.repo.path"
+          :disabled-modal="!repo?.repo.path"
           @ok="cloneRepo"
         >
           <button :disabled="isWeb() || repo?.repo.outdated" class="button">

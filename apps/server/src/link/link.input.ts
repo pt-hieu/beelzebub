@@ -6,6 +6,7 @@ import {
   IsUrl,
   ValidateIf,
 } from 'class-validator'
+import { nanoid } from 'nanoid'
 
 @InputType()
 export class CreateLinkDto {
@@ -14,11 +15,10 @@ export class CreateLinkDto {
   url: string
 
   @Field({ nullable: true })
-  @ValidateIf((_, value) => value !== null)
   @IsNotEmpty()
   @IsOptional()
   @IsString()
-  alias: string | null
+  alias: string = nanoid(3)
 }
 
 @InputType()

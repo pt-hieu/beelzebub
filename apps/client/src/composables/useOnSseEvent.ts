@@ -1,6 +1,6 @@
 import { useMessageEvent } from '@/pinia/message-event'
 import type { Event } from '@beelzebub/types'
-import { watch } from 'vue'
+import { unref, watch } from 'vue'
 
 export function useOnSseEvent<E extends Event.SSE['type']>(
   event: E,
@@ -14,7 +14,7 @@ export function useOnSseEvent<E extends Event.SSE['type']>(
       if (!ev) return
       if (ev.type !== event) return
 
-      cb(messageEvent.value!.payload as unknown as any)
+      cb(unref(messageEvent.value!.payload as unknown as any))
     },
     { immediate: false },
   )
