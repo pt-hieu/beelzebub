@@ -119,10 +119,10 @@ input CreateRepositoryDto {
 
 input CreateLinkDto {
   url: String!
-  alias: String = "Udi"
+  alias: String
 }
 
 input UpdateLinkDto {
   url: String
-  alias: String = "lUl"
+  alias: String
 }

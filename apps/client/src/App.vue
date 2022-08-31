@@ -49,7 +49,7 @@ provide('config', result)
 }
 
 .button-2nd {
-  @apply text-blue hover:text-blue-tint button-base disabled:!text-gray disabled:!border-gray;
+  @apply text-blue hover:text-blue-tint button-base disabled:!text-gray disabled:!border-gray disabled:!shadow-none;
 }
 
 .button-3rd {

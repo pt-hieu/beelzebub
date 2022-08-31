@@ -6,7 +6,6 @@ import {
   IsUrl,
   ValidateIf,
 } from 'class-validator'
-import { nanoid } from 'nanoid'
 
 @InputType()
 export class CreateLinkDto {
@@ -18,7 +17,7 @@ export class CreateLinkDto {
   @IsNotEmpty()
   @IsOptional()
   @IsString()
-  alias: string = nanoid(3)
+  alias: string
 }
 
 @InputType()

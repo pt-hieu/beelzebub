@@ -3,6 +3,7 @@ import { Event } from '@beelzebub/types'
 import { NotFoundException, ParseUUIDPipe } from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
+import { nanoid } from 'nanoid'
 
 import { CrawlLinkEvent } from './link.event.js'
 import { CreateLinkDto, UpdateLinkDto } from './link.input.js'
@@ -23,6 +24,7 @@ export class LinkResolver {
 
   @Mutation(() => LinkModel)
   async createLink(@Args('dto') dto: CreateLinkDto) {
+    dto.alias = dto.alias || nanoid(3)
     const result = await this.linkService.create(dto.url, dto.alias)
 
     const crawlEvent = new CrawlLinkEvent(result.url)
