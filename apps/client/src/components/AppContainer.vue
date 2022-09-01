@@ -12,11 +12,14 @@ import SubscriptionHandler from './SubscriptionHandler.vue'
 import { isTauri } from '../libs/platform.js'
 import Confirm from './Confirm.vue'
 import ShortcutHandler from './ShortcutHandler.vue'
+import ShortcutHelpModal from './ShortcutHelpModal.vue'
 
 const { currentRoute } = useRouter()
 const config = inject<Ref<{ config: Model.Config }>>('config')
 
 const configModal = ref(false)
+const shortcutModal = $ref(false)
+
 const configRef = ref<InstanceType<typeof Config> | null>(null)
 
 watch(configModal, () => {
@@ -42,6 +45,11 @@ watch(configModal, () => {
           <config ref="configRef" @submit="configModal = false" />
         </modal-vue>
 
+        <shortcut-help-modal
+          :visible="shortcutModal"
+          @close="shortcutModal = false"
+        />
+
         <dropdown-vue>
           <img
             :src="config?.config.avatar"
@@ -57,6 +65,13 @@ watch(configModal, () => {
                 class="py-2 px-3 w-full text-left hover:bg-blue hover:text-white duration-100"
               >
                 <span class="fa fa-cog mr-2" />Settings
+              </button>
+
+              <button
+                @click="shortcutModal = true"
+                class="py-2 px-3 w-full text-left hover:bg-blue hover:text-white duration-100"
+              >
+                <span class="fa fa-keyboard mr-2" />Shortcuts
               </button>
             </div>
           </template>
