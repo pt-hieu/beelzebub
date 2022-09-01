@@ -4,13 +4,12 @@ import { reactive, unref, watch } from 'vue'
 import { FormKit, submitForm, reset } from '@formkit/vue'
 import Modal from './Modal.vue'
 import { useMutation } from '@vue/apollo-composable'
-import {
-  CREATE_LINK,
-  GET_LINKS,
-  UPDATE_LINK,
-  type GetLinksRes,
-} from '../queries/link.js'
+import { UPDATE_LINK } from '../queries/link.js'
 import { useToast } from '../pinia/toast.js'
+import {
+  useCreateLink,
+  CREATE_LINK_TOAST_ID,
+} from '../mutations/create-link.js'
 
 type Props = {
   visible: boolean
@@ -20,7 +19,6 @@ type Props = {
 const { visible, linkData } = defineProps<Props>()
 const emit = defineEmits(['close'])
 
-const CREATE_LINK_TOAST_ID = 'create-link'
 const UPDATE_LINK_TOAST_ID = 'update-link'
 
 const toast = useToast()
@@ -37,29 +35,7 @@ watch(formData, (formData) => {
   reset(formId, unref(formData))
 })
 
-const {
-  mutate: create,
-  loading: creating,
-  onDone: onCreated,
-  onError: onCreateFailed,
-} = useMutation(CREATE_LINK, {
-  update: (cache, { data: { createLink } }) => {
-    let data = cache.readQuery<GetLinksRes>({ query: GET_LINKS })
-    data = {
-      links: [createLink, ...(data?.links || [])],
-    }
-
-    cache.writeQuery({ query: GET_LINKS, data })
-  },
-})
-
-onCreated(() => {
-  toast.add('Link created', 'Success', CREATE_LINK_TOAST_ID, 2)
-})
-
-onCreateFailed(() => {
-  toast.add('Link failed to create', 'Error', CREATE_LINK_TOAST_ID, 2)
-})
+const { create, creating } = useCreateLink()
 
 const {
   loading: updating,

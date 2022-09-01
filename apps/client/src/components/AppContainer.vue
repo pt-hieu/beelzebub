@@ -11,6 +11,7 @@ import ToastHandler from './ToastHandler.vue'
 import SubscriptionHandler from './SubscriptionHandler.vue'
 import { isTauri } from '../libs/platform.js'
 import Confirm from './Confirm.vue'
+import ShortcutHandler from './ShortcutHandler.vue'
 
 const { currentRoute } = useRouter()
 const config = inject<Ref<{ config: Model.Config }>>('config')
@@ -105,6 +106,7 @@ watch(configModal, () => {
     </header>
 
     <toast-handler />
+    <shortcut-handler />
     <subscription-handler />
 
     <main

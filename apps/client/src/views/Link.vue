@@ -9,6 +9,10 @@ import Confirm from '../components/Confirm.vue'
 import Loading from '../components/Loading.vue'
 import { useToast } from '../pinia/toast.js'
 import { toRaw } from 'vue'
+import { useOnPiniaEvent } from '../composables/useOnPiniaEvent.js'
+import { isWeb } from '../libs/platform.js'
+import { readText } from '@tauri-apps/api/clipboard'
+import { useCreateLink } from '../mutations/create-link.js'
 
 const { result } = useQuery<GetLinksRes>(GET_LINKS)
 
@@ -25,8 +29,6 @@ useOnSseEvent('link.crawl.1', (links) => {
   ])
 
   const final = Array.from(linkMap.values())
-
-  console.log({ links, data: data?.links, final })
 
   cache.writeQuery({
     query: GET_LINKS,
@@ -70,6 +72,19 @@ onDeleted(() => {
 
 onDeleteFailed(() => {
   toast.add('Link failed to delete', 'Error', DELETE_LINK_TOAST_ID, 2)
+})
+
+const { create } = useCreateLink()
+useOnPiniaEvent('Control+Alt+Q', async () => {
+  if (isWeb()) return
+  const link = await readText()
+
+  if (!link) {
+    toast.add('Clipboard is empty', 'Info', undefined, 2)
+    return
+  }
+
+  create({ dto: { url: link } })
 })
 </script>
 
