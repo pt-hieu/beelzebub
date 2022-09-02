@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { DeepPartial, Repository } from 'typeorm'
+import { Repository } from 'typeorm'
 
 import { LinkModel } from './link.model.js'
 
 type LinkModelWithoutMethod = Omit<LinkModel, 'generateId'>
+type CreateInput = (Pick<LinkModel, 'url'> &
+  Partial<Pick<LinkModel, 'alias'>>)[]
 
 @Injectable()
 export class LinkService {
@@ -31,8 +33,24 @@ export class LinkService {
     return this.linkRepo.findOne({ where: { alias } })
   }
 
-  create(url: string, alias?: string) {
-    return this.linkRepo.save({ alias, url })
+  create(data: CreateInput): Promise<(CreateInput & LinkModel)[]>
+  create(
+    url: string,
+    alias?: string,
+  ): Promise<
+    {
+      alias: string
+      url: string
+    } & LinkModel
+  >
+  create(url: string | CreateInput, alias?: string) {
+    if (Array.isArray(url)) {
+      return this.linkRepo.save(url)
+    }
+
+    if (typeof url === 'string') {
+      return this.linkRepo.save({ alias, url })
+    }
   }
 
   update(datas: LinkModelWithoutMethod[]): Promise<LinkModel[]>

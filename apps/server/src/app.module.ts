@@ -4,6 +4,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter'
 import { GraphQLModule } from '@nestjs/graphql'
 import { TypeOrmModule } from '@nestjs/typeorm'
 
+import { BookmarkModule } from './bookmark/bookmark.module.js'
 import { ConfigModule } from './config/config.module.js'
 import { HttpModule } from './http/http.module.js'
 import { LinkModule } from './link/link.module.js'
@@ -41,6 +42,7 @@ import { TodoModule } from './todo/todo.module.js'
     RepoModule,
     LinkModule,
     SseModule,
+    BookmarkModule,
   ],
 })
 export class AppModule {}

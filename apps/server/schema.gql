@@ -2,21 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type ConfigModel {
-  id: String!
-  created_at: DateTime!
-  updated_at: DateTime!
-  unique: Boolean!
-  display_name: String!
-  avatar: String!
-  github_token: String
-}
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
 type LinkModel {
   id: String!
   created_at: DateTime!
@@ -27,6 +12,21 @@ type LinkModel {
   image: String
   description: String
   scrapeStatus: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type ConfigModel {
+  id: String!
+  created_at: DateTime!
+  updated_at: DateTime!
+  unique: Boolean!
+  display_name: String!
+  avatar: String!
+  github_token: String
 }
 
 type RepoModel {
@@ -85,6 +85,7 @@ type Mutation {
   createLink(dto: CreateLinkDto!): LinkModel!
   updateLink(id: String!, dto: UpdateLinkDto!): LinkModel!
   deleteLink(id: String!): LinkModel!
+  importLinks(source: String!, dto: ImportBookmarkDto!): [LinkModel!]!
 }
 
 input UpdateConfig {
@@ -126,3 +127,10 @@ input UpdateLinkDto {
   url: String
   alias: String
 }
+
+input ImportBookmarkDto {
+  file: Upload!
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
