@@ -1,8 +1,14 @@
-import { Injectable } from '@nestjs/common'
-import ogs, { type OpenGraphImage } from 'open-graph-scraper'
+import { Injectable, Logger } from '@nestjs/common'
+import ogs, {
+  ErrorResult,
+  type OpenGraphImage,
+  SuccessResult,
+} from 'open-graph-scraper'
 
 @Injectable()
 export class ScraperService {
+  private logger = new Logger(ScraperService.name)
+
   constructor() {}
 
   public async do(url: string) {
@@ -11,9 +17,16 @@ export class ScraperService {
       headers: {
         'user-agent': 'Googlebot/2.1 (+http://www.google.com/bot.html)',
       },
+    }).catch((r: ErrorResult | SuccessResult) => {
+      return r
     })
 
-    if (!scrapeResult.result.success) return null
+    if (!scrapeResult.result.success) {
+      this.logger.verbose(JSON.stringify(scrapeResult.result))
+
+      return null
+    }
+
     const { ogImage, ...rest } = scrapeResult.result
 
     let typeCastedOgImage = ogImage as unknown as
@@ -31,6 +44,10 @@ export class ScraperService {
       finalOgImage = typeCastedOgImage?.url
     }
 
-    return { ...rest, ogImage: finalOgImage }
+    return { ...rest, ogImage: finalOgImage, url }
+  }
+
+  public doMany(urls: string[]) {
+    return urls.map((url) => this.do(url))
   }
 }

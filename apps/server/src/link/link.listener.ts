@@ -1,6 +1,6 @@
 import { Event } from '@beelzebub/types'
 
-import { Injectable } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
 import { OnEvent } from '@nestjs/event-emitter'
 
 import { CrawlLinkEvent } from './link.event.js'
@@ -12,6 +12,8 @@ import { SseService } from '../sse/sse.service.js'
 
 @Injectable()
 export class LinkListener {
+  private logger = new Logger(LinkListener.name)
+
   constructor(
     private sseService: SseService,
     private linkService: LinkService,
@@ -19,40 +21,45 @@ export class LinkListener {
   ) {}
 
   @OnEvent(Event.LinkEvent.CRAWL, { async: true })
-  async crawl({ url }: CrawlLinkEvent) {
-    const [links, scrapeResult] = await Promise.all([
-      this.linkService.getAll(url),
-      this.scraper.do(url),
+  async crawl({ urls }: CrawlLinkEvent) {
+    const [links, scrapeResults] = await Promise.all([
+      this.linkService.getAll(urls),
+      this.scraper.doMany(urls),
     ])
 
-    let updatedLinks: LinkModel[]
+    scrapeResults.forEach(async (promise, index) => {
+      const scrapeResult = await promise
 
-    if (scrapeResult) {
-      const { ogTitle, ogImage, ogDescription } = scrapeResult
+      const linkWithScrapeUrl = links.filter((link) => link.url === urls[index])
+      let updatedLinks: LinkModel[]
 
-      updatedLinks = await this.linkService.update(
-        links.map((link) => ({
-          ...link,
-          scrapeStatus: 'Done',
-          image: ogImage,
-          description: ogDescription,
-          title: ogTitle,
-        })),
-      )
-    }
+      if (scrapeResult) {
+        const { ogTitle, ogImage, ogDescription } = scrapeResult
 
-    if (!scrapeResult) {
-      updatedLinks = await this.linkService.update(
-        links.map((link) => ({
-          ...link,
-          scrapeStatus: 'Error',
-        })),
-      )
-    }
+        updatedLinks = await this.linkService.update(
+          linkWithScrapeUrl.map((link) => ({
+            ...link,
+            scrapeStatus: 'Done',
+            image: ogImage,
+            description: ogDescription,
+            title: ogTitle,
+          })),
+        )
+      }
 
-    this.sseService.emit({
-      type: 'link.crawl.1',
-      payload: updatedLinks,
+      if (!scrapeResult) {
+        updatedLinks = await this.linkService.update(
+          linkWithScrapeUrl.map((link) => ({
+            ...link,
+            scrapeStatus: 'Error',
+          })),
+        )
+      }
+
+      this.sseService.emit({
+        type: 'link.crawl.1',
+        payload: updatedLinks,
+      })
     })
   }
 }

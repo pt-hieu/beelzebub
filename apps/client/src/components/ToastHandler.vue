@@ -17,7 +17,7 @@ watch(
     const footers = Array.from(document.getElementsByTagName('footer'))
     hasFooter = !!footers.length
   },
-  { flush: 'post' },
+  { flush: 'pre' },
 )
 </script>
 
@@ -25,14 +25,14 @@ watch(
   <TransitionGroup
     tag="div"
     name="list"
-    :class="`fixed z-auto flex flex-col-reverse gap-4 left-1/2 -translate-x-1/2 ${
+    :class="`fixed z-[9999] flex flex-col-reverse gap-4 left-1/2 -translate-x-1/2 ${
       hasFooter ? 'bottom-[96px]' : 'bottom-[16px]'
     }`"
   >
     <div
       v-for="toast in toastStore.items"
       :key="toast.id"
-      class="px-3 py-4 rounded-md shadow-md shadow-blue/30 border-t border-blue/40 w-[300px]"
+      class="px-3 py-4 rounded-md shadow-md shadow-blue/30 border-t border-blue/40 bg-white w-[300px]"
     >
       <div class="flex items-center justify-between">
         <div class="text-blue-shade font-medium flex gap-2">

@@ -42,7 +42,7 @@ onLongPress($$(linkItemRef), () => {
   <button
     ref="linkItemRef"
     :title="shortened"
-    :class="`p-2 ring-blue ring-1 rounded-md flex flex-col duration-100 ${
+    :class="`p-2 ring-blue bg-white ring-1 rounded-md flex flex-col duration-100 ${
       selected ? '!ring-2' : ''
     }`"
     @click="emit('chosen', selected ? undefined : data.id)"
@@ -75,7 +75,8 @@ onLongPress($$(linkItemRef), () => {
 
     <template v-else>
       <div class="h-[169px] w-full grid place-content-center">
-        Failed To Crawl Data
+        <div class="text-sm text-blue">Failed To Crawl Data</div>
+        <div class="truncate px-2">{{ data.url }}</div>
       </div>
     </template>
   </button>

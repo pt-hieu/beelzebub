@@ -26,7 +26,8 @@
     "@vueuse/motion": "~2.0.0-beta.12",
     "moment": "~2.29.3",
     "string-similarity": "~4.0.4",
-    "copy-to-clipboard": "~3.3.2"
+    "copy-to-clipboard": "~3.3.2",
+    "apollo-upload-client": "~17.0.0"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1.0.0-rc.10",
@@ -42,6 +43,7 @@
     "vite": "^2.9.7",
     "vue-tsc": "^0.34.7",
     "@types/string-similarity": "~4.0.0",
-    "prettier": "~2.7.1"
+    "prettier": "~2.7.1",
+    "@types/apollo-upload-client": "~17.0.1"
   }
 }

@@ -13,6 +13,7 @@ import { useOnPiniaEvent } from '../composables/useOnPiniaEvent.js'
 import { isWeb } from '../libs/platform.js'
 import { readText } from '@tauri-apps/api/clipboard'
 import { useCreateLink } from '../mutations/create-link.js'
+import BookmarkImportModal from '../components/BookmarkImportModal.vue'
 
 const { result } = useQuery<GetLinksRes>(GET_LINKS)
 
@@ -37,6 +38,7 @@ useOnSseEvent('link.crawl.1', (links) => {
 })
 
 let mutateLinkVisible = $ref(false)
+let importBookmarkVisible = $ref(false)
 let selectedLinkId = $ref<string | undefined>()
 
 const selectedLink = $computed(() =>
@@ -89,7 +91,9 @@ useOnPiniaEvent('Control+Alt+Q', async () => {
 </script>
 
 <template>
-  <div class="py-4 grid grid-cols-[repeat(auto-fit,minmax(250px,250px))] gap-3">
+  <div
+    class="p-4 pt-1 grid grid-cols-[repeat(auto-fit,minmax(250px,270px))] gap-3 max-h-[calc(100vh-160px)] mt-4 overflow-auto"
+  >
     <link-item
       v-for="link in result?.links"
       :data="link"
@@ -108,6 +112,11 @@ useOnPiniaEvent('Control+Alt+Q', async () => {
       }
     "
     :link-data="selectedLink"
+  />
+
+  <bookmark-import-modal
+    :visible="importBookmarkVisible"
+    @close="importBookmarkVisible = false"
   />
 
   <footer-vue>
@@ -131,6 +140,11 @@ useOnPiniaEvent('Control+Alt+Q', async () => {
       <span v-else class="fa fa-edit mr-2" />
 
       {{ selectedLinkId ? 'Update' : 'Add New' }}
+    </button>
+
+    <button @click="importBookmarkVisible = true" class="button-2nd">
+      <span class="fa fa-file-import mr-2" />
+      Import From Bookmark
     </button>
   </footer-vue>
 </template>

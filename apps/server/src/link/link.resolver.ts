@@ -27,7 +27,7 @@ export class LinkResolver {
     dto.alias = dto.alias || nanoid(3)
     const result = await this.linkService.create(dto.url, dto.alias)
 
-    const crawlEvent = new CrawlLinkEvent(result.url)
+    const crawlEvent = new CrawlLinkEvent([result.url])
     this.emitter.emitAsync(Event.LinkEvent.CRAWL, crawlEvent)
 
     return result

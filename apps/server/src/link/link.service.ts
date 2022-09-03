@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Repository } from 'typeorm'
+import { In, Repository } from 'typeorm'
 
 import { LinkModel } from './link.model.js'
 
@@ -15,11 +15,13 @@ export class LinkService {
   ) {}
 
   getAll(): Promise<LinkModel[]>
+  getAll(urls: string[]): Promise<LinkModel[]>
   getAll(url: string): Promise<LinkModel[]>
-  getAll(url?: string) {
+  getAll(url?: string | string[]) {
     return this.linkRepo.find({
       where: {
-        ...(url && { url }),
+        ...(url && !Array.isArray(url) && { url }),
+        ...(url && Array.isArray(url) && { url: In(url) }),
       },
       order: { created_at: 'desc' },
     })

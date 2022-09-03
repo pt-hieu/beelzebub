@@ -10,6 +10,7 @@ type Props = {
   okText?: string
   title?: string
   id?: string
+  okDisabled?: boolean
 }
 
 const props = defineProps<Props>()
@@ -97,9 +98,15 @@ watch(
               class="flex gap-2 items-center justify-end mt-4 border-t border-black/10 pt-4"
               id="footer-container"
             >
-              <button class="button-3rd order-2" @click="emit('close')">Cancel</button>
+              <button class="button-3rd order-2" @click="emit('close')">
+                Cancel
+              </button>
 
-              <button class="button order-3" @click="emit('ok')">
+              <button
+                :disabled="okDisabled"
+                class="button order-3"
+                @click="emit('ok')"
+              >
                 <loading :is-loading="isLoading || false">
                   <span class="fa fa-check mr-2" />
                 </loading>

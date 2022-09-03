@@ -53,3 +53,12 @@ export const DELETE_LINK = gql`
     }
   }
 `
+
+export const IMPORT_LINK = gql`
+  ${LINK_FIELDS}
+  mutation ImportLink($source: String!, $file: Upload!) {
+    importLinks(source: $source, dto: { file: $file }) {
+      ...LinkFields
+    }
+  }
+`

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import Modal from './Modal.vue'
 import { shortcuts, type Shortcut } from '../shortcuts.js'
-import ShortcutKey from './ShortcutKey.vue'
+import ShortcutKey from './KeyCode.vue'
 
 type Props = {
   visible: boolean
@@ -39,7 +39,7 @@ const tags = Object.keys(shortcutDict)
             :key="shortcut.keys"
           >
             <span>{{ shortcut.description }}</span>
-            <shortcut-key :keys="shortcut.keys" />
+            <shortcut-key :keys="shortcut.keys" :deli="'+'" />
           </div>
         </div>
       </div>
