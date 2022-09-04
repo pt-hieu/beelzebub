@@ -76,7 +76,7 @@ onLongPress($$(linkItemRef), () => {
     <template v-else>
       <div class="h-[169px] w-full grid place-content-center">
         <div class="text-sm text-blue">Failed To Crawl Data</div>
-        <div class="truncate px-2">{{ data.url }}</div>
+        <div :title="data.url" class="truncate px-2">{{ data.url }}</div>
       </div>
     </template>
   </button>

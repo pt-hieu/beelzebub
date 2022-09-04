@@ -14,6 +14,7 @@ import { isWeb } from '../libs/platform.js'
 import { readText } from '@tauri-apps/api/clipboard'
 import { useCreateLink } from '../mutations/create-link.js'
 import BookmarkImportModal from '../components/BookmarkImportModal.vue'
+import { open } from '@tauri-apps/api/shell'
 
 const { result } = useQuery<GetLinksRes>(GET_LINKS)
 
@@ -88,6 +89,11 @@ useOnPiniaEvent('Control+Alt+Q', async () => {
 
   create({ dto: { url: link } })
 })
+
+async function openInBrowser() {
+  if (!selectedLink) return
+  await open(selectedLink.url)
+}
 </script>
 
 <template>
@@ -134,6 +140,15 @@ useOnPiniaEvent('Control+Alt+Q', async () => {
         Delete
       </button>
     </confirm>
+
+    <button
+      @click="openInBrowser"
+      :disabled="!selectedLinkId"
+      class="button-2nd"
+    >
+      <span class="fa fa-external-link mr-2" />
+      Open
+    </button>
 
     <button @click="mutateLinkVisible = true" class="button-2nd">
       <span v-if="!selectedLinkId" class="fa fa-add mr-2" />
