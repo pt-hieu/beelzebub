@@ -1,5 +1,9 @@
 <script lang="ts" setup>
-import { registerAll, unregisterAll } from '@tauri-apps/api/globalShortcut'
+import {
+  registerAll,
+  unregisterAll,
+  isRegistered,
+} from '@tauri-apps/api/globalShortcut'
 import { onMounted, onUnmounted } from 'vue'
 import { useDispatchPiniaEvent } from '../composables/useDispatchPiniaEvent.js'
 import { isWeb } from '../libs/platform.js'
@@ -12,10 +16,19 @@ const toast = useToast()
 onMounted(async () => {
   if (isWeb()) return
 
+  const globalShortcuts = shortcuts
+    .filter((shortcut) => shortcut.scope === 'global')
+    .map((shortcut) => shortcut.keys)
+
+  const unregisteredGlobalShortcuts = await Promise.all(
+    globalShortcuts.map(async (short) => {
+      const registered = await isRegistered(short)
+      return registered ? '' : short
+    }),
+  )
+
   await registerAll(
-    shortcuts
-      .filter((shortcut) => shortcut.scope === 'global')
-      .map((shortcut) => shortcut.keys),
+    unregisteredGlobalShortcuts.filter((s) => !!s),
     async (s) => {
       dispatch({}, s)
     },
