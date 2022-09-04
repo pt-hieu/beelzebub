@@ -6,6 +6,7 @@ import copy from 'copy-to-clipboard'
 import { isWeb } from '../libs/platform.js'
 import { onLongPress } from '@vueuse/core'
 import Loading from './Loading.vue'
+import { open } from '@tauri-apps/api/shell'
 
 type Props = {
   data: Model.Link
@@ -42,10 +43,15 @@ onLongPress($$(linkItemRef), () => {
   <button
     ref="linkItemRef"
     :title="shortened"
-    :class="`p-2 ring-blue bg-white ring-1 rounded-md flex flex-col duration-100 ${
+    :class="`p-2 ring-blue bg-[#fff] ring-1 rounded-md flex flex-col duration-100 ${
       selected ? '!ring-2' : ''
     }`"
-    @click="emit('chosen', selected ? undefined : data.id)"
+    @click="
+      !$event.ctrlKey
+        ? emit('chosen', selected ? undefined : data.id)
+        : open(data.url)
+    "
+    @dblclick="copy2Clipboard"
   >
     <template v-if="data.scrapeStatus === 'Done'">
       <div
