@@ -7,7 +7,7 @@ import { CrawlLinkEvent } from './link.event.js'
 import { LinkModel } from './link.model.js'
 import { LinkService } from './link.service.js'
 
-import { ScraperService } from '../misc/scaper.service.js'
+import { ScraperService } from '../misc/scraper.service.js'
 import { SseService } from '../sse/sse.service.js'
 
 @Injectable()
