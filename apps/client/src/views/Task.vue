@@ -1,13 +1,14 @@
 <script lang="ts" setup>
+import type { Model } from '@beelzebub/types'
 import { useMutation, useQuery } from '@vue/apollo-composable'
 import { onMounted, onUnmounted, ref, watch } from 'vue'
+
 import FooterVue from '../components/Footer.vue'
 import ModalVue from '../components/Modal.vue'
-import CreateTaskVue from '../components/CreateTask.vue'
+import CreateTaskVue from '../components/tasks/CreateTask.vue'
 import { DELETE_TODO, GET_TODOES, type GetTodoesRes } from '../queries/todo'
-import TaskVue from '../components/Task.vue'
+import TaskVue from '../components/tasks/Task.vue'
 import DropdownVue from '../components/Dropdown.vue'
-import type { Model } from '@beelzebub/types'
 import ConfirmVue from '../components/Confirm.vue'
 import MotionVue from '../components/Motion.vue'
 import { leaveByWidthVariant } from '../variants/leave-by-width'

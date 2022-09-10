@@ -1,13 +1,15 @@
 <script lang="ts" setup>
-import Modal from './Modal.vue'
 import { readBinaryFile } from '@tauri-apps/api/fs'
-import { open } from '../dialog.js'
-import KeyCode from './KeyCode.vue'
-import Loading from './Loading.vue'
 import { watch } from 'vue'
 import { useMutation } from '@vue/apollo-composable'
-import { IMPORT_LINK } from '../queries/link.js'
-import { useToast } from '../pinia/toast.js'
+
+import Modal from '../Modal.vue'
+import KeyCode from '../KeyCode.vue'
+import Loading from '../Loading.vue'
+
+import { open } from '../../dialog.js'
+import { IMPORT_LINK } from '../../queries/link.js'
+import { useToast } from '../../pinia/toast.js'
 
 type Props = {
   visible: boolean

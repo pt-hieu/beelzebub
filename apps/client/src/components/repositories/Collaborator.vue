@@ -1,9 +1,11 @@
 <script lang="ts" setup>
 import type { GitHub } from '@beelzebub/types'
-import Confirm from './Confirm.vue'
 import { useElementHover } from '@vueuse/core'
-import Motion from './Motion.vue'
+
 import { enterFromLeft } from '@/variants/enter-from-left'
+
+import Confirm from '../Confirm.vue'
+import Motion from '../Motion.vue'
 
 type Props = {
   data: GitHub.Collaborator

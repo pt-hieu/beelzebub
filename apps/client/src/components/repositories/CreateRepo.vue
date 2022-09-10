@@ -1,9 +1,11 @@
 <script lang="ts" setup>
-import Modal from './Modal.vue'
 import { FormKit, submitForm, reset } from '@formkit/vue'
 import { reactive } from 'vue'
 import { useMutation } from '@vue/apollo-composable'
+
 import { CREATE_REPO, GET_REPOES, type GetRepoesRes } from '@/queries/repo'
+
+import Modal from '../Modal.vue'
 
 type Props = {
   visible: boolean

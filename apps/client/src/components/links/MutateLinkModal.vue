@@ -2,14 +2,16 @@
 import type { Model } from '@beelzebub/types'
 import { reactive, unref, watch } from 'vue'
 import { FormKit, submitForm, reset } from '@formkit/vue'
-import Modal from './Modal.vue'
 import { useMutation } from '@vue/apollo-composable'
-import { UPDATE_LINK } from '../queries/link.js'
-import { useToast } from '../pinia/toast.js'
+
+import Modal from '../Modal.vue'
+
+import { UPDATE_LINK } from '../../queries/link.js'
+import { useToast } from '../../pinia/toast.js'
 import {
   useCreateLink,
   CREATE_LINK_TOAST_ID,
-} from '../mutations/create-link.js'
+} from '../../mutations/create-link.js'
 
 type Props = {
   visible: boolean

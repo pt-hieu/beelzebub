@@ -1,11 +1,12 @@
 <script lang="ts" setup>
 import type { Model } from '@beelzebub/types'
 import { inject, reactive, ref, watch, watchEffect, type Ref } from 'vue'
-import ToggleVue from './Toggle.vue'
-import Confirm from './Confirm.vue'
-import RepoCollab from './RepoCollab.vue'
 import { useMutation } from '@vue/apollo-composable'
 import { UDPATE_REPO } from '@/queries/repo'
+
+import ToggleVue from '../Toggle.vue'
+import Confirm from '../Confirm.vue'
+import RepoCollab from '../repositories/RepoCollab.vue'
 
 const repo = inject<Ref<{ repo: Model.GitHubRepo } | undefined>>('repo')
 

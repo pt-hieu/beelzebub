@@ -1,21 +1,23 @@
 <script lang="ts" setup>
+import type { Model } from '@beelzebub/types'
+import { useLazyQuery, useMutation } from '@vue/apollo-composable'
+import { provide, ref, watch } from 'vue'
+
+import RepoViewVue from '@/components/repositories/RepoView.vue'
+import { useToast } from '@/pinia/toast'
 import FooterVue from '@/components/Footer.vue'
-import RepoListVue from '@/components/RepoList.vue'
+import { useOnSseEvent } from '@/composables/useOnSseEvent'
+import RepoListVue from '@/components/repositories/RepoList.vue'
 import {
   GET_REPO,
   GET_REPOES,
   SYNC_REPO,
   type GetRepoesRes,
 } from '@/queries/repo'
-import type { Model } from '@beelzebub/types'
-import { useLazyQuery, useMutation } from '@vue/apollo-composable'
-import { provide, ref, watch } from 'vue'
-import RepoViewVue from '@/components/RepoView.vue'
-import { useToast } from '@/pinia/toast'
+
 import Loading from '../components/Loading.vue'
-import { useOnSseEvent } from '@/composables/useOnSseEvent'
-import CreateRepo from '../components/CreateRepo.vue'
-import SearchRepoModal from '../components/SearchRepoModal.vue'
+import CreateRepo from '../components/repositories/CreateRepo.vue'
+import SearchRepoModal from '../components/repositories/SearchRepoModal.vue'
 
 const selectedRepoId = ref<string | undefined>(undefined)
 

@@ -2,11 +2,13 @@
 import { inject, reactive, unref, watch, type Ref } from 'vue'
 import { FormKit, submitForm, reset } from '@formkit/vue'
 import { useMutation } from '@vue/apollo-composable'
-import { UDPATE_REPO } from '../queries/repo.js'
 import type { Model } from '@beelzebub/types'
 import { open } from '@tauri-apps/api/dialog'
-import Modal from './Modal.vue'
-import { useToast } from '../pinia/toast.js'
+
+import Modal from '../Modal.vue'
+
+import { useToast } from '../../pinia/toast.js'
+import { UDPATE_REPO } from '../../queries/repo.js'
 
 type Props = {
   visible: boolean

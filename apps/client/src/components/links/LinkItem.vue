@@ -1,12 +1,14 @@
 <script lang="ts" setup>
 import type { Model } from '@beelzebub/types'
 import { writeText } from '@tauri-apps/api/clipboard'
-import { useToast } from '../pinia/toast.js'
 import copy from 'copy-to-clipboard'
-import { isWeb } from '../libs/platform.js'
 import { onLongPress } from '@vueuse/core'
-import Loading from './Loading.vue'
 import { open } from '@tauri-apps/api/shell'
+
+import Loading from '../Loading.vue'
+
+import { useToast } from '../../pinia/toast.js'
+import { isWeb } from '../../libs/platform.js'
 
 type Props = {
   data: Model.Link

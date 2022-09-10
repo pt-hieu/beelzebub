@@ -1,20 +1,22 @@
 <script lang="ts" setup>
 import { useApolloClient, useMutation, useQuery } from '@vue/apollo-composable'
-import { useOnSseEvent } from '../composables/useOnSseEvent.js'
+import { open } from '@tauri-apps/api/shell'
+import { readText } from '@tauri-apps/api/clipboard'
+import { toRaw } from 'vue'
+
 import FooterVue from '@/components/Footer.vue'
+
+import { useOnSseEvent } from '../composables/useOnSseEvent.js'
 import { DELETE_LINK, GET_LINKS, type GetLinksRes } from '../queries/link.js'
-import MutateLinkModal from '../components/MutateLinkModal.vue'
-import LinkItem from '../components/LinkItem.vue'
+import MutateLinkModal from '../components/links/MutateLinkModal.vue'
+import LinkItem from '../components/links/LinkItem.vue'
 import Confirm from '../components/Confirm.vue'
 import Loading from '../components/Loading.vue'
 import { useToast } from '../pinia/toast.js'
-import { toRaw } from 'vue'
 import { useOnPiniaEvent } from '../composables/useOnPiniaEvent.js'
 import { isWeb } from '../libs/platform.js'
-import { readText } from '@tauri-apps/api/clipboard'
 import { useCreateLink } from '../mutations/create-link.js'
-import BookmarkImportModal from '../components/BookmarkImportModal.vue'
-import { open } from '@tauri-apps/api/shell'
+import BookmarkImportModal from '../components/links/BookmarkImportModal.vue'
 
 const { result } = useQuery<GetLinksRes>(GET_LINKS)
 

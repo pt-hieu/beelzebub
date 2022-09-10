@@ -3,9 +3,11 @@ import { FETCH_COLLABS } from '@/queries/repo'
 import type { Model } from '@beelzebub/types'
 import { useMutation } from '@vue/apollo-composable'
 import { inject, type Ref } from 'vue'
-import Loading from './Loading.vue'
-import Collaborator from './Collaborator.vue'
+
 import { useToast } from '@/pinia/toast'
+
+import Loading from '../Loading.vue'
+import Collaborator from '../repositories/Collaborator.vue'
 
 const FETCH_COLLABS_TOAST_ID = 'fetch-collab'
 

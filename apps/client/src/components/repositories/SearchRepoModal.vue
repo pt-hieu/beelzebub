@@ -1,10 +1,11 @@
 <script lang="ts" setup>
-import Modal from './Modal.vue'
 import { FormKit, submitForm, reset } from '@formkit/vue'
 import { watch } from 'vue'
 import { useQuery } from '@vue/apollo-composable'
-import { GET_REPOES, type GetRepoesRes } from '../queries/repo.js'
 import { findBestMatch } from 'string-similarity'
+
+import Modal from '../Modal.vue'
+import { GET_REPOES, type GetRepoesRes } from '../../queries/repo'
 
 type Props = {
   visible: boolean
