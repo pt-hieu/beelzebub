@@ -45,7 +45,7 @@ onLongPress($$(linkItemRef), () => {
   <button
     ref="linkItemRef"
     :title="shortened"
-    :class="`p-2 ring-blue bg-[#fff] ring-1 rounded-md flex flex-col duration-100 ${
+    :class="`relative p-2 ring-blue bg-[#fff] ring-1 rounded-md flex flex-col duration-100 ${
       selected ? '!ring-2' : ''
     }`"
     @click="
@@ -56,6 +56,13 @@ onLongPress($$(linkItemRef), () => {
     @dblclick="copy2Clipboard"
   >
     <template v-if="data.scrapeStatus === 'Done'">
+      <div
+        v-if="!!data.tag"
+        class="absolute top-0 left-0 bg-blue text-white p-2 rounded-br-md rounded-tl-md text-sm shadow-md"
+      >
+        {{ data.tag }}
+      </div>
+
       <div
         class="h-[100px] w-full bg-center bg-cover mb-4 rounded-md"
         :style="{ backgroundImage: `url(${data.image})` }"
@@ -83,6 +90,13 @@ onLongPress($$(linkItemRef), () => {
 
     <template v-else>
       <div class="h-[169px] w-full grid place-content-center">
+        <div
+          v-if="!!data.tag"
+          class="absolute top-0 left-0 bg-blue text-white p-2 rounded-br-md rounded-tl-md text-sm shadow-md"
+        >
+          {{ data.tag }}
+        </div>
+
         <div class="text-sm text-blue">Failed To Crawl Data</div>
         <div :title="data.url" class="truncate px-2">{{ data.url }}</div>
       </div>

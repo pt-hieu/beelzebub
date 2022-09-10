@@ -9,6 +9,7 @@ const LINK_FIELDS = gql`
   fragment LinkFields on LinkModel {
     id
     url
+    tag
     alias
     title
     image

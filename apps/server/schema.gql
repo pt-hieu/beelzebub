@@ -7,6 +7,7 @@ type LinkModel {
   created_at: DateTime!
   updated_at: DateTime!
   url: String!
+  tag: String
   alias: String!
   title: String
   image: String
@@ -120,11 +121,13 @@ input CreateRepositoryDto {
 
 input CreateLinkDto {
   url: String!
+  tag: String
   alias: String
 }
 
 input UpdateLinkDto {
   url: String
+  tag: String
   alias: String
 }
 

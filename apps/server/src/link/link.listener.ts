@@ -52,6 +52,7 @@ export class LinkListener {
           linkWithScrapeUrl.map((link) => ({
             ...link,
             scrapeStatus: 'Error',
+            tag: 'Crawl failed',
           })),
         )
       }

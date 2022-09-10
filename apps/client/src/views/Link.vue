@@ -2,7 +2,7 @@
 import { useApolloClient, useMutation, useQuery } from '@vue/apollo-composable'
 import { open } from '@tauri-apps/api/shell'
 import { readText } from '@tauri-apps/api/clipboard'
-import { toRaw } from 'vue'
+import { toRaw, watch } from 'vue'
 
 import FooterVue from '@/components/Footer.vue'
 
@@ -17,8 +17,9 @@ import { useOnPiniaEvent } from '../composables/useOnPiniaEvent.js'
 import { isWeb } from '../libs/platform.js'
 import { useCreateLink } from '../mutations/create-link.js'
 import BookmarkImportModal from '../components/links/BookmarkImportModal.vue'
+import TagItem from '../components/links/TagItem.vue'
 
-const { result } = useQuery<GetLinksRes>(GET_LINKS)
+const { result, refetch } = useQuery<GetLinksRes>(GET_LINKS)
 
 const apollo = useApolloClient()
 useOnSseEvent('link.crawl.1', (links) => {
@@ -47,6 +48,19 @@ let selectedLinkId = $ref<string | undefined>()
 const selectedLink = $computed(() =>
   result.value?.links.find((link) => link.id === selectedLinkId),
 )
+
+const tags = $computed(() => result.value?.links.map((link) => link.tag))
+let expands = $ref<Record<string, boolean>>({})
+
+watch($$(tags), () => {
+  expands = {
+    ...expands,
+    ...tags?.reduce(
+      (dict, tag) => ({ ...dict, [tag || '']: !tag }),
+      {} as Record<string, boolean>,
+    ),
+  }
+})
 
 const toast = useToast()
 const DELETE_LINK_TOAST_ID = 'delete-link'
@@ -102,13 +116,20 @@ async function openInBrowser() {
   <div
     class="p-4 pt-1 grid grid-cols-[repeat(auto-fit,minmax(250px,270px))] gap-3 max-h-[calc(100vh-160px)] mt-4 overflow-auto"
   >
-    <link-item
-      v-for="link in result?.links"
-      :data="link"
-      :key="link.id"
-      @chosen="(id) => (selectedLinkId = id)"
-      :selected="selectedLinkId === link.id"
-    />
+    <template v-for="(link, index) in result?.links" :key="link.id">
+      <tag-item
+        v-if="!!link.tag && index === tags?.indexOf(link.tag)"
+        :text="link.tag!"
+        @toggle="(v) => (expands[link.tag || ''] = v)"
+      />
+
+      <link-item
+        v-show="expands[link.tag || '']"
+        :data="link"
+        @chosen="(id) => (selectedLinkId = id)"
+        :selected="selectedLinkId === link.id"
+      />
+    </template>
   </div>
 
   <mutate-link-modal
@@ -119,6 +140,7 @@ async function openInBrowser() {
         mutateLinkVisible = false
       }
     "
+    @update-tag="refetch"
     :link-data="selectedLink"
   />
 

@@ -2,6 +2,7 @@ import { Base } from './base.js'
 
 export interface Link extends Base {
   url: string
+  tag?: string
   alias: string
 
   title: string | null

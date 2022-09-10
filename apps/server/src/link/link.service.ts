@@ -23,7 +23,7 @@ export class LinkService {
         ...(url && !Array.isArray(url) && { url }),
         ...(url && Array.isArray(url) && { url: In(url) }),
       },
-      order: { created_at: 'desc' },
+      order: { tag: 'asc' },
     })
   }
 

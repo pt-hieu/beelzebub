@@ -1,7 +1,6 @@
 import { Model } from '@beelzebub/types'
 
 import { Field, ObjectType } from '@nestjs/graphql'
-import { nanoid } from 'nanoid'
 import { Column, Entity } from 'typeorm'
 
 import { BaseModel } from '../misc/base.model.js'
@@ -12,6 +11,10 @@ export class LinkModel extends BaseModel implements Model.Link {
   @Field()
   @Column()
   url: string
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  tag: string | null
 
   @Field()
   @Column({ unique: true })

@@ -3,7 +3,11 @@ import { useToast } from '../pinia/toast.js'
 import { CREATE_LINK, GET_LINKS, type GetLinksRes } from '../queries/link.js'
 
 export const CREATE_LINK_TOAST_ID = 'create-link'
-export const useCreateLink = () => {
+type UseCreateLinkOptions = {
+  onCreated?: () => void
+}
+
+export const useCreateLink = (options?: UseCreateLinkOptions) => {
   const toast = useToast()
 
   const {
@@ -24,6 +28,7 @@ export const useCreateLink = () => {
 
   onCreated(() => {
     toast.add('Link created', 'Success', CREATE_LINK_TOAST_ID, 2)
+    options?.onCreated?.()
   })
 
   onCreateFailed(() => {

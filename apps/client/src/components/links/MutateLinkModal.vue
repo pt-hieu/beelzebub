@@ -19,25 +19,36 @@ type Props = {
 }
 
 const { visible, linkData } = defineProps<Props>()
-const emit = defineEmits(['close'])
+const emit = defineEmits(['close', 'update-tag'])
 
 const UPDATE_LINK_TOAST_ID = 'update-link'
 
 const toast = useToast()
 
 const formId = 'mutate-link'
-const formData = reactive<Partial<Pick<Model.Link, 'alias' | 'url'>>>({})
+const formData = reactive<Partial<Pick<Model.Link, 'alias' | 'url' | 'tag'>>>(
+  {},
+)
 
 watch($$(linkData), (linkData) => {
   formData.alias = linkData?.alias || ''
   formData.url = linkData?.url || ''
+  formData.tag = linkData?.tag || ''
 })
 
 watch(formData, (formData) => {
   reset(formId, unref(formData))
 })
 
-const { create, creating } = useCreateLink()
+let shouldEmitUpdateTag = $ref(false)
+const { create, creating } = useCreateLink({
+  onCreated() {
+    if (shouldEmitUpdateTag) {
+      shouldEmitUpdateTag = false
+      emit('update-tag')
+    }
+  },
+})
 
 const {
   loading: updating,
@@ -52,6 +63,10 @@ onUpdateFailed(() => {
 
 onUpdated(() => {
   toast.add('Link updated', 'Success', UPDATE_LINK_TOAST_ID, 2)
+  if (shouldEmitUpdateTag) {
+    shouldEmitUpdateTag = false
+    emit('update-tag')
+  }
 })
 
 const submit = (data: any) => {
@@ -60,14 +75,22 @@ const submit = (data: any) => {
   }, 0)
 
   data.alias = data.alias || undefined
+  data.tag = data.tag || undefined
 
   if (linkData) {
     toast.add('Updating link', 'Working', UPDATE_LINK_TOAST_ID)
     update({ id: linkData.id, dto: data })
+
+    if (data.tag !== linkData.tag) shouldEmitUpdateTag = true
+
     return
   }
 
   toast.add('Creating link', 'Working', CREATE_LINK_TOAST_ID)
+  if (data.tag) {
+    shouldEmitUpdateTag = true
+  }
+
   create({ dto: data })
 }
 </script>
@@ -95,7 +118,11 @@ const submit = (data: any) => {
       type="form"
     >
       <form-kit type="text" label="Url*" validation="required" name="url" />
-      <form-kit type="text" label="Alias" name="alias" />
+
+      <div class="grid grid-cols-2 gap-2">
+        <form-kit type="text" label="Tag" name="tag" />
+        <form-kit type="text" label="Alias" name="alias" />
+      </div>
     </form-kit>
   </modal>
 </template>
