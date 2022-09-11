@@ -11,6 +11,7 @@ import { ChromeBookmarkService } from './chrome-bookmark.service.js'
 import { CrawlLinkEvent } from '../link/link.event.js'
 import { LinkModel } from '../link/link.model.js'
 import { LinkService } from '../link/link.service.js'
+import { readable2Buffer } from '../misc/readable.js'
 
 enum ImportLinkSource {
   CHROME = 'CHROME',
@@ -34,47 +35,33 @@ export class BookmarkResolver {
     dto: ImportBookmarkDto,
   ) {
     const { createReadStream } = await dto.file
+    const stream = createReadStream()
 
-    return new Promise((resolve, reject) => {
-      const stream = createReadStream()
-      const chunks = []
+    const buffer = await readable2Buffer(stream)
+    const bookmarkContent = buffer.toString('utf-8')
 
-      stream.on('data', (chunk) => chunks.push(Buffer.from(chunk)))
+    if (source === ImportLinkSource.CHROME) {
+      let parsedBookmarkContent: any
+      try {
+        parsedBookmarkContent = JSON.parse(bookmarkContent)
+      } catch (e) {
+        this.logger.verbose('Bookmark file invalid')
+      }
 
-      stream.on('error', (err) => {
-        this.logger.debug(err)
-        reject(err)
+      const urls = this.chromeBookmarkServiec.parse(parsedBookmarkContent)
+      const links = await this.linkService
+        .create(urls.map((url) => ({ url, alias: nanoid(4) })))
+        .catch((e) => {
+          this.logger.verbose('Failed to create link from urls')
+          throw e
+        })
+
+      const crawlEvent = new CrawlLinkEvent(urls)
+      this.emitter.emitAsync(Event.LinkEvent.CRAWL, crawlEvent).catch((e) => {
+        this.logger.verbose('Emit async event failed', e)
       })
 
-      stream.on('end', async () => {
-        const bookmarkContent = Buffer.concat(chunks).toString('utf8')
-
-        if (source === ImportLinkSource.CHROME) {
-          let parsedBookmarkContent: any
-          try {
-            parsedBookmarkContent = JSON.parse(bookmarkContent)
-          } catch (e) {
-            this.logger.verbose('Bookmark file invalid')
-          }
-
-          const urls = this.chromeBookmarkServiec.parse(parsedBookmarkContent)
-          const links = await this.linkService
-            .create(urls.map((url) => ({ url, alias: nanoid(4) })))
-            .catch(() => {
-              this.logger.verbose('Failed to create link from urls')
-              reject()
-            })
-
-          const crawlEvent = new CrawlLinkEvent(urls)
-          this.emitter
-            .emitAsync(Event.LinkEvent.CRAWL, crawlEvent)
-            .catch((e) => {
-              this.logger.verbose('Emit async event failed', e)
-            })
-
-          resolve(links)
-        }
-      })
-    })
+      return links
+    }
   }
 }
