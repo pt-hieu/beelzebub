@@ -12,6 +12,8 @@ import DropdownVue from '../components/Dropdown.vue'
 import ConfirmVue from '../components/Confirm.vue'
 import MotionVue from '../components/Motion.vue'
 import { leaveByWidthVariant } from '../variants/leave-by-width'
+import moment from 'moment'
+import CurrentHourIndicator from '../components/tasks/CurrentHourIndicator.vue'
 
 const { result } = useQuery<GetTodoesRes>(GET_TODOES)
 
@@ -91,32 +93,64 @@ onMounted(() => {
 onUnmounted(() => {
   document.removeEventListener('click', handleClickOutsideTask)
 })
+
+const today = $ref(moment())
+const weekDays = $computed(() => {
+  const weekStart = today.clone().startOf('week')
+  const days: ReturnType<typeof moment>[] = []
+
+  let i = 0
+  while (i < 7) {
+    days.push(weekStart.clone().add(i, 'days'))
+    i++
+  }
+
+  return days
+})
 </script>
 
 <template>
-  <div
-    v-if="!!result?.todoes.length"
-    class="py-8 grid grid-cols-[repeat(auto-fit,minmax(200px,350px))] gap-4"
-  >
-    <task-vue
-      v-for="(todo, index) in result?.todoes"
-      :key="todo.id"
-      :task-data="todo"
-      :is-loading="loading"
-      :is-selected="
-        selectedTasks.some((selectedTask) => selectedTask.id === todo.id)
-      "
-      @click="handleTaskClick($event, todo, index)"
-    />
+  <div class="mt-8 grid grid-cols-8 divide-x divide-blue/30">
+    <div />
+    <div
+      v-for="(day, index) in weekDays"
+      :key="index"
+      class="text-center py-2"
+      data-vue-type="week-day"
+    >
+      <div class="uppercase">{{ day.format('ddd') }}</div>
+      <div class="text-xl text-blue">{{ day.format('DD') }}</div>
+    </div>
   </div>
 
   <div
-    v-else
-    class="h-full grid place-content-center text-blue opacity-50 text-center"
+    class="py-8 grid grid-cols-8 max-h-[calc(100vh-240px)] overflow-y-auto relative"
   >
-    <span class="fas fa-folder-open text-4xl mb-4" />
-    <span class="text-lg"> You don&apos;t have any tasks.</span>
-    <span>Enjoy your day bro!</span>
+    <current-hour-indicator />
+
+    <div>
+      <div
+        v-for="(_, index) in Array(24).fill('')"
+        :key="index"
+        class="h-[70px] text-center grid place-content-center"
+      >
+        <span>{{ index.toString().padStart(2, '0') }}:00</span>
+      </div>
+    </div>
+
+    <div class="col-span-7 relative">
+      <task-vue
+        v-for="(todo, index) in result?.todoes"
+        :key="todo.id"
+        :task-data="todo"
+        :is-loading="loading"
+        :week-days="weekDays"
+        :is-selected="
+          selectedTasks.some((selectedTask) => selectedTask.id === todo.id)
+        "
+        @click="handleTaskClick($event, todo, index)"
+      />
+    </div>
   </div>
 
   <modal-vue
@@ -124,6 +158,7 @@ onUnmounted(() => {
     @close="createTask = false"
     @ok="createTaskRef?.submit()"
     title="Create Task"
+    class="min-w-[450px]"
   >
     <create-task-vue @done="createTask = false" ref="createTaskRef" />
   </modal-vue>

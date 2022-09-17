@@ -11,7 +11,8 @@ const TODO_FIELDS = gql`
     title
     content
     categorization
-    deadline
+    startTime
+    duration
     created_at
   }
 `

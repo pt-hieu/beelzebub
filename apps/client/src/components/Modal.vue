@@ -88,7 +88,7 @@ watch(
 
           <div
             v-bind="$attrs"
-            class="max-h-[500px] min-h-[40px] overflow-auto px-2"
+            class="max-h-[500px] min-h-[40px] overflow-auto px-2 overflow-x-hidden"
           >
             <slot />
           </div>

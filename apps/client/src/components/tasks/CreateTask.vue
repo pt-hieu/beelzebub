@@ -28,6 +28,7 @@ onDone(() => {
 
 const submit = (data: any) => {
   const dto: Model.Todo = data
+  dto.duration = Number(dto.duration)
   mutate({ input: dto })
 }
 
@@ -49,17 +50,22 @@ defineExpose({
     }"
     type="form"
   >
-    <form-kit label="Title" name="title" validation="length:0,30" type="text" />
+    <form-kit
+      label="Title*"
+      name="title"
+      validation="length:0,30"
+      type="text"
+    />
 
     <form-kit
-      label="Content"
+      label="Content*"
       name="content"
       validation="required|length:0,500"
       type="textarea"
     />
 
     <form-kit
-      label="Categorization"
+      label="Categorization*"
       name="categorization"
       validation="required"
       type="checkbox"
@@ -67,10 +73,19 @@ defineExpose({
     />
 
     <form-kit
-      label="Deadline"
-      name="deadline"
+      type="number"
+      label="Duration"
+      help="In minutes"
+      name="duration"
+      :min="0"
+      :step="15"
+    />
+
+    <form-kit
+      label="Start Time*"
+      name="startTime"
       :validation="`after:${moment().format('YYYY-MM-DD')}`"
-      type="date"
+      type="datetime-local"
     />
   </form-kit>
 </template>
