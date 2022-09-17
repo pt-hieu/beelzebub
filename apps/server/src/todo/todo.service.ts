@@ -21,7 +21,7 @@ export class TodoService {
           }),
       },
       order: {
-        created_at: 'desc',
+        startTime: 'asc',
       },
     })
   }

@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import type { Model } from '@beelzebub/types'
-import { useMutation, useLazyQuery } from '@vue/apollo-composable'
+import { useMutation, useLazyQuery, useQuery } from '@vue/apollo-composable'
 import { debounce } from 'lodash'
-import { onMounted, onUnmounted, ref, watch } from 'vue'
+import { onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 
 import FooterVue from '../components/Footer.vue'
 import ModalVue from '../components/Modal.vue'
@@ -41,26 +41,27 @@ watch(
   { immediate: true },
 )
 
-const { result, refetch, load } = useLazyQuery<GetTodoesRes>(GET_TODOES)
+const getTodoesVars = reactive<{ dto: { from?: Date; to?: Date } }>({
+  dto: {
+    from: weekDays[0].toDate(),
+    to: weekDays.slice(-1)[0].clone().endOf('day').toDate(),
+  },
+})
+
+const { result, refetch } = useQuery<GetTodoesRes>(GET_TODOES, getTodoesVars)
 
 const loadTasks = debounce((weekDays: moment.Moment[]) => {
   if (weekDays.length !== 7) return
 
-  load(GET_TODOES, {
-    dto: {
-      from: weekDays[0].toDate(),
-      to: weekDays.slice(-1)[0].clone().endOf('day').toDate(),
-    },
-  })
+  getTodoesVars.dto = {
+    from: weekDays[0].toDate(),
+    to: weekDays.slice(-1)[0].clone().endOf('day').toDate(),
+  }
 }, 400)
 
-watch(
-  $$(weekDays),
-  (weekDays) => {
-    loadTasks(weekDays)
-  },
-  { immediate: true },
-)
+watch($$(weekDays), (weekDays) => {
+  loadTasks(weekDays)
+})
 
 const { mutate, onDone, loading } = useMutation(DELETE_TODO, {
   update: (cache, { data: { deleteTodo } }) => {
@@ -92,15 +93,9 @@ watch(createTask, () => {
 const handleTaskClick = (
   e: Event & { ctrlKey: boolean; altKey: boolean },
   task: Model.Todo,
-  index: number,
 ) => {
   if (e.ctrlKey) {
     selectedTasks.value.push(task)
-    return
-  }
-
-  if (e.altKey) {
-    selectedTasks.value = result.value?.todoes.slice(0, index + 1) || []
     return
   }
 
@@ -113,7 +108,7 @@ watch(
   (newResult, oldResult) => {
     if (newResult?.todoes.length === oldResult?.todoes.length) return
     taskComponents.value = Array.from(
-      document.querySelectorAll(`button[data-vue-type='task-component']`),
+      document.querySelectorAll(`div[data-vue-type='task-component']`),
     )
   },
   { flush: 'post', immediate: true },
@@ -192,7 +187,7 @@ onUnmounted(() => {
 
     <div class="col-span-7 relative">
       <task-vue
-        v-for="(todo, index) in result?.todoes"
+        v-for="todo in result?.todoes"
         :key="todo.id"
         :task-data="todo"
         :is-loading="loading"
@@ -200,7 +195,7 @@ onUnmounted(() => {
         :is-selected="
           selectedTasks.some((selectedTask) => selectedTask.id === todo.id)
         "
-        @click="handleTaskClick($event, todo, index)"
+        @click="handleTaskClick($event, todo)"
       />
     </div>
   </div>
@@ -249,7 +244,7 @@ onUnmounted(() => {
       <button class="button-2nd"><span class="fa fa-eye mr-2" />View</button>
 
       <template #overlay>
-        <div class="border border-blue rounded-md bg-[#fff] shadow-sm p-4">
+        <div class="border border-blue rounded-md bg-white shadow-sm p-4">
           <form-kit
             type="checkbox"
             v-model="filter"

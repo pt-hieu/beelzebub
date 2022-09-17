@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { Model } from '@beelzebub/types'
 import moment from 'moment'
-import { reactive, watch, type Ref } from 'vue'
+import { reactive, watch } from 'vue'
 
 type Props = {
   taskData: Model.Todo
@@ -44,10 +44,14 @@ watch(
     data-vue-type="task-component"
     role="button"
     :style="computedPosition"
-    class="absolute text-white ring-1 ring-blue-tint hover:z-[999] bg-blue hover:bg-blue-tint duration-100 shadow-md shadow-blue-shade p-2 text-left rounded-lg overflow-hidden w-[calc((100vw-120px)/8-10px)] min-h-[70px]"
-
+    :class="[
+      'absolute text-white p-2 text-left rounded-lg overflow-hidden w-[calc((100vw-120px)/8-10px)] min-h-[80px]',
+      'hover:ring-1 ring-blue ring-offset-1 hover:shadow-lg shadow-blue duration-100',
+      !!taskData.duration && 'bg-gradient-to-br from-blue to-blue-shade',
+      !taskData.duration && 'bg-transparent bg-blue',
+    ]"
   >
-    <div class="font-medium">
+    <div class="font-medium truncate">
       {{ taskData.title }}
     </div>
 
@@ -55,5 +59,11 @@ watch(
       {{ moment(taskData.startTime).format('HH mm A') }}
       <span v-if="!!taskData.duration">- {{ taskData.duration }} minutes</span>
     </div>
+
+    <span
+      class="fa fa-check-circle absolute bottom-2 right-4"
+      v-if="isSelected"
+      v-motion-fade
+    />
   </div>
 </template>
