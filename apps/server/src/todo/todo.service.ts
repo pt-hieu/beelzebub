@@ -10,10 +10,10 @@ export class TodoService {
     @InjectRepository(TodoModel) private readonly repo: Repository<TodoModel>,
   ) {}
 
-  findWithDeadlineAsc() {
+  findMany() {
     return this.repo.find({
       order: {
-        deadline: 'asc',
+        created_at: 'desc',
       },
     })
   }

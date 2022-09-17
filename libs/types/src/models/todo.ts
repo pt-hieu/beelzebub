@@ -9,5 +9,6 @@ export interface Todo extends Base {
   title: string | null
   content: string
   categorization: TodoCategorization[]
-  deadline: Date | null
+  startTime: Date
+  duration: number | null
 }

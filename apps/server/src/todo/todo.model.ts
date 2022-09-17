@@ -24,11 +24,11 @@ export class TodoModel extends BaseModel implements Model.Todo {
   @Field(() => [Model.TodoCategorization])
   categorization: Model.TodoCategorization[]
 
-  @Column({ nullable: true })
-  @Field(() => Date, { nullable: true })
-  deadline: Date | null
+  @Column()
+  @Field(() => Date)
+  startTime: Date
 
-  @Column({ default: false })
-  @Field({ defaultValue: false })
-  extended: boolean
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  duration: number | null
 }

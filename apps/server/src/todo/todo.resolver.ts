@@ -1,10 +1,5 @@
-import {
-  NotFoundException,
-  ParseUUIDPipe,
-  UnprocessableEntityException,
-} from '@nestjs/common'
+import { NotFoundException, ParseUUIDPipe } from '@nestjs/common'
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
-import moment from 'moment'
 
 import { CreateTodo, UpdateTodo } from './todo.input.js'
 import { TodoModel } from './todo.model.js'
@@ -16,7 +11,7 @@ export class TodoResolver {
 
   @Query(() => [TodoModel])
   todoes() {
-    return this.todoService.findWithDeadlineAsc()
+    return this.todoService.findMany()
   }
 
   @Mutation(() => TodoModel)
@@ -33,21 +28,6 @@ export class TodoResolver {
     if (!todo) throw new NotFoundException('Todo not found')
 
     return this.todoService.save({ ...todo, ...dto })
-  }
-
-  @Mutation(() => TodoModel)
-  async extendTodo(@Args('id', ParseUUIDPipe) id: string) {
-    const todo = await this.todoService.findById(id)
-
-    if (!todo) throw new NotFoundException('Todo not found')
-    if (todo.extended)
-      throw new UnprocessableEntityException('Todo has already been extended')
-
-    return this.todoService.save({
-      ...todo,
-      deadline: moment(todo.deadline).add('2', 'days').toDate(),
-      extended: true,
-    })
   }
 
   @Mutation(() => TodoModel)
