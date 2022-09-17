@@ -19,8 +19,8 @@ const TODO_FIELDS = gql`
 
 export const GET_TODOES = gql`
   ${TODO_FIELDS}
-  query GetTodo {
-    todoes {
+  query GetTodo($dto: GetManyTodo!) {
+    todoes(dto: $dto) {
       ...TodoFields
     }
   }

@@ -4,23 +4,14 @@ import { FormKit, submitForm, reset } from '@formkit/vue'
 import { useMutation } from '@vue/apollo-composable'
 import { Model } from '@beelzebub/types'
 import moment from 'moment'
-import { GET_TODOES, CREATE_TODO, type GetTodoesRes } from '@/queries/todo'
+import { CREATE_TODO } from '@/queries/todo'
 
 const formData = reactive({})
 const formId = 'task-form'
 
 const emit = defineEmits(['done'])
 
-const { loading, mutate, onDone } = useMutation(CREATE_TODO, {
-  update: (cache, { data: { createTodo } }) => {
-    let data = cache.readQuery<GetTodoesRes>({ query: GET_TODOES })
-    data = {
-      todoes: [createTodo, ...(data?.todoes || [])],
-    }
-
-    cache.writeQuery({ query: GET_TODOES, data })
-  },
-})
+const { loading, mutate, onDone } = useMutation(CREATE_TODO)
 
 onDone(() => {
   emit('done')

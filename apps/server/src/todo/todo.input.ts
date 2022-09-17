@@ -1,6 +1,7 @@
 import { Model } from '@beelzebub/types'
 
 import { Field, InputType, OmitType, PartialType } from '@nestjs/graphql'
+import { Type } from 'class-transformer'
 import {
   IsDate,
   IsEnum,
@@ -32,6 +33,21 @@ export class CreateTodo implements Omit<Model.Todo, keyof Model.Base> {
   @IsPositive()
   @IsOptional()
   duration: number | null
+}
+
+@InputType()
+export class GetManyTodo {
+  @Field(() => Date, { nullable: true })
+  @Type(() => Date)
+  @IsOptional()
+  @IsDate()
+  from?: Date
+
+  @Field(() => Date, { nullable: true })
+  @Type(() => Date)
+  @IsOptional()
+  @IsDate()
+  to?: Date
 }
 
 @InputType()

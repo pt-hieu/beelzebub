@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Repository } from 'typeorm'
+import { Between, Repository } from 'typeorm'
 
 import { TodoModel } from './todo.model.js'
 
@@ -10,8 +10,16 @@ export class TodoService {
     @InjectRepository(TodoModel) private readonly repo: Repository<TodoModel>,
   ) {}
 
-  findMany() {
+  findMany(): Promise<TodoModel[]>
+  findMany(from: Date | string, to: Date | string): Promise<TodoModel[]>
+  findMany(from?: Date | string, to?: Date | string) {
     return this.repo.find({
+      where: {
+        ...(from &&
+          to && {
+            startTime: Between(new Date(from), new Date(to)),
+          }),
+      },
       order: {
         created_at: 'desc',
       },

@@ -1,7 +1,7 @@
 import { NotFoundException, ParseUUIDPipe } from '@nestjs/common'
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 
-import { CreateTodo, UpdateTodo } from './todo.input.js'
+import { CreateTodo, GetManyTodo, UpdateTodo } from './todo.input.js'
 import { TodoModel } from './todo.model.js'
 import { TodoService } from './todo.service.js'
 
@@ -10,7 +10,9 @@ export class TodoResolver {
   constructor(private todoService: TodoService) {}
 
   @Query(() => [TodoModel])
-  todoes() {
+  todoes(@Args('dto', { nullable: true }) dto: GetManyTodo) {
+    if (dto.from && dto.to) return this.todoService.findMany(dto.from, dto.to)
+
     return this.todoService.findMany()
   }
 

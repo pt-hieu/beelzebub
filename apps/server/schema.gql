@@ -65,10 +65,15 @@ enum TodoCategorization {
 
 type Query {
   config: ConfigModel!
-  todoes: [TodoModel!]!
+  todoes(dto: GetManyTodo): [TodoModel!]!
   repoes: [RepoModel!]!
   repo(id: String!): RepoModel!
   links: [LinkModel!]!
+}
+
+input GetManyTodo {
+  from: DateTime
+  to: DateTime
 }
 
 type Mutation {

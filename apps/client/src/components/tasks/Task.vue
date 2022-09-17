@@ -45,6 +45,7 @@ watch(
     role="button"
     :style="computedPosition"
     class="absolute text-white ring-1 ring-blue-tint hover:z-[999] bg-blue hover:bg-blue-tint duration-100 shadow-md shadow-blue-shade p-2 text-left rounded-lg overflow-hidden w-[calc((100vw-120px)/8-10px)] min-h-[70px]"
+
   >
     <div class="font-medium">
       {{ taskData.title }}

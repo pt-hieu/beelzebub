@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import type { Model } from '@beelzebub/types'
-import { useMutation, useQuery } from '@vue/apollo-composable'
+import { useMutation, useLazyQuery } from '@vue/apollo-composable'
+import { debounce } from 'lodash'
 import { onMounted, onUnmounted, ref, watch } from 'vue'
 
 import FooterVue from '../components/Footer.vue'
@@ -15,12 +16,51 @@ import { leaveByWidthVariant } from '../variants/leave-by-width'
 import moment from 'moment'
 import CurrentHourIndicator from '../components/tasks/CurrentHourIndicator.vue'
 
-const { result } = useQuery<GetTodoesRes>(GET_TODOES)
-
 const createTask = ref(false)
 const createTaskRef = ref<InstanceType<typeof CreateTaskVue> | null>(null)
 const selectedTasks = ref<Model.Todo[]>([])
 const confirmRef = ref<InstanceType<typeof ConfirmVue> | null>(null)
+
+let today = $ref(moment())
+let weekDays = $ref<moment.Moment[]>([])
+
+watch(
+  $$(today),
+  (today) => {
+    const weekStart = today.clone().startOf('week')
+    const days: ReturnType<typeof moment>[] = []
+
+    let i = 0
+    while (i < 7) {
+      days.push(weekStart.clone().add(i, 'days'))
+      i++
+    }
+
+    weekDays = days
+  },
+  { immediate: true },
+)
+
+const { result, refetch, load } = useLazyQuery<GetTodoesRes>(GET_TODOES)
+
+const loadTasks = debounce((weekDays: moment.Moment[]) => {
+  if (weekDays.length !== 7) return
+
+  load(GET_TODOES, {
+    dto: {
+      from: weekDays[0].toDate(),
+      to: weekDays.slice(-1)[0].clone().endOf('day').toDate(),
+    },
+  })
+}, 400)
+
+watch(
+  $$(weekDays),
+  (weekDays) => {
+    loadTasks(weekDays)
+  },
+  { immediate: true },
+)
 
 const { mutate, onDone, loading } = useMutation(DELETE_TODO, {
   update: (cache, { data: { deleteTodo } }) => {
@@ -86,6 +126,14 @@ const handleClickOutsideTask = (e: Event) => {
   selectedTasks.value = []
 }
 
+const moveForward = () => {
+  today = today.clone().add(7, 'days')
+}
+
+const moveBackward = () => {
+  today = today.clone().subtract(7, 'days')
+}
+
 onMounted(() => {
   document.addEventListener('click', handleClickOutsideTask)
 })
@@ -93,25 +141,29 @@ onMounted(() => {
 onUnmounted(() => {
   document.removeEventListener('click', handleClickOutsideTask)
 })
-
-const today = $ref(moment())
-const weekDays = $computed(() => {
-  const weekStart = today.clone().startOf('week')
-  const days: ReturnType<typeof moment>[] = []
-
-  let i = 0
-  while (i < 7) {
-    days.push(weekStart.clone().add(i, 'days'))
-    i++
-  }
-
-  return days
-})
 </script>
 
 <template>
-  <div class="mt-8 grid grid-cols-8 divide-x divide-blue/30">
-    <div />
+  <div
+    class="mt-8 grid grid-cols-8 divide-x divide-blue/30 border-b border-blue/30"
+  >
+    <div class="flex items-center justify-center gap-4">
+      <button @click="moveBackward">
+        <span class="fa fa-angle-left" />
+      </button>
+
+      <div class="text-center font-medium">
+        <div class="uppercase text-blue text-lg">
+          {{ today.format('MMM / YYYY') }}
+        </div>
+        <div>{{ today.week() }}</div>
+      </div>
+
+      <button @click="moveForward">
+        <span class="fa fa-angle-right" />
+      </button>
+    </div>
+
     <div
       v-for="(day, index) in weekDays"
       :key="index"
@@ -160,7 +212,15 @@ const weekDays = $computed(() => {
     title="Create Task"
     class="min-w-[450px]"
   >
-    <create-task-vue @done="createTask = false" ref="createTaskRef" />
+    <create-task-vue
+      @done="
+        () => {
+          createTask = false
+          refetch()
+        }
+      "
+      ref="createTaskRef"
+    />
   </modal-vue>
 
   <footer-vue>
