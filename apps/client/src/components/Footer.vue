@@ -2,12 +2,11 @@
 
 <template>
   <teleport to="#app">
-    <div class="fixed bottom-0 right-0 left-0 px-[60px]" @click.stop>
-      <footer
-        class="h-[80px] w-full flex gap-2 items-center justify-center rounded-t-3xl shadow-2xl shadow-blue px-[60px]"
-      >
-        <slot />
-      </footer>
-    </div>
+    <footer
+      class="fixed bottom-0 right-0 left-0 mx-[60px] rounded-t-3xl shadow-[0px_8px_20px_0px_rgba(90,123,181,0.7)] flex items-center justify-center gap-2 h-[80px] bg-white"
+      @click.stop
+    >
+      <slot />
+    </footer>
   </teleport>
 </template>
