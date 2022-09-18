@@ -1,9 +1,12 @@
 <script lang="ts" setup>
 import moment from 'moment'
-import { onMounted, reactive } from 'vue'
+import { onMounted, reactive, watch } from 'vue'
+import { useWindowResize } from '../../composables/useWindowResize.js'
 
 const style = reactive({ top: '32px', left: '0px' })
-onMounted(() => {
+const wdResize = useWindowResize()
+
+function calcPos() {
   const now = moment()
   const currentHour = now.get('hour')
 
@@ -13,7 +16,13 @@ onMounted(() => {
 
   style.top = 32 + currentHour * 70 + 'px'
   style.left = weekDayElement?.getBoundingClientRect().left - 60 + 'px'
+}
+
+watch(wdResize, () => {
+  calcPos()
 })
+
+onMounted(calcPos)
 </script>
 
 <template>

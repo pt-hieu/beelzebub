@@ -2,6 +2,7 @@
 import type { Model } from '@beelzebub/types'
 import moment from 'moment'
 import { reactive, watch } from 'vue'
+import { useWindowResize } from '../../composables/useWindowResize.js'
 
 type Props = {
   taskData: Model.Todo
@@ -11,11 +12,12 @@ type Props = {
 }
 
 const { taskData, isSelected, weekDays } = defineProps<Props>()
+const wdResize = $(useWindowResize())
 
 const computedPosition = reactive({ top: '0px', left: '0px', height: '0px' })
 watch(
-  () => taskData,
-  ({ duration, startTime }) => {
+  () => [taskData, wdResize] as const,
+  ([{ duration, startTime }]) => {
     const momentStarttime = moment(startTime)
 
     computedPosition.height = ((duration || 10) / 60) * 70 + 'px'
