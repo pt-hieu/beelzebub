@@ -2,6 +2,7 @@
 import type { Model } from '@beelzebub/types'
 import moment from 'moment'
 import { reactive, watch } from 'vue'
+
 import { useWindowResize } from '../../composables/useWindowResize.js'
 
 type Props = {
@@ -32,7 +33,7 @@ watch(
     ) as HTMLDivElement[]
 
     weekDays.forEach((day, index) => {
-      if (!day.clone().isSame(momentStarttime, 'day')) return
+      if (!day.clone().isSame(momentStarttime, 'date')) return
       computedPosition.left =
         weekDayElements[0]?.getBoundingClientRect().width * index + 'px'
     })
