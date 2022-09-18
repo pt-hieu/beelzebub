@@ -14,6 +14,7 @@ const TODO_FIELDS = gql`
     startTime
     duration
     created_at
+    weekly
   }
 `
 

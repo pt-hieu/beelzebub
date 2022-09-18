@@ -58,6 +58,7 @@ watch(
     <div class="text-sm">
       {{ moment(taskData.startTime).format('HH mm A') }}
       <span v-if="!!taskData.duration">- {{ taskData.duration }} minutes</span>
+      <span v-if="taskData.weekly" class="fa fa-retweet ml-2" />
     </div>
 
     <span

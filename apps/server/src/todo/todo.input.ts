@@ -1,14 +1,17 @@
 import { Model } from '@beelzebub/types'
 
-import { Field, InputType, OmitType, PartialType } from '@nestjs/graphql'
-import { Type } from 'class-transformer'
+import { Field, InputType, PartialType } from '@nestjs/graphql'
+import { Transform, Type } from 'class-transformer'
 import {
+  IsBoolean,
   IsDate,
   IsEnum,
   IsNotEmpty,
   IsOptional,
   IsPositive,
 } from 'class-validator'
+
+import { toBoolean } from '../misc/transform.js'
 
 @InputType()
 export class CreateTodo implements Omit<Model.Todo, keyof Model.Base> {
@@ -33,6 +36,12 @@ export class CreateTodo implements Omit<Model.Todo, keyof Model.Base> {
   @IsPositive()
   @IsOptional()
   duration: number | null
+
+  @Field({ nullable: true })
+  @IsOptional()
+  @Transform(toBoolean)
+  @IsBoolean()
+  weekly: boolean | null
 }
 
 @InputType()

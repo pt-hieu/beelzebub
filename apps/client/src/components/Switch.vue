@@ -29,6 +29,7 @@ watch(
 <template>
   <button
     @click="state = !state"
+    type="button"
     :disabled="disabled"
     :class="`relative ring-[2px] ring-blue w-[46px] h-[20px] rounded-full p-[2px] ${
       state ? 'bg-blue' : ''
@@ -40,4 +41,6 @@ watch(
       } ${disabled ? '!bg-white' : ''}`"
     />
   </button>
+
+  <slot :toggle="() => (state = !state)" />
 </template>

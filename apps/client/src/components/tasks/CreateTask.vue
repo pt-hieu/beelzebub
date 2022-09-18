@@ -5,6 +5,7 @@ import { useMutation } from '@vue/apollo-composable'
 import { Model } from '@beelzebub/types'
 import moment from 'moment'
 import { CREATE_TODO } from '@/queries/todo'
+import SwitchVue from '../Switch.vue'
 
 const formData = reactive({})
 const formId = 'task-form'
@@ -12,6 +13,7 @@ const formId = 'task-form'
 const emit = defineEmits(['done'])
 
 const { loading, mutate, onDone } = useMutation(CREATE_TODO)
+let weekly = $ref(false)
 
 onDone(() => {
   emit('done')
@@ -19,13 +21,19 @@ onDone(() => {
 
 const submit = (data: any) => {
   const dto: Model.Todo = data
+
   dto.duration = Number(dto.duration)
+  dto.weekly = weekly
+
   mutate({ input: dto })
 }
 
 defineExpose({
   submit: () => submitForm(formId),
-  reset: () => reset(formId, unref(formData)),
+  reset: () => {
+    reset(formId, unref(formData))
+    weekly = false
+  },
 })
 </script>
 
@@ -63,20 +71,30 @@ defineExpose({
       :options="Object.values(Model.TodoCategorization)"
     />
 
-    <form-kit
-      type="number"
-      label="Duration"
-      help="In minutes"
-      name="duration"
-      :min="0"
-      :step="15"
-    />
+    <div class="grid grid-cols-2 gap-2">
+      <form-kit
+        type="number"
+        label="Duration"
+        help="In minutes"
+        name="duration"
+        :min="0"
+        :step="15"
+      />
 
-    <form-kit
-      label="Start Time*"
-      name="startTime"
-      :validation="`after:${moment().format('YYYY-MM-DD')}`"
-      type="datetime-local"
-    />
+      <form-kit
+        label="Start Time*"
+        name="startTime"
+        :validation="`after:${moment().format('YYYY-MM-DD')}`"
+        type="datetime-local"
+      />
+    </div>
+
+    <div class="flex items-center gap-2">
+      <switch-vue :checked="weekly" @change="(v) => (weekly = v)">
+        <template #default="{ toggle }">
+          <label @click="toggle">Weekly</label>
+        </template>
+      </switch-vue>
+    </div>
   </form-kit>
 </template>

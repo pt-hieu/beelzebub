@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { Model } from '@beelzebub/types'
-import { useMutation, useLazyQuery, useQuery } from '@vue/apollo-composable'
+import { useMutation, useQuery } from '@vue/apollo-composable'
 import { debounce } from 'lodash'
 import { onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 

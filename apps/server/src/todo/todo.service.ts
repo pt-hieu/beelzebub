@@ -14,12 +14,15 @@ export class TodoService {
   findMany(from: Date | string, to: Date | string): Promise<TodoModel[]>
   findMany(from?: Date | string, to?: Date | string) {
     return this.repo.find({
-      where: {
-        ...(from &&
-          to && {
-            startTime: Between(new Date(from), new Date(to)),
-          }),
-      },
+      where: [
+        {
+          ...(from &&
+            to && {
+              startTime: Between(new Date(from), new Date(to)),
+            }),
+        },
+        { weekly: true },
+      ],
       order: {
         startTime: 'asc',
       },

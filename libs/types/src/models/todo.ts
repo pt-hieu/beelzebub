@@ -11,4 +11,5 @@ export interface Todo extends Base {
   categorization: TodoCategorization[]
   startTime: Date
   duration: number | null
+  weekly: boolean
 }

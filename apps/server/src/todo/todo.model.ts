@@ -31,4 +31,8 @@ export class TodoModel extends BaseModel implements Model.Todo {
   @Column({ nullable: true })
   @Field({ nullable: true })
   duration: number | null
+
+  @Column({ default: false })
+  @Field()
+  weekly: boolean
 }
