@@ -36,6 +36,12 @@ watch(
 )
 </script>
 
+<script lang="ts">
+export default {
+  inheritAttrs: false,
+}
+</script>
+
 <template>
   <teleport to="body">
     <motion-vue
