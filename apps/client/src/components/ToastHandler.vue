@@ -17,7 +17,7 @@ watch(
     const footers = Array.from(document.getElementsByTagName('footer'))
     hasFooter = !!footers.length
   },
-  { flush: 'pre' },
+  { immediate: true },
 )
 </script>
 

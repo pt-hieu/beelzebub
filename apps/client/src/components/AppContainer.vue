@@ -29,7 +29,7 @@ watch(configModal, () => {
 </script>
 
 <template>
-  <div v-motion-fade>
+  <div v-motion-fade class="min-h-screen">
     <header
       class="h-[60px] grid grid-cols-[2fr,6fr,2fr] gap-2 place-content-center items-center px-[60px] border-b border-blue/20"
       data-tauri-drag-region
@@ -120,7 +120,6 @@ watch(configModal, () => {
       </div>
     </header>
 
-    <toast-handler />
     <shortcut-handler />
     <subscription-handler />
 
@@ -129,5 +128,7 @@ watch(configModal, () => {
     >
       <slot></slot>
     </main>
+
+    <toast-handler />
   </div>
 </template>
