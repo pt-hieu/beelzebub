@@ -11,6 +11,7 @@ import { DELETE_TODO, GET_TODOES, type GetTodoesRes } from '../queries/todo'
 import TaskVue from '../components/tasks/Task.vue'
 import DropdownVue from '../components/Dropdown.vue'
 import ConfirmVue from '../components/Confirm.vue'
+import Tooltip from '../components/Tooltip.vue'
 import MotionVue from '../components/Motion.vue'
 import { leaveByWidthVariant } from '../variants/leave-by-width'
 import moment from 'moment'
@@ -135,9 +136,13 @@ onUnmounted(() => {
     class="mt-8 grid grid-cols-8 divide-x divide-blue/30 border-b border-blue/30"
   >
     <div class="flex items-center justify-center gap-4">
-      <button @click="moveBackward">
+      <tooltip
+        text="Move backward one week"
+        as="button"
+        @click="moveBackward"
+      >
         <span class="fa fa-angle-left" />
-      </button>
+      </tooltip>
 
       <div class="text-center font-medium">
         <div class="uppercase text-blue text-lg">
@@ -146,9 +151,9 @@ onUnmounted(() => {
         <div>{{ today.week() }}</div>
       </div>
 
-      <button @click="moveForward">
+      <tooltip text="Move forward one week" as="button" @click="moveForward">
         <span class="fa fa-angle-right" />
-      </button>
+      </tooltip>
     </div>
 
     <div
