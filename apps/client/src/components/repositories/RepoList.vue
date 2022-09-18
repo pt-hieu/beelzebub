@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { GET_REPOES, type GetRepoesRes } from '@/queries/repo'
 import { useQuery } from '@vue/apollo-composable'
+import zIndex from '../../libs/z-index.js'
 
 const { selectedRepoId } = defineProps<{ selectedRepoId?: string }>()
 const emit = defineEmits({
@@ -24,11 +25,11 @@ onResult(({ data: { repoes } }) => {
     <div class="flex flex-col h-full overflow-auto">
       <button
         v-for="repo in result?.repoes"
-        :class="`px-5 py-3 text-left ${
-          selectedRepoId === repo.id
-            ? 'bg-blue text-white sticky top-0 bottom-0 shadow z-[10]'
-            : ''
-        } duration-100 flex justify-between group w-[calc(100%-4px)]`"
+        :class="[
+          `px-5 py-3 text-left duration-100 flex justify-between group w-[calc(100%-4px)]`,
+          selectedRepoId === repo.id &&
+            `bg-blue text-white sticky top-0 bottom-0 shadow ${zIndex.SELECTED_REPOSITORY}`,
+        ]"
         @click="emit('repoSelected', repo.id)"
         :key="repo.id"
       >
@@ -36,9 +37,11 @@ onResult(({ data: { repoes } }) => {
           {{ repo.name.split('/')[1] }}
           <span
             v-if="repo.outdated"
-            :class="`fa fa-warning ml-2 relative z-[-1] ${
-              selectedRepoId === repo.id ? 'text-white' : 'text-blue'
-            }`"
+            :class="[
+              'fa fa-warning ml-2 relative ',
+              selectedRepoId === repo.id ? 'text-white' : 'text-blue',
+              zIndex.OUTDATED_REPOSITORY_ICON,
+            ]"
           />
         </span>
 

@@ -3,6 +3,7 @@ import { ref, watch } from 'vue'
 import MotionVue from './Motion.vue'
 import Loading from './Loading.vue'
 import { useTrapFocus } from '../composables/useTrapFocus.js'
+import zIndex from '../libs/z-index'
 
 type Props = {
   visible: boolean
@@ -59,7 +60,10 @@ export default {
         },
         leave: { opacity: 0, transition: { duration: 100 } },
       }"
-      class="fixed z-10 w-screen h-screen top-0 left-0 bg-black/40 grid place-content-center"
+      :class="[
+        'fixed w-screen h-screen top-0 left-0 bg-black/40 grid place-content-center',
+        zIndex.MODAL_OVERLAY,
+      ]"
       @click="emit('close')"
       @leave-done="internalVisible = false"
     >

@@ -3,5 +3,7 @@
   "typescript.preferences.importModuleSpecifier": "relative",
   "volar.completion.preferredTagNameCase": "kebab",
   "volar.completion.preferredAttrNameCase": "kebab",
-  "volar.completion.autoImportComponent": true
+  "volar.completion.autoImportComponent": true,
+  "inlineFold.regex": "(class|className|:class)=[\\[`'{\"]([^`'\"\\r}]+)[`'\"}\\]]",
+  "inlineFold.maskChar": "o((>ω< ))o"
 }

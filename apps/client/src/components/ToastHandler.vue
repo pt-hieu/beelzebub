@@ -3,6 +3,7 @@ import { useToast } from '@/pinia/toast'
 import { watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useDispatchPiniaEvent } from '../composables/useDispatchPiniaEvent.js'
+import zIndex from '../libs/z-index'
 import Loading from './Loading.vue'
 
 const toastStore = useToast()
@@ -25,9 +26,11 @@ watch(
   <TransitionGroup
     tag="div"
     name="list"
-    :class="`fixed z-[9999] flex flex-col-reverse gap-4 left-1/2 -translate-x-1/2 ${
-      hasFooter ? 'bottom-[96px]' : 'bottom-[16px]'
-    }`"
+    :class="[
+      'fixed flex flex-col-reverse gap-4 left-1/2 -translate-x-1/2 ',
+      hasFooter ? 'bottom-[96px]' : 'bottom-[16px]',
+      zIndex.TOAST,
+    ]"
   >
     <div
       v-for="toast in toastStore.items"

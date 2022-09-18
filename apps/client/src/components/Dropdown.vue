@@ -2,6 +2,8 @@
 import { onUnmounted, ref, watch } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 
+import zIndex from '../libs/z-index'
+
 type Props = {
   hold?: boolean
 }
@@ -84,7 +86,7 @@ watch([visible, props], ([visible]) => {
     <div
       :style="{ top, left, transform }"
       v-show="visible"
-      class="absolute z-[1000]"
+      :class="['absolute', zIndex.DROPDOWN_OVERLAY]"
       ref="overlay"
     >
       <slot name="overlay" />

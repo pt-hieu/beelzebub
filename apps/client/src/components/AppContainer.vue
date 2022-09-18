@@ -13,6 +13,7 @@ import { isTauri } from '../libs/platform.js'
 import Confirm from './Confirm.vue'
 import ShortcutHandler from './ShortcutHandler.vue'
 import ShortcutHelpModal from './ShortcutHelpModal.vue'
+import zIndex from '../libs/z-index'
 
 const { currentRoute } = useRouter()
 const config = inject<Ref<{ config: Model.Config }>>('config')
@@ -29,7 +30,7 @@ watch(configModal, () => {
 </script>
 
 <template>
-  <div v-motion-fade class="min-h-screen z-1">
+  <div v-motion-fade :class="['min-h-screen', zIndex.APP_DIV]">
     <header
       class="h-[60px] grid grid-cols-[2fr,6fr,2fr] gap-2 place-content-center items-center px-[60px] border-b border-blue/20"
       data-tauri-drag-region
