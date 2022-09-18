@@ -51,7 +51,7 @@ watch(configModal, () => {
           @close="shortcutModal = false"
         />
 
-        <dropdown-vue>
+        <dropdown-vue as="button">
           <img
             :src="config?.config.avatar"
             class="w-8 aspect-square rounded-full translate-y-1"

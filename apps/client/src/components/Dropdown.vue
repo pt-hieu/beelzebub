@@ -1,17 +1,32 @@
+<script lang="ts">
+export default {
+  inheritAttrs: false,
+}
+</script>
+
 <script lang="ts" setup>
-import { onUnmounted, ref, watch } from 'vue'
+import {
+  onUnmounted,
+  ref,
+  watch,
+  type Component,
+  type HTMLAttributes,
+} from 'vue'
 import { onClickOutside } from '@vueuse/core'
 
 import zIndex from '../libs/z-index'
+import { findQuater } from '../libs/viewport.js'
 
 type Props = {
   hold?: boolean
+  containerAttrs?: HTMLAttributes
+  as: string | Component
 }
 
-const props = defineProps<Props>()
+const { as, hold, containerAttrs } = defineProps<Props>()
 
-const target = ref<HTMLButtonElement | null>(null)
-const overlay = ref<HTMLDivElement | null>(null)
+const target = ref<HTMLElement>()
+const overlay = ref<HTMLDivElement>()
 
 const visible = ref(false)
 
@@ -20,7 +35,7 @@ const stop = onClickOutside(
   () => {
     visible.value = false
   },
-  { ignore: props.hold ? [overlay] : undefined },
+  { ignore: hold ? [overlay] : undefined },
 )
 
 onUnmounted(() => {
@@ -31,45 +46,32 @@ const top = ref('0px')
 const left = ref('0px')
 const transform = ref('unset')
 
-watch([visible, props], ([visible]) => {
+watch([visible], ([visible]) => {
   if (!visible) return
 
   if (!target.value) return
   if (!overlay.value) return
 
-  const vw = Math.max(
-    document.documentElement.clientWidth || 0,
-    window.innerWidth || 0,
-  )
-
-  const vh = Math.max(
-    document.documentElement.clientHeight || 0,
-    window.innerHeight || 0,
-  )
-
   const { top: eTop, left: eLeft } = target.value.getBoundingClientRect()
 
-  const isFirstQuater = eTop < vh / 2 && eLeft < vw / 2
-  const isSecondQuater = eTop < vh / 2 && eLeft >= vw / 2
-  const isThirdQuater = eTop >= vh / 2 && eLeft < vw / 2
-  const isFourthQuater = eTop >= vh / 2 && eLeft >= vw / 2
+  const { q1, q2, q3, q4 } = findQuater({ left: eLeft, top: eTop })
 
-  if (isFirstQuater) {
+  if (q1) {
     top.value = `calc(100%)`
   }
 
-  if (isSecondQuater) {
+  if (q2) {
     top.value = `calc(100% + 4px)`
     left.value = `calc(100%)`
     transform.value = `translateX(-100%)`
   }
 
-  if (isThirdQuater) {
+  if (q3) {
     top.value = '-4px'
     transform.value = `translate(0, -100%)`
   }
 
-  if (isFourthQuater) {
+  if (q4) {
     left.value = '100%'
     top.value = '-4px'
     transform.value = `translate(-100%, -100%)`
@@ -78,10 +80,15 @@ watch([visible, props], ([visible]) => {
 </script>
 
 <template>
-  <div class="relative">
-    <button ref="target" @click="visible = !visible">
+  <div class="relative" v-bind="containerAttrs">
+    <component
+      :is="as"
+      ref="target"
+      @click="visible = !visible"
+      v-bind="$attrs"
+    >
       <slot />
-    </button>
+    </component>
 
     <div
       :style="{ top, left, transform }"

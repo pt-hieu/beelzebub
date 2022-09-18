@@ -136,11 +136,7 @@ onUnmounted(() => {
     class="mt-8 grid grid-cols-8 divide-x divide-blue/30 border-b border-blue/30"
   >
     <div class="flex items-center justify-center gap-4">
-      <tooltip
-        text="Move backward one week"
-        as="button"
-        @click="moveBackward"
-      >
+      <tooltip text="Move backward one week" as="button" @click="moveBackward">
         <span class="fa fa-angle-left" />
       </tooltip>
 
@@ -237,8 +233,8 @@ onUnmounted(() => {
       </motion-vue>
     </confirm-vue>
 
-    <dropdown-vue :hold="true">
-      <button class="button-2nd"><span class="fa fa-eye mr-2" />View</button>
+    <dropdown-vue as="button" :hold="true" class="button-2nd">
+      <span class="fa fa-eye mr-2" />View
 
       <template #overlay>
         <div class="border border-blue rounded-md bg-white shadow-sm p-4">

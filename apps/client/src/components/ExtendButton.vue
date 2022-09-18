@@ -34,7 +34,13 @@ const attrs = useAttrs()
       <slot />
     </button>
 
-    <dropdown class="inline-block">
+    <dropdown
+      :container-attrs="{ class: 'inline-block' }"
+      as="button"
+      :class="`!rounded-l-none !px-3 ${attrs.class}`"
+    >
+      <span class="fa fa-caret-down" />
+
       <template #overlay>
         <div
           class="min-w-[200px] rounded-md bg-white border border-blue/30 flex flex-col py-2 text-blue shadow"
@@ -73,10 +79,6 @@ const attrs = useAttrs()
           </template>
         </div>
       </template>
-
-      <button :class="`!rounded-l-none !px-3 ${attrs.class}`">
-        <span class="fa fa-caret-down" />
-      </button>
     </dropdown>
   </span>
 </template>
