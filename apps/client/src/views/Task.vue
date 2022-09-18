@@ -63,18 +63,10 @@ watch($$(weekDays), (weekDays) => {
   loadTasks(weekDays)
 })
 
-const { mutate, onDone, loading } = useMutation(DELETE_TODO, {
-  update: (cache, { data: { deleteTodo } }) => {
-    let data = cache.readQuery<GetTodoesRes>({ query: GET_TODOES })
-    data = {
-      todoes: (data?.todoes || []).filter((todo) => todo.id !== deleteTodo.id),
-    }
-
-    cache.writeQuery({ query: GET_TODOES, data })
-  },
-})
+const { mutate, onDone, loading } = useMutation(DELETE_TODO)
 
 onDone(() => {
+  refetch()
   selectedTasks.value = []
 })
 
