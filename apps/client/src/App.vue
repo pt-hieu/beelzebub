@@ -4,6 +4,7 @@ import { useQuery } from '@vue/apollo-composable'
 import type { Model } from '@beelzebub/types'
 import { provide } from 'vue'
 import WelcomeVue from './components/Welcome.vue'
+import DarkModeHandler from './components/DarkModeHandler.vue'
 
 const { result, loading } = useQuery<{ config: Model.Config }>(gql`
   query GetConfig {
@@ -21,6 +22,7 @@ provide('config', result)
 
 <template>
   <welcome-vue v-if="!loading" />
+  <dark-mode-handler />
 </template>
 
 <style>
@@ -42,10 +44,12 @@ provide('config', result)
 
 .button-base {
   @apply px-5 py-3 rounded-lg duration-100 border border-blue hover:border-blue-tint text-sm hover:shadow-md shadow-blue;
+  @apply dark:border-cyan dark:hover:border-cyan-tint dark:shadow-cyan/40;
 }
 
 .button {
   @apply bg-blue hover:bg-blue-tint text-white button-base disabled:!bg-gray disabled:!shadow-none disabled:!border-gray;
+  @apply dark:bg-$blue dark:hover:bg-$blue-tint dark:text-cyan;
 }
 
 .button-2nd {

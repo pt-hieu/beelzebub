@@ -43,7 +43,11 @@ watch(configModal, () => {
           title="Settings"
           @ok="configRef?.submitConfig()"
         >
-          <config ref="configRef" @submit="configModal = false" />
+          <Suspense>
+            <config ref="configRef" @submit="configModal = false" />
+
+            <template #fallback> Loading... </template>
+          </Suspense>
         </modal-vue>
 
         <shortcut-help-modal

@@ -20,13 +20,17 @@ onKeyDown('Enter', () => {
     <router-view />
   </app-container>
 
-  <div v-motion-fade class="w-screen h-screen grid place-content-center" v-else>
+  <div
+    v-motion-fade
+    :class="['w-screen h-screen grid place-content-center', 'dark:bg-$white']"
+    v-else
+  >
     <img
       class="w-44 aspect-square rounded-full bg-cover bg-center"
       :style="{ backgroundImage: `url(${config?.config.avatar})` }"
     />
 
-    <div class="mt-4 text-center text-xl text-blue-shade font-medium">
+    <div class="mt-4 text-center text-xl text-blue-shade dark:text-cyan-shade font-medium">
       Welcome {{ config?.config.display_name }}
     </div>
 
