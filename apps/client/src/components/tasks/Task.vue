@@ -4,6 +4,7 @@ import moment from 'moment'
 import { reactive, watch } from 'vue'
 
 import { useWindowResize } from '../../composables/useWindowResize.js'
+import Tooltip from '../Tooltip.vue'
 
 type Props = {
   taskData: Model.Todo
@@ -48,7 +49,7 @@ watch(
     role="button"
     :style="computedPosition"
     :class="[
-      'absolute text-white p-2 text-left rounded-lg overflow-hidden w-[calc((100vw-120px)/8-10px)] min-h-[80px]',
+      'absolute text-white p-2 text-left rounded-lg w-[calc((100vw-120px)/8-10px)] min-h-[80px]',
       'hover:ring-1 ring-blue ring-offset-1 hover:shadow-lg shadow-blue duration-100',
       !!taskData.duration && 'bg-gradient-to-br from-blue to-blue-shade',
       !taskData.duration && 'bg-transparent bg-blue',
@@ -61,7 +62,15 @@ watch(
     <div class="text-sm">
       {{ moment(taskData.startTime).format('HH mm A') }}
       <span v-if="!!taskData.duration">- {{ taskData.duration }} minutes</span>
-      <span v-if="taskData.weekly" class="fa fa-retweet ml-2" />
+
+      <tooltip
+        v-if="taskData.weekly"
+        text="This task is weekly"
+        as="span"
+        movable
+      >
+        <span class="fa fa-retweet ml-2" />
+      </tooltip>
     </div>
 
     <span

@@ -30,8 +30,14 @@ const style = reactive<CSSProperties>({
   visibility: 'hidden',
 })
 
+const resetStyle = () => {
+  style.left = '0px'
+  style.top = '0px'
+  style.transform = 'unset'
+}
+
 const calcStyle = () => {
-  const { top, left, right } = eleRef.getBoundingClientRect()
+  const { top, left, right, width } = eleRef.getBoundingClientRect()
   const text = textRef.getBoundingClientRect()
 
   const { q1, q2, q3, q4 } = findQuater({ top, left })
@@ -44,7 +50,7 @@ const calcStyle = () => {
       offset = Math.abs(left - text.width / 2) + 16 + 'px'
     }
 
-    style.transform = `translateX(calc(-50% + ${offset}))`
+    style.transform = `translateX(calc(-50% + ${offset} + ${width}px / 2))`
   }
 
   if (q2) {
@@ -55,7 +61,7 @@ const calcStyle = () => {
       offset = Math.abs(right - text.right / 2) + 16 + 'px'
     }
 
-    style.transform = `translateX(calc(-50% + ${offset}))`
+    style.transform = `translateX(calc(-50% + ${offset} + ${width}px / 2))`
   }
 
   if (q3) {
@@ -63,7 +69,7 @@ const calcStyle = () => {
       offset = Math.abs(left - text.width / 2) + 16 + 'px'
     }
 
-    style.transform = `translate(calc(-50% + ${offset}), -100%)`
+    style.transform = `translate(calc(-50% + ${offset} + ${width}px / 2), -100%)`
   }
 
   if (q4) {
@@ -73,7 +79,7 @@ const calcStyle = () => {
       offset = Math.abs(right - text.right / 2) + 16 + 'px'
     }
 
-    style.transform = `translateX(calc(-50% + ${offset}))`
+    style.transform = `translate(calc(-50% + ${offset} + ${width}px / 2), -100%)`
   }
 }
 
@@ -82,6 +88,7 @@ watchEffect(
     style.visibility = isHover ? 'unset' : 'hidden'
     if (!isHover || !movable) return
 
+    resetStyle()
     calcStyle()
   },
   { flush: 'post' },
@@ -98,8 +105,9 @@ onMounted(calcStyle)
       ref="textRef"
       :style="style"
       :class="[
-        'absolute w-max max-w-[200px] p-2 px-4 bg-blue',
-        'rounded-md shadow-md text-white text-sm',
+        'absolute w-max max-w-[200px] p-2 px-4 bg-white',
+        'rounded-md shadow-md text-blue text-sm',
+        'ring-1 ring-blue',
       ]"
     >
       {{ text }}

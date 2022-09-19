@@ -2,6 +2,7 @@
 import { GET_REPOES, type GetRepoesRes } from '@/queries/repo'
 import { useQuery } from '@vue/apollo-composable'
 import zIndex from '../../libs/z-index.js'
+import Tooltip from '../Tooltip.vue'
 
 const { selectedRepoId } = defineProps<{ selectedRepoId?: string }>()
 const emit = defineEmits({
@@ -35,14 +36,15 @@ onResult(({ data: { repoes } }) => {
       >
         <span>
           {{ repo.name.split('/')[1] }}
-          <span
-            v-if="repo.outdated"
-            :class="[
-              'fa fa-warning ml-2 relative ',
-              selectedRepoId === repo.id ? 'text-white' : 'text-blue',
-              zIndex.OUTDATED_REPOSITORY_ICON,
-            ]"
-          />
+          <tooltip v-if="repo.outdated" text="The repo is outdated" as="span">
+            <span
+              :class="[
+                'fa fa-warning ml-2 relative ',
+                selectedRepoId === repo.id ? 'text-white' : 'text-blue',
+                zIndex.OUTDATED_REPOSITORY_ICON,
+              ]"
+            />
+          </tooltip>
         </span>
 
         <span
