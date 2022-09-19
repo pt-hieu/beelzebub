@@ -1,7 +1,7 @@
 const formKitTailwind = require('@formkit/themes/tailwindcss')
 
 module.exports = {
-  content: ['./**/*.vue', './src/theme.ts'],
+  content: ['./**/*.vue', './src/theme.ts', './src/libs/z-index.ts'],
   darkMode: 'class',
   theme: {
     extend: {
