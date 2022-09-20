@@ -2,21 +2,20 @@
 // many input types are identical in how
 // we want to style them.
 const textClassification = {
-  label: 'inline-block mb-2 select-none formkit-invalid:text-red-500',
-  inner: `
-   
-  `,
+  label:
+    'inline-block mb-2 select-none formkit-invalid:text-red-500 dark:text-white/80',
   input:
-    'w-full bg-transparent rounded-md outline-none border-black/20 focus:border-blue/30 ring-0 formkit-invalid:border-red-500 text-gray-700 placeholder-gray-400',
+    'w-full bg-transparent rounded-md outline-none border-black/20 dark:border-cyan/20 focus:ring-blue dark:focus:ring-cyan dark:text-white/80 ring-0 formkit-invalid:border-red-500 text-gray-700 placeholder-gray-400',
 }
 const boxClassification = {
   fieldset: '',
-  legend: 'inline-block mb-2 select-none formkit-invalid:text-red-500',
+  legend:
+    'inline-block mb-2 select-none formkit-invalid:text-red-500 dark:text-white/80',
   wrapper: 'flex items-center mb-1 cursor-pointer',
   help: 'mb-2',
   input:
-    'form-check-input appearance-none h-5 w-5 mr-2 border border-gray-500 rounded-sm bg-white checked:bg-blue-500 focus:outline-none focus:ring-0 transition duration-200',
-  label: 'text-sm text-gray-700 mt-1',
+    'form-check-input appearance-none h-5 w-5 mr-2 border border-gray-500 dark:border-cyan/20 rounded-sm bg-white dark:bg-$blue checked:bg-blue-500 dark:checked:bg-cyan focus:outline-none focus:ring-0 transition duration-200',
+  label: 'text-sm text-gray-700 mt-1 dark:text-white/80',
 }
 
 const buttonClassification = {
@@ -31,7 +30,7 @@ export default {
   // the global key will apply to all inputs
   global: {
     outer: 'mb-5 formkit-disabled:opacity-50',
-    help: 'text-xs text-gray-500',
+    help: 'text-xs text-gray-500 dark:text-white/80',
     messages: 'list-none p-0 mt-1 mb-0',
     message: 'text-red-500 mb-1 text-xs',
   },

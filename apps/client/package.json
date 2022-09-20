@@ -45,6 +45,7 @@
     "vue-tsc": "^0.34.7",
     "@types/string-similarity": "~4.0.0",
     "prettier": "~2.7.1",
-    "@types/apollo-upload-client": "~17.0.1"
+    "@types/apollo-upload-client": "~17.0.1",
+    "sass": "~1.54.9"
   }
 }

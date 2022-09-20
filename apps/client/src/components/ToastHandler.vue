@@ -35,10 +35,18 @@ watch(
     <div
       v-for="toast in toastStore.items"
       :key="toast.id"
-      class="px-3 py-4 rounded-md shadow-md shadow-blue/30 border-t border-blue/40 bg-white w-[300px]"
+      :class="[
+        'px-3 py-4 rounded-md shadow-md shadow-blue/30 border-t border-blue/40 bg-white w-[300px]',
+        'dark:bg-$blue dark:shadow-cyan-tint/30 dark:border-cyan-tint/30',
+      ]"
     >
       <div class="flex items-center justify-between">
-        <div class="text-blue-shade font-medium flex gap-2">
+        <div
+          :class="[
+            'text-blue-shade font-medium flex gap-2',
+            'dark:text-cyan-shade',
+          ]"
+        >
           {{ toast.type }}
 
           <span v-if="toast.type === 'Success'" class="fa fa-check" />
@@ -51,11 +59,13 @@ watch(
         </div>
 
         <button @click="toastStore.remove(toast.id)">
-          <span class="fa fa-times text-blue-tint relative bottom-[1px]" />
+          <span
+            class="fa fa-times text-blue-tint dark:text-cyan-shade relative bottom-[1px]"
+          />
         </button>
       </div>
 
-      <div class="text-sm">{{ toast.message }}</div>
+      <div class="text-sm dark:text-white/80">{{ toast.message }}</div>
 
       <div class="mt-2 flex justify-end gap-2 text-sm">
         <button

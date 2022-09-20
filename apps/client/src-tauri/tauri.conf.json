@@ -81,7 +81,8 @@
         "width": 1280,
         "center": true,
         "fileDropEnabled": true,
-        "decorations": false
+        "decorations": false,
+        "transparent": true
       }
     ]
   }

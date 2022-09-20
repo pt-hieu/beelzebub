@@ -30,9 +30,12 @@ watch(configModal, () => {
 </script>
 
 <template>
-  <div v-motion-fade :class="['min-h-screen', zIndex.APP_DIV]">
+  <div v-motion-fade :class="['min-h-screen', zIndex.APP_DIV, 'dark:bg-$blue']">
     <header
-      class="h-[60px] grid grid-cols-[2fr,6fr,2fr] gap-2 place-content-center items-center px-[60px] border-b border-blue/20"
+      :class="[
+        'h-[60px] grid grid-cols-[2fr,6fr,2fr] gap-2 place-content-center items-center px-[60px]',
+        ' border-b border-blue/20 dark:border-cyan/20',
+      ]"
       data-tauri-drag-region
     >
       <div class="flex items-center gap-2">
@@ -63,18 +66,22 @@ watch(configModal, () => {
 
           <template #overlay>
             <div
-              class="min-w-[200px] rounded-md bg-white border border-blue/30 flex gap-2 flex-col py-2 text-blue shadow"
+              :class="[
+                'min-w-[200px] rounded-md border flex gap-2 flex-col py-2',
+                'bg-white border-blue/30 text-blue shadow',
+                'dark:bg-$blue dark:border-cyan/30 dark:shadow-cyan/70',
+              ]"
             >
               <button
                 @click="configModal = true"
-                class="py-2 px-3 w-full text-left hover:bg-blue hover:text-white duration-100"
+                class="py-2 px-3 w-full text-left hover:bg-blue hover:text-white duration-100 dark:hover:bg-$blue-tint dark:text-cyan-shade dark:hover:text-cyan-tint"
               >
                 <span class="fa fa-cog mr-2" />Settings
               </button>
 
               <button
                 @click="shortcutModal = true"
-                class="py-2 px-3 w-full text-left hover:bg-blue hover:text-white duration-100"
+                class="py-2 px-3 w-full text-left hover:bg-blue hover:text-white duration-100 dark:hover:bg-$blue-tint dark:text-cyan-shade dark:hover:text-cyan-tint"
               >
                 <span class="fa fa-keyboard mr-2" />Shortcuts
               </button>
@@ -82,7 +89,7 @@ watch(configModal, () => {
           </template>
         </dropdown-vue>
 
-        <div class="text-blue">
+        <div class="text-blue dark:text-cyan-shade">
           Hi {{ config?.config.display_name }}. You look good!
         </div>
       </div>
@@ -90,9 +97,16 @@ watch(configModal, () => {
       <div class="flex justify-center gap-2 h-full items-center">
         <router-link
           v-for="route in routes"
-          :class="`py-2 px-4 hover:bg-blue-tint/40 hover:text-white text-blue ${
-            currentRoute.path === route.path ? `!bg-blue-tint !text-white` : ``
-          } rounded-md duration-100 ease-in-out`"
+          :class="[
+            `py-2 px-4 hover:bg-blue-tint/40 hover:text-white text-blue ${
+              currentRoute.path === route.path
+                ? `!bg-blue-tint !text-white`
+                : ``
+            } rounded-md duration-100 ease-in-out ring-cyan`,
+            'dark:hover:bg-$blue dark:hover:text-cyan-tint dark:text-cyan-shade',
+            currentRoute.path === route.path &&
+              'dark:!bg-$blue dark:ring-1 dark:!text-cyan-shade',
+          ]"
           :to="route.path"
           :key="route.path"
         >

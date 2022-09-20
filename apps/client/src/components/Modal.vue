@@ -84,15 +84,18 @@ export default {
       >
         <div
           @click="$event.stopPropagation()"
-          class="bg-white rounded-lg min-w-[450px] p-5 shadow-md"
+          class="bg-white dark:bg-$blue rounded-lg min-w-[450px] p-5 shadow-md"
         >
           <slot name="header">
             <div class="flex justify-between my-2 px-2">
-              <div class="text-blue font-medium text-lg">
+              <div class="text-blue dark:text-cyan-shade font-medium text-lg">
                 {{ title }}
               </div>
 
-              <button @click="emit('close')" class="fa fa-times" />
+              <button
+                @click="emit('close')"
+                class="fa fa-times dark:text-cyan-tint"
+              />
             </div>
           </slot>
 
@@ -105,16 +108,19 @@ export default {
 
           <slot name="footer">
             <div
-              class="flex gap-2 items-center justify-end mt-4 border-t border-black/10 pt-4"
+              class="flex gap-2 items-center justify-end mt-4 border-t border-black/10 dark:border-cyan/10 pt-4"
               id="footer-container"
             >
-              <button class="button-3rd order-2" @click="emit('close')">
+              <button
+                class="button-3rd order-2 font-medium"
+                @click="emit('close')"
+              >
                 Cancel
               </button>
 
               <button
                 :disabled="okDisabled"
-                class="button order-3"
+                class="button order-3 font-medium"
                 @click="emit('ok')"
               >
                 <loading :is-loading="isLoading || false">

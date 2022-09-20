@@ -50,7 +50,9 @@ const handleOkButtonClick = () => {
     @ok="handleOkButtonClick"
     @close="visible = false"
   >
-    {{ message }}
+    <span class="dark:text-white/80">
+      {{ message }}
+    </span>
   </modal-vue>
 
   <div @click="handleContainerClick" v-bind="$attrs">

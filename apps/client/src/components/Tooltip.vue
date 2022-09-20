@@ -108,6 +108,7 @@ onMounted(calcStyle)
         'absolute w-max max-w-[200px] p-2 px-4 bg-white',
         'rounded-md shadow-md text-blue text-sm',
         'ring-1 ring-blue',
+        'dark:ring-cyan-tint dark:text-white/80 dark:bg-$blue dark:shadow-cyan-tint/30',
       ]"
     >
       {{ text }}

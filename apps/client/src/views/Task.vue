@@ -133,22 +133,22 @@ onUnmounted(() => {
 
 <template>
   <div
-    class="mt-8 grid grid-cols-8 divide-x divide-blue/30 border-b border-blue/30"
+    class="mt-8 grid grid-cols-8 divide-x divide-blue/30 border-b border-blue/30 dark:border-cyan/30 dark:divide-cyan/30"
   >
     <div class="flex items-center justify-center gap-4">
       <tooltip text="Move backward one week" as="button" @click="moveBackward">
-        <span class="fa fa-angle-left" />
+        <span class="fa fa-angle-left dark:text-white" />
       </tooltip>
 
       <div class="text-center font-medium">
-        <div class="uppercase text-blue text-lg">
+        <div class="uppercase text-blue text-lg dark:text-cyan-shade">
           {{ today.format('MMM / YYYY') }}
         </div>
-        <div>{{ today.week() }}</div>
+        <div class="dark:text-white/80">{{ today.week() }}</div>
       </div>
 
       <tooltip text="Move forward one week" as="button" @click="moveForward">
-        <span class="fa fa-angle-right" />
+        <span class="fa fa-angle-right dark:text-white" />
       </tooltip>
     </div>
 
@@ -158,8 +158,10 @@ onUnmounted(() => {
       class="text-center py-2"
       data-vue-type="week-day"
     >
-      <div class="uppercase">{{ day.format('ddd') }}</div>
-      <div class="text-xl text-blue">{{ day.format('DD') }}</div>
+      <div class="uppercase dark:text-white/80">{{ day.format('ddd') }}</div>
+      <div class="text-xl text-blue dark:text-cyan-shade">
+        {{ day.format('DD') }}
+      </div>
     </div>
   </div>
 
@@ -172,7 +174,7 @@ onUnmounted(() => {
       <div
         v-for="(_, index) in Array(24).fill('')"
         :key="index"
-        class="h-[70px] text-center grid place-content-center"
+        class="h-[70px] text-center grid place-content-center dark:text-white/80"
       >
         <span>{{ index.toString().padStart(2, '0') }}:00</span>
       </div>
@@ -237,7 +239,9 @@ onUnmounted(() => {
       <span class="fa fa-eye mr-2" />View
 
       <template #overlay>
-        <div class="border border-blue rounded-md bg-white shadow-sm p-4">
+        <div
+          class="border border-blue dark:border-cyan/60 rounded-md bg-white dark:bg-$blue shadow-sm p-4"
+        >
           <form-kit
             type="checkbox"
             v-model="filter"

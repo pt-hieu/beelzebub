@@ -70,7 +70,7 @@ watch($$(darkMode), (enable) => {
 <template>
   <div>
     <div
-      class="flex items-center gap-2 p-4 border border-blue rounded-md mb-4 mt-2"
+      class="flex items-center gap-2 p-4 border border-blue dark:border-cyan/60 rounded-md mb-4 mt-2"
     >
       <switch-vue
         :initial-checked="darkMode"
@@ -78,7 +78,7 @@ watch($$(darkMode), (enable) => {
         @change="(v) => (darkMode = v)"
       >
         <template #default="{ toggle }">
-          <label @click="toggle">Dark Mode</label>
+          <label class="dark:text-white/80 ml-4" @click="toggle">Dark Mode</label>
         </template>
       </switch-vue>
     </div>

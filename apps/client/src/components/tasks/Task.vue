@@ -53,6 +53,7 @@ watch(
       'hover:ring-1 ring-blue ring-offset-1 hover:shadow-lg shadow-blue duration-100',
       !!taskData.duration && 'bg-gradient-to-br from-blue to-blue-shade',
       !taskData.duration && 'bg-transparent bg-blue',
+      'dark:from-$blue dark:to-$blue-shade dark:ring-1 dark:ring-cyan dark:shadow-cyan/30',
     ]"
   >
     <div class="font-medium truncate">

@@ -22,7 +22,7 @@ onKeyDown('Enter', () => {
 
   <div
     v-motion-fade
-    :class="['w-screen h-screen grid place-content-center', 'dark:bg-$white']"
+    :class="['w-screen h-screen grid place-content-center', 'dark:bg-$blue']"
     v-else
   >
     <img

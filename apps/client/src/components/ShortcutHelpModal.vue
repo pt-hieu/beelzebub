@@ -28,13 +28,13 @@ const tags = Object.keys(shortcutDict)
   >
     <div class="grid grid-cols-2">
       <div v-for="tag in tags" :key="tag" class="min-w-[450px]">
-        <div class="capitalize text-lg">
+        <div class="capitalize text-lg dark:text-white/80">
           {{ tag }}
         </div>
 
         <div class="mt-2 flex flex-col gap-2 text-sm">
           <div
-            class="grid grid-cols-[1fr,150px] items-center"
+            class="grid grid-cols-[1fr,150px] items-center dark:text-white/80"
             v-for="shortcut in shortcutDict[tag]"
             :key="shortcut.keys"
           >

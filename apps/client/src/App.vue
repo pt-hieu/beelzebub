@@ -44,16 +44,17 @@ provide('config', result)
 
 .button-base {
   @apply px-5 py-3 rounded-lg duration-100 border border-blue hover:border-blue-tint text-sm hover:shadow-md shadow-blue;
-  @apply dark:border-cyan dark:hover:border-cyan-tint dark:shadow-cyan/40;
+  @apply dark:border-cyan dark:hover:border-cyan-tint dark:shadow-cyan-shade/40;
 }
 
 .button {
   @apply bg-blue hover:bg-blue-tint text-white button-base disabled:!bg-gray disabled:!shadow-none disabled:!border-gray;
-  @apply dark:bg-$blue dark:hover:bg-$blue-tint dark:text-cyan;
+  @apply dark:bg-cyan dark:hover:bg-cyan-tint dark:text-$blue;
 }
 
 .button-2nd {
   @apply text-blue hover:text-blue-tint button-base disabled:!text-gray disabled:!border-gray disabled:!shadow-none;
+  @apply dark:text-cyan-shade dark:hover:text-cyan-tint;
 }
 
 .button-3rd {
@@ -61,7 +62,7 @@ provide('config', result)
 }
 </style>
 
-<style>
+<style lang="scss">
 /* Scroll bar stylings */
 ::-webkit-scrollbar {
   width: 5px;
@@ -79,13 +80,23 @@ provide('config', result)
   border-radius: 2px;
 }
 
+.dark {
+  ::-webkit-scrollbar-thumb {
+    background: #70def1;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #8de5f4;
+  }
+}
+
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #7c95a4;
 }
 </style>
 
-<style>
+<style lang="scss">
 .lds-ring {
   display: inline-block;
   position: relative;
@@ -104,6 +115,13 @@ provide('config', result)
   border-radius: 50%;
   animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
   border-color: #5a7bb5 transparent transparent transparent;
+}
+
+.dark {
+  .lds-ring div {
+    border: 2px solid #8de5f4;
+    border-color: #8de5f4 transparent transparent transparent;
+  }
 }
 
 .lds-ring div:nth-child(1) {
@@ -125,5 +143,11 @@ provide('config', result)
   100% {
     transform: rotate(360deg);
   }
+}
+</style>
+
+<style>
+#app {
+  @apply rounded-xl overflow-hidden bg-white dark:bg-$blue;
 }
 </style>
