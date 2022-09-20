@@ -16,6 +16,7 @@ import MotionVue from '../components/Motion.vue'
 import { leaveByWidthVariant } from '../variants/leave-by-width'
 import moment from 'moment'
 import CurrentHourIndicator from '../components/tasks/CurrentHourIndicator.vue'
+import { pluralize } from '../libs/text'
 
 const createTask = ref(false)
 const createTaskRef = ref<InstanceType<typeof CreateTaskVue> | null>(null)
@@ -216,7 +217,10 @@ onUnmounted(() => {
   <footer-vue>
     <confirm-vue
       ref="confirmRef"
-      :message="`Are you sure you want to delete ${selectedTasks.length} tasks?`"
+      :message="`Are you sure you want to delete ${pluralize(
+        selectedTasks.length,
+        'task',
+      )}?`"
       @ok="deleteTasks"
     >
       <motion-vue
