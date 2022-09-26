@@ -4,5 +4,7 @@
   "globals": {
     "MY_GLOBAL": true
   },
-  "esversion": 8
+  "esversion": 8,
+  "maxparams": 3,
+  "strict": true
 }

@@ -42,6 +42,11 @@ export class CreateTodo implements Omit<Model.Todo, keyof Model.Base> {
   @Transform(toBoolean)
   @IsBoolean()
   weekly: boolean | null
+
+  @Field(() => Model.RemindType, { nullable: true })
+  @IsEnum(Model.RemindType)
+  @IsOptional()
+  remind: Model.RemindType
 }
 
 @InputType()

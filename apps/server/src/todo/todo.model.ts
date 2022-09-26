@@ -9,6 +9,10 @@ registerEnumType(Model.TodoCategorization, {
   name: 'TodoCategorization',
 })
 
+registerEnumType(Model.RemindType, {
+  name: 'RemindType',
+})
+
 @ObjectType()
 @Entity({ name: 'todo' })
 export class TodoModel extends BaseModel implements Model.Todo {
@@ -35,4 +39,13 @@ export class TodoModel extends BaseModel implements Model.Todo {
   @Column({ default: false })
   @Field()
   weekly: boolean
+
+  @Column({
+    type: 'enum',
+    enum: Model.RemindType,
+    nullable: true,
+    default: null,
+  })
+  @Field(() => Model.RemindType, { nullable: true, defaultValue: null })
+  remind: Model.RemindType
 }

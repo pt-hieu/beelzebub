@@ -8,10 +8,8 @@ import { routes } from '../router'
 import Config from './Config.vue'
 import ModalVue from './Modal.vue'
 import ToastHandler from './ToastHandler.vue'
-import SubscriptionHandler from './SubscriptionHandler.vue'
 import { isTauri } from '../libs/platform.js'
 import Confirm from './Confirm.vue'
-import ShortcutHandler from './ShortcutHandler.vue'
 import ShortcutHelpModal from './ShortcutHelpModal.vue'
 import zIndex from '../libs/z-index'
 
@@ -139,8 +137,6 @@ watch(configModal, () => {
       </div>
     </header>
 
-    <shortcut-handler />
-    <subscription-handler />
 
     <main
       class="px-[60px] pb-[20px] h-[clamp(0px,calc(100vh-140px),calc(100vh-140px))]"

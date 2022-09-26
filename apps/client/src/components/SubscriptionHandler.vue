@@ -2,10 +2,8 @@
 import { markRaw, onUnmounted } from 'vue'
 import { useMessageEvent } from '@/pinia/message-event'
 import type { Event } from '@beelzebub/types'
-import { useToast } from '../pinia/toast'
 
 const messageEvent = useMessageEvent()
-const toast = useToast()
 
 let subscription = markRaw<EventSource>(
   new EventSource(`${import.meta.env.VITE_API}/subscribe`),
@@ -17,11 +15,11 @@ subscription.onmessage = (ev) => {
 }
 
 subscription.addEventListener('open', () => {
-  toast.add('Connection to SSE server established!', 'Success', undefined, 2)
+  console.info('Connection to SSE server established!')
 })
 
 subscription.addEventListener('error', () => {
-  toast.add('SSE server disconnected!', 'Error', undefined, 2)
+  console.error('SSE server disconnected!')
 })
 
 onUnmounted(() => {

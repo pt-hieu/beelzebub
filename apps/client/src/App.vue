@@ -3,8 +3,14 @@ import { gql } from 'graphql-tag'
 import { useQuery } from '@vue/apollo-composable'
 import type { Model } from '@beelzebub/types'
 import { provide } from 'vue'
+
 import WelcomeVue from './components/Welcome.vue'
 import DarkModeHandler from './components/DarkModeHandler.vue'
+import ShortcutHandler from './components/ShortcutHandler.vue'
+import SubscriptionHandler from './components/SubscriptionHandler.vue'
+import RemindHandler from './components/RemindHandler.vue'
+
+import Reminder from './components/tasks/Reminder.vue'
 
 const { result, loading } = useQuery<{ config: Model.Config }>(gql`
   query GetConfig {
@@ -18,11 +24,18 @@ const { result, loading } = useQuery<{ config: Model.Config }>(gql`
 `)
 
 provide('config', result)
+
+let isToRemind = $ref<boolean>(window.location.search.includes('remindId'))
 </script>
 
 <template>
-  <welcome-vue v-if="!loading" />
+  <welcome-vue v-if="!loading && !isToRemind" />
+  <reminder v-if="isToRemind" />
+
   <dark-mode-handler />
+  <shortcut-handler />
+  <subscription-handler />
+  <remind-handler />
 </template>
 
 <style>

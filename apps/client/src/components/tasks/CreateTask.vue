@@ -24,6 +24,7 @@ const submit = (data: any) => {
 
   dto.duration = Number(dto.duration)
   dto.weekly = weekly
+  dto.remind = Model.RemindType.FIVE_MINUTES_BEFORE
 
   mutate({ input: dto })
 }
@@ -92,7 +93,7 @@ defineExpose({
     <div class="flex items-center gap-2">
       <switch-vue :checked="weekly" @change="(v) => (weekly = v)">
         <template #default="{ toggle }">
-          <label @click="toggle">Weekly</label>
+          <label class="dark:text-white/80" @click="toggle">Weekly</label>
         </template>
       </switch-vue>
     </div>

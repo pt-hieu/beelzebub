@@ -57,11 +57,19 @@ type TodoModel {
   startTime: DateTime!
   duration: Float
   weekly: Boolean!
+  remind: RemindType
 }
 
 enum TodoCategorization {
   URGENT
   IMPORTANT
+}
+
+enum RemindType {
+  FIVE_MINUTES_BEFORE
+  FIFTEEN_MINUTES_BEFORE
+  ONE_HOUR_BEFORE
+  TWELVE_HOURS_BEFORE
 }
 
 type Query {
@@ -82,6 +90,7 @@ type Mutation {
   createTodo(createTodo: CreateTodo!): TodoModel!
   updateTodo(updateTodo: UpdateTodo!, id: String!): TodoModel!
   deleteTodo(id: String!): TodoModel!
+  trigger: Boolean!
   updateRepo(id: String!, dto: UpdateRepositoryDto!): RepoModel!
   deleteRepo(id: String!): RepoModel!
   fetchCollaborators(id: String!): RepoModel!
@@ -107,6 +116,7 @@ input CreateTodo {
   startTime: DateTime!
   duration: Float
   weekly: Boolean
+  remind: RemindType
 }
 
 input UpdateTodo {
@@ -116,6 +126,7 @@ input UpdateTodo {
   startTime: DateTime
   duration: Float
   weekly: Boolean
+  remind: RemindType
 }
 
 input UpdateRepositoryDto {

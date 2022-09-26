@@ -28,11 +28,11 @@
     "string-similarity": "~4.0.4",
     "copy-to-clipboard": "~3.3.2",
     "apollo-upload-client": "~17.0.0",
+    "@beelzebub/types": "workspace:*",
     "@tauri-apps/tauri-forage": "~1.0.0-beta.2"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1.0.0-rc.10",
-    "@beelzebub/types": "workspace:*",
     "autoprefixer": "~10.4.7",
     "postcss": "~8.4.13",
     "tailwindcss": "~3.0.24",

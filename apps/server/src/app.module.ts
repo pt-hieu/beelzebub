@@ -2,6 +2,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
 import { Module } from '@nestjs/common'
 import { EventEmitterModule } from '@nestjs/event-emitter'
 import { GraphQLModule } from '@nestjs/graphql'
+import { ScheduleModule } from '@nestjs/schedule'
 import { TypeOrmModule } from '@nestjs/typeorm'
 
 import { BookmarkModule } from './bookmark/bookmark.module.js'
@@ -36,6 +37,7 @@ import { TodoModule } from './todo/todo.module.js'
     EventEmitterModule.forRoot({
       global: true,
     }),
+    ScheduleModule.forRoot(),
     ConfigModule,
     HttpModule,
     TodoModule,
