@@ -4,6 +4,8 @@ import { useMessageEvent } from '@/pinia/message-event'
 import type { Event } from '@beelzebub/types'
 import { useRouter } from 'vue-router'
 
+import { useOnPiniaEvent } from '../composables/useOnPiniaEvent.js'
+
 const messageEvent = useMessageEvent()
 const { currentRoute } = useRouter()
 
@@ -40,6 +42,10 @@ watch(
   },
   { immediate: true },
 )
+
+useOnPiniaEvent('close-sse', () => {
+  subscription?.close()
+})
 
 onUnmounted(() => {
   subscription?.close()

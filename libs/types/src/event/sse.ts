@@ -24,3 +24,7 @@ export type SSE =
       type: `${TodoEvent.TRIGGER_REMIND}.1`
       payload: string
     }
+  | {
+      type: `${TodoEvent.CLOSE_REMINDER}.1`
+      payload: string
+    }

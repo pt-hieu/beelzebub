@@ -53,9 +53,13 @@ export class SseService {
   }
 
   removeSubscription(channel: string) {
-    const { listener } = this.#preparationDict.get(channel) || {}
-    listener?.off()
+    const { listener, $sub } = this.#preparationDict.get(channel) || {}
 
+    if ($sub instanceof ReplaySubject) {
+      this.emit({ type: 'todo.close-reminder.1', payload: channel })
+    }
+
+    listener?.off()
     this.#preparationDict.delete(channel)
   }
 }
