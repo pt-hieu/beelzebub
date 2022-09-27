@@ -2,7 +2,7 @@ import { Event } from '@beelzebub/types'
 
 import { Injectable } from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
-import { Subject } from 'rxjs'
+import { ReplaySubject, Subject } from 'rxjs'
 
 type Listener = Extract<ReturnType<EventEmitter2['on']>, { off: () => void }>
 
@@ -11,14 +11,32 @@ export class SseService {
   private $emitter: EventEmitter2
   private readonly PUBLIC_CHANNEL = 'public'
 
+  #preparationDict = new Map<
+    string,
+    { $sub: ReplaySubject<unknown> | Subject<unknown>; listener: Listener }
+  >()
+
   constructor() {
     this.$emitter = new EventEmitter2()
   }
 
-  subscribe(channel = this.PUBLIC_CHANNEL) {
-    const $sub = new Subject()
+  subscribe(
+    channel = this.PUBLIC_CHANNEL,
+    options?: { asReplaySubject?: boolean },
+  ) {
+    let $sub: Subject<unknown> | ReplaySubject<unknown>, listener: Listener
 
-    const listener = this.$emitter.on(
+    if (this.#preparationDict.has(channel)) {
+      return { $sub: this.#preparationDict.get(channel).$sub }
+    }
+
+    if (options?.asReplaySubject) {
+      $sub = new ReplaySubject(1)
+    } else {
+      $sub = new Subject()
+    }
+
+    listener = this.$emitter.on(
       channel,
       function (value) {
         $sub.next(value)
@@ -26,10 +44,18 @@ export class SseService {
       { objectify: true },
     ) as Listener
 
-    return { $sub, listener }
+    this.#preparationDict.set(channel, { $sub, listener })
+    return { $sub }
   }
 
   emit(data: Event.SSE, channel = this.PUBLIC_CHANNEL) {
     return this.$emitter.emit(channel, { data, type: 'message' })
+  }
+
+  removeSubscription(channel: string) {
+    const { listener } = this.#preparationDict.get(channel) || {}
+    listener?.off()
+
+    this.#preparationDict.delete(channel)
   }
 }

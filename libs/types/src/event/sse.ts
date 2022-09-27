@@ -20,3 +20,7 @@ export type SSE =
       type: `${TodoEvent.REMIND}.1`
       payload: Todo
     }
+  | {
+      type: `${TodoEvent.TRIGGER_REMIND}.1`
+      payload: string
+    }

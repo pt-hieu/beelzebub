@@ -1,4 +1,4 @@
-import { Controller, Req, Sse } from '@nestjs/common'
+import { Controller, Query, Req, Sse } from '@nestjs/common'
 import { Request } from 'express'
 
 import { SseService } from './sse.service.js'
@@ -8,11 +8,11 @@ export class SseController {
   constructor(private appSubs: SseService) {}
 
   @Sse('subscribe')
-  subscribe(@Req() req: Request) {
-    const { $sub, listener } = this.appSubs.subscribe()
+  subscribe(@Req() req: Request, @Query('channel') channel: string) {
+    const { $sub } = this.appSubs.subscribe(channel)
 
     req.on('close', () => {
-      listener.off()
+      this.appSubs.removeSubscription(channel)
     })
 
     return $sub.asObservable()
