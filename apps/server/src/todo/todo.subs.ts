@@ -11,7 +11,7 @@ import {
   RemoveEvent,
 } from 'typeorm'
 
-import { TodoRemindEvent } from './todo.event.js'
+import { TodoRemindEvent, TriggerRemindEvent } from './todo.event.js'
 import { TodoModel } from './todo.model.js'
 
 import { SchedulerService } from '../misc/scheduler.service.js'
@@ -89,9 +89,15 @@ export class TodoSubscriber implements EntitySubscriberInterface<TodoModel> {
     if (!remind) return
 
     const jobId = this.scheduler.scheduleCron(
-      () => {
+      async () => {
         const remindEvent = new TodoRemindEvent(event.entity)
-        this.emitter.emitAsync(Event.TodoEvent.REMIND, remindEvent)
+        await this.emitter.emitAsync(Event.TodoEvent.REMIND, remindEvent)
+
+        const triggerRemindEvent = new TriggerRemindEvent(todoId)
+        this.emitter.emitAsync(
+          Event.TodoEvent.TRIGGER_REMIND,
+          triggerRemindEvent,
+        )
 
         if (weekly) return
         this.onTodoRemoved(todoId)

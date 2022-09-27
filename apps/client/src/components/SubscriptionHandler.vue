@@ -1,29 +1,48 @@
 <script lang="ts" setup>
-import { markRaw, onUnmounted } from 'vue'
+import { onUnmounted, watch } from 'vue'
 import { useMessageEvent } from '@/pinia/message-event'
 import type { Event } from '@beelzebub/types'
+import { useRouter } from 'vue-router'
 
 const messageEvent = useMessageEvent()
+const { currentRoute } = useRouter()
 
-let subscription = markRaw<EventSource>(
-  new EventSource(`${import.meta.env.VITE_API}/subscribe`),
+let subscription = $ref<EventSource | undefined>(undefined)
+
+// FixMe
+watch(
+  () => currentRoute.value.query.remindId,
+  (remindId) => {
+    subscription?.close()
+
+    let url = `${import.meta.env.VITE_API}/subscribe`
+
+    if (remindId) {
+      url += `?channel=${remindId}`
+    }
+
+    const es = new EventSource(url)
+
+    es.addEventListener('message', (ev) => {
+      const data = JSON.parse(ev.data) as Event.SSE
+      messageEvent.set(data)
+    })
+
+    es.addEventListener('open', () => {
+      console.info('Connection to SSE server established!')
+    })
+
+    es.addEventListener('error', () => {
+      console.error('SSE server disconnected!')
+    })
+
+    subscription = es
+  },
+  { immediate: true },
 )
 
-subscription.onmessage = (ev) => {
-  const data = JSON.parse(ev.data) as Event.SSE
-  messageEvent.set(data)
-}
-
-subscription.addEventListener('open', () => {
-  console.info('Connection to SSE server established!')
-})
-
-subscription.addEventListener('error', () => {
-  console.error('SSE server disconnected!')
-})
-
 onUnmounted(() => {
-  subscription.close()
+  subscription?.close()
 })
 </script>
 

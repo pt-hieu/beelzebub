@@ -9,6 +9,7 @@ export default defineConfig({
   server: {
     open: false,
     host: true,
+    port: 3000,
   },
   resolve: {
     alias: {

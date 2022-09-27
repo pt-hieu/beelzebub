@@ -5,35 +5,23 @@ import { watch } from 'vue'
 
 import { useOnSseEvent } from '../composables/useOnSseEvent'
 
-let todo = $ref<Model.Todo[]>([])
+let todoIds = $ref<Model.Todo['id'][]>([])
 
-watch($$(todo), async (newTodo, oldTodo) => {
+watch($$(todoIds), async (newTodo, oldTodo) => {
   if (newTodo.length <= oldTodo.length) return
 
-  const [target] = newTodo.slice(-1)
-  const webview = new WebviewWindow(target.id + Date.now(), {
-    url: import.meta.env.VITE_LOCAL + `?remindId=${target.id}`,
+  const [targetId] = newTodo.slice(-1)
+  const webview = new WebviewWindow(targetId + Date.now(), {
+    url: import.meta.env.VITE_LOCAL + `?remindId=${targetId}`,
   })
 
-  const bc = new BroadcastChannel('beelzebub')
-
-  await webview.once('tauri://error', (e) => {
-    console.error(e)
-  })
-
-  await webview.once('tauri://created', () => {
-    setTimeout(() => {
-      bc.postMessage(JSON.stringify(target))
-    }, 0)
-  })
-
-  await webview.once('tauri://destroyed', () => {
-    bc.close()
+  webview.once('tauri://error', (e) => {
+    console.log(e)
   })
 })
 
-useOnSseEvent('todo.remind.1', (remindTodo) => {
-  todo = [...todo, remindTodo]
+useOnSseEvent('todo.trigger-remind.1', (todoId) => {
+  todoIds = [...todoIds, todoId]
 })
 </script>
 

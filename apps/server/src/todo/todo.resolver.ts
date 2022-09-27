@@ -4,7 +4,7 @@ import { NotFoundException, ParseUUIDPipe } from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 
-import { TodoRemindEvent } from './todo.event.js'
+import { TodoRemindEvent, TriggerRemindEvent } from './todo.event.js'
 import { CreateTodo, GetManyTodo, UpdateTodo } from './todo.input.js'
 import { TodoModel } from './todo.model.js'
 import { TodoService } from './todo.service.js'
@@ -51,9 +51,12 @@ export class TodoResolver {
   @Mutation(() => Boolean)
   async trigger() {
     const todo = await this.todoService.findMany().then((r) => r[0])
-    const event = new TodoRemindEvent(todo)
 
-    this.emitter.emitAsync(Event.TodoEvent.REMIND, event)
+    const event = new TodoRemindEvent(todo)
+    await this.emitter.emitAsync(Event.TodoEvent.REMIND, event)
+
+    const triggerEvent = new TriggerRemindEvent(todo.id)
+    this.emitter.emitAsync(Event.TodoEvent.TRIGGER_REMIND, triggerEvent)
 
     return true
   }

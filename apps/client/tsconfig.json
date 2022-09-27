@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "lib": ["ES2017"],
+    "lib": ["ES2017", "dom"],
     "types": ["vue/ref-macros"],
     "paths": {
       "@/*": ["./src/*"]

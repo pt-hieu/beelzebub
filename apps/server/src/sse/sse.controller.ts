@@ -9,6 +9,7 @@ export class SseController {
 
   @Sse('subscribe')
   subscribe(@Req() req: Request, @Query('channel') channel: string) {
+    channel = channel || undefined
     const { $sub } = this.appSubs.subscribe(channel)
 
     req.on('close', () => {

@@ -1,17 +1,12 @@
 <script lang="ts" setup>
 import type { Model } from '@beelzebub/types'
-import { onMounted, onUnmounted } from 'vue'
+import { useOnSseEvent } from '../../composables/useOnSseEvent.js'
 
 let todo = $ref<Model.Todo>()
-let bc = $ref(new BroadcastChannel('beelzebub'))
 
-onMounted(() => {
-  bc.onmessage = (e) => {
-    console.log(e)
-  }
+useOnSseEvent('todo.remind.1', (toRemindTodo) => {
+  todo = toRemindTodo
 })
-
-onUnmounted(bc.close)
 </script>
 
 <template>
