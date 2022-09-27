@@ -16,7 +16,7 @@ useOnSseEvent('todo.trigger-remind.1', (todoId) => {
     transparent: true,
     resizable: false,
     width: 600,
-    height: 450,
+    height: 200,
     center: true,
   })
 

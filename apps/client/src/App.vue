@@ -2,7 +2,7 @@
 import { gql } from 'graphql-tag'
 import { useQuery } from '@vue/apollo-composable'
 import type { Model } from '@beelzebub/types'
-import { provide } from 'vue'
+import { provide, ref } from 'vue'
 
 import WelcomeVue from './components/Welcome.vue'
 import DarkModeHandler from './components/DarkModeHandler.vue'
@@ -25,7 +25,7 @@ const { result, loading } = useQuery<{ config: Model.Config }>(gql`
 
 provide('config', result)
 
-let isToRemind = $ref<boolean>(window.location.search.includes('remindId'))
+const isToRemind = ref<boolean>(window.location.search.includes('remindId'))
 </script>
 
 <template>
@@ -161,6 +161,6 @@ let isToRemind = $ref<boolean>(window.location.search.includes('remindId'))
 
 <style>
 #app {
-  @apply rounded-xl overflow-hidden bg-white dark:bg-$blue;
+  @apply rounded-md overflow-hidden bg-white dark:bg-$blue;
 }
 </style>
