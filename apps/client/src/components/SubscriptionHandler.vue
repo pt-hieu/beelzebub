@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onUnmounted, watch } from 'vue'
+import { onMounted, onUnmounted, watch } from 'vue'
 import { useMessageEvent } from '@/pinia/message-event'
 import type { Event } from '@beelzebub/types'
 import { useRouter } from 'vue-router'
@@ -55,6 +55,10 @@ watch(
   },
   { immediate: true },
 )
+
+onMounted(() => {
+  subscribeChannel('')
+})
 
 useOnPiniaEvent('close-sse', (channel) => {
   const subscription = subscriptionDict.get(channel || '')
