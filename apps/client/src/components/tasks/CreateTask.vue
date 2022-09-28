@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { reactive, unref } from 'vue'
+import { markRaw, reactive, unref } from 'vue'
 import { FormKit, submitForm, reset } from '@formkit/vue'
 import { useMutation } from '@vue/apollo-composable'
 import { Model } from '@beelzebub/types'
@@ -24,7 +24,6 @@ const submit = (data: any) => {
 
   dto.duration = Number(dto.duration)
   dto.weekly = weekly
-  dto.remind = Model.RemindType.FIVE_MINUTES_BEFORE
 
   mutate({ input: dto })
 }
@@ -36,6 +35,24 @@ defineExpose({
     weekly = false
   },
 })
+
+function parseStr(str: string) {
+  let texts = str.split('_')
+  texts = texts.map((txt) => {
+    const [firstChar, ...str] = Array.from(txt.toLocaleLowerCase())
+    return [firstChar.toLocaleUpperCase()].concat(str).join('')
+  })
+
+  return texts.join(' ')
+}
+
+const remindOptions = markRaw([
+  { label: "Don't remind me!", value: null },
+  ...Object.values(Model.RemindType).map((str) => ({
+    label: parseStr(str),
+    value: str,
+  })),
+])
 </script>
 
 <template>
@@ -64,13 +81,28 @@ defineExpose({
       type="textarea"
     />
 
-    <form-kit
-      label="Categorization*"
-      name="categorization"
-      validation="required"
-      type="checkbox"
-      :options="Object.values(Model.TodoCategorization)"
-    />
+    <div class="grid grid-cols-2 gap-2 items-start">
+      <div>
+        <form-kit
+          label="Categorization*"
+          name="categorization"
+          validation="required"
+          type="checkbox"
+          :options="Object.values(Model.TodoCategorization)"
+        />
+      </div>
+
+      <div>
+        <div>Repeat</div>
+        <div class="flex items-center gap-2 mt-3">
+          <switch-vue :checked="weekly" @change="(v) => (weekly = v)">
+            <template #default="{ toggle }">
+              <label class="dark:text-white/80" @click="toggle">Weekly</label>
+            </template>
+          </switch-vue>
+        </div>
+      </div>
+    </div>
 
     <div class="grid grid-cols-2 gap-2">
       <form-kit
@@ -90,12 +122,11 @@ defineExpose({
       />
     </div>
 
-    <div class="flex items-center gap-2">
-      <switch-vue :checked="weekly" @change="(v) => (weekly = v)">
-        <template #default="{ toggle }">
-          <label class="dark:text-white/80" @click="toggle">Weekly</label>
-        </template>
-      </switch-vue>
-    </div>
+    <form-kit
+      type="select"
+      label="Remind"
+      name="remind"
+      :options="remindOptions"
+    />
   </form-kit>
 </template>

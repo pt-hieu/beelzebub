@@ -101,7 +101,7 @@ export default {
 
           <div
             v-bind="$attrs"
-            class="max-h-[500px] min-h-[40px] overflow-auto px-2 overflow-x-hidden"
+            class="max-h-[calc(100vh-144px-32px)] min-h-[40px] px-2 overflow-hidden"
           >
             <slot />
           </div>
