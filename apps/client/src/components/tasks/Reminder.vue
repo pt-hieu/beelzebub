@@ -13,7 +13,7 @@ useOnSseEvent('todo.remind.1', (toRemindTodo) => {
 
 const dispatch = useDispatchPiniaEvent('close-sse')
 const closeReminder = () => {
-  dispatch(undefined)
+  dispatch(todo.id)
 }
 </script>
 

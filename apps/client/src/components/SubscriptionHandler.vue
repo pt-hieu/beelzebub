@@ -9,46 +9,64 @@ import { useOnPiniaEvent } from '../composables/useOnPiniaEvent.js'
 const messageEvent = useMessageEvent()
 const { currentRoute } = useRouter()
 
-let subscription = $ref<EventSource | undefined>(undefined)
+let subscriptionDict = $ref(new Map<string, EventSource>())
 
-// FixMe
+function subscribeChannel(channel: string) {
+  const subscription = subscriptionDict.get(channel)
+  subscription?.close()
+
+  let url = `${import.meta.env.VITE_API}/subscribe`
+  if (channel) {
+    url += `?channel=${channel}`
+  }
+
+  const es = new EventSource(url)
+
+  es.addEventListener('message', (ev) => {
+    const data = JSON.parse(ev.data) as Event.SSE
+    messageEvent.set(data)
+  })
+
+  es.addEventListener('open', () => {
+    console.info(
+      `Connection to SSE server established! - [channel: ${
+        channel || 'Public'
+      }]`,
+    )
+
+    subscriptionDict.set(channel, es)
+  })
+
+  es.addEventListener('error', () => {
+    console.error(
+      `SSE server disconnected! - [channel: ${channel || 'Public'}]`,
+    )
+
+    es.close()
+  })
+}
+
 watch(
   () => currentRoute.value.query.remindId,
   (remindId) => {
-    subscription?.close()
-
-    let url = `${import.meta.env.VITE_API}/subscribe`
-
-    if (remindId) {
-      url += `?channel=${remindId}`
+    if (typeof remindId === 'string') {
+      subscribeChannel(remindId || '')
     }
-
-    const es = new EventSource(url)
-
-    es.addEventListener('message', (ev) => {
-      const data = JSON.parse(ev.data) as Event.SSE
-      messageEvent.set(data)
-    })
-
-    es.addEventListener('open', () => {
-      console.info('Connection to SSE server established!')
-    })
-
-    es.addEventListener('error', () => {
-      console.error('SSE server disconnected!')
-    })
-
-    subscription = es
   },
   { immediate: true },
 )
 
-useOnPiniaEvent('close-sse', () => {
+useOnPiniaEvent('close-sse', (channel) => {
+  const subscription = subscriptionDict.get(channel || '')
+
   subscription?.close()
+  subscriptionDict.delete(channel || '')
 })
 
 onUnmounted(() => {
-  subscription?.close()
+  Array.from(subscriptionDict.values()).forEach((es) => {
+    es.close()
+  })
 })
 </script>
 

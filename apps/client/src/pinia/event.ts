@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 
 declare global {
   interface PiniaEvent {
+    'close-sse': string
     [x: string]: unknown
   }
 }
