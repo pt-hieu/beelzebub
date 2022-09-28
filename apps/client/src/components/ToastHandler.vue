@@ -72,7 +72,7 @@ watch(
           class="button-2nd !py-1.5 rounded-sm"
           v-for="action in toast.actions"
           :key="action.event"
-          @click="dispatch(undefined, action.event)"
+          @click="dispatch(action.event, undefined)"
         >
           <span v-if="!!action.icon" :class="`${action.icon} mr-2`" />
           {{ action.label }}

@@ -29,7 +29,7 @@ onMounted(async () => {
   await registerAll(
     unregisteredGlobalShortcuts.filter((s) => !!s),
     async (s) => {
-      dispatch({}, s)
+      dispatch(s, {})
     },
   )
 })

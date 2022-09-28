@@ -1,8 +1,9 @@
 <script lang="ts" setup>
 import type { Model } from '@beelzebub/types'
 import moment from 'moment'
-import { useDispatchPiniaEvent } from '../../composables/useDispatchPiniaEvent.js'
-import { useOnSseEvent } from '../../composables/useOnSseEvent.js'
+
+import { useDispatchPiniaEvent } from '@/composables/useDispatchPiniaEvent.js'
+import { useOnSseEvent } from '@/composables/useOnSseEvent.js'
 
 let todo = $ref<Model.Todo>()
 
@@ -10,9 +11,9 @@ useOnSseEvent('todo.remind.1', (toRemindTodo) => {
   todo = toRemindTodo
 })
 
-const dispatch = useDispatchPiniaEvent()
+const dispatch = useDispatchPiniaEvent('close-sse')
 const closeReminder = () => {
-  dispatch(undefined, 'close-sse')
+  dispatch(undefined)
 }
 </script>
 

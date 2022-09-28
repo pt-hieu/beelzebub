@@ -1,15 +1,22 @@
 import { usePiniaEvent } from '@/pinia/event'
 
 export function useDispatchPiniaEvent<K extends keyof PiniaEvent>(): (
-  payload: PiniaEvent[K],
   eventName: K,
+  payload: PiniaEvent[K],
 ) => void
 export function useDispatchPiniaEvent<K extends keyof PiniaEvent>(
+  name: K,
+): (payload: PiniaEvent[K]) => void
+export function useDispatchPiniaEvent<K extends keyof PiniaEvent>(
   name?: K,
-): (payload: PiniaEvent[K], eventName?: K) => void {
+): (eventName: K | PiniaEvent[K], payload?: PiniaEvent[K]) => void {
   const event = usePiniaEvent()
 
-  return (payload, eventName) => {
-    return event.dispatch(name! || eventName!, payload)
+  return (eventNameOrPayload, payload) => {
+    return event.dispatch(
+      // @ts-expect-error
+      name! || eventNameOrPayload!,
+      payload || eventNameOrPayload,
+    )
   }
 }
