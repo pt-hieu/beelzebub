@@ -2,7 +2,7 @@
 import type { Model } from '@beelzebub/types'
 import { useMutation, useQuery } from '@vue/apollo-composable'
 import { debounce } from 'lodash'
-import { onMounted, onUnmounted, reactive, ref, watch } from 'vue'
+import { markRaw, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 
 import FooterVue from '../components/Footer.vue'
 import ModalVue from '../components/Modal.vue'
@@ -23,11 +23,12 @@ const createTaskRef = ref<InstanceType<typeof CreateTaskVue> | null>(null)
 const selectedTasks = ref<Model.Todo[]>([])
 const confirmRef = ref<InstanceType<typeof ConfirmVue> | null>(null)
 
-let today = $ref(moment())
+let today = markRaw(moment())
+let currentDay = $ref(moment())
 let weekDays = $ref<moment.Moment[]>([])
 
 watch(
-  $$(today),
+  $$(currentDay),
   (today) => {
     const weekStart = today.clone().startOf('week')
     const days: ReturnType<typeof moment>[] = []
@@ -116,11 +117,11 @@ const handleClickOutsideTask = (e: Event) => {
 }
 
 const moveForward = () => {
-  today = today.clone().add(7, 'days')
+  currentDay = currentDay.clone().add(7, 'days')
 }
 
 const moveBackward = () => {
-  today = today.clone().subtract(7, 'days')
+  currentDay = currentDay.clone().subtract(7, 'days')
 }
 
 onMounted(() => {
@@ -152,9 +153,9 @@ function shouldShowTask(todo: Model.Todo) {
 
       <div class="text-center font-medium">
         <div class="uppercase text-blue text-lg dark:text-cyan-shade">
-          {{ today.format('MMM / YYYY') }}
+          {{ currentDay.format('MMM / YYYY') }}
         </div>
-        <div class="dark:text-white/80">{{ today.week() }}</div>
+        <div class="dark:text-white/80">{{ currentDay.week() }}</div>
       </div>
 
       <tooltip text="Move forward one week" as="button" @click="moveForward">
@@ -165,11 +166,14 @@ function shouldShowTask(todo: Model.Todo) {
     <div
       v-for="(day, index) in weekDays"
       :key="index"
-      class="text-center py-2"
+      :class="[
+        'text-center py-2',
+        day.isSame(today, 'date') && 'bg-blue !text-white',
+      ]"
       data-vue-type="week-day"
     >
       <div class="uppercase dark:text-white/80">{{ day.format('ddd') }}</div>
-      <div class="text-xl text-blue dark:text-cyan-shade">
+      <div class="text-xl">
         {{ day.format('DD') }}
       </div>
     </div>
@@ -267,6 +271,10 @@ function shouldShowTask(todo: Model.Todo) {
 
     <button @click="createTask = true" class="button-2nd">
       <span class="fa fa-plus mr-2" />Add Task
+    </button>
+
+    <button @click="currentDay = today" class="button-2nd">
+      <span class="fa fa-calendar mr-2" />Today
     </button>
   </footer-vue>
 </template>
