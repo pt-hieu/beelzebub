@@ -9,6 +9,7 @@ import {
   EventSubscriber,
   InsertEvent,
   RemoveEvent,
+  UpdateEvent,
 } from 'typeorm'
 
 import { TodoRemindEvent, TriggerRemindEvent } from './todo.event.js'
@@ -47,7 +48,7 @@ export class TodoSubscriber implements EntitySubscriberInterface<TodoModel> {
     return TodoModel
   }
 
-  private parseStartTime2Cron(input: {
+  private parseToCron(input: {
     startTime: Date
     weekly: boolean
     remind: Model.RemindType
@@ -84,13 +85,12 @@ export class TodoSubscriber implements EntitySubscriberInterface<TodoModel> {
     this.#mapper.delete(todoId)
   }
 
-  afterInsert(event: InsertEvent<TodoModel>): void | Promise<any> {
-    const { title, startTime, weekly, remind, id: todoId } = event.entity
-    if (!remind) return
+  private scheduleTodo(todo: TodoModel) {
+    const { title, startTime, weekly, remind, id: todoId } = todo
 
     const jobId = this.scheduler.scheduleCron(
       async () => {
-        const remindEvent = new TodoRemindEvent(event.entity)
+        const remindEvent = new TodoRemindEvent(todo)
         await this.emitter.emitAsync(Event.TodoEvent.REMIND, remindEvent)
 
         const triggerRemindEvent = new TriggerRemindEvent(todoId)
@@ -104,11 +104,28 @@ export class TodoSubscriber implements EntitySubscriberInterface<TodoModel> {
       },
       {
         name: title,
-        cron: this.parseStartTime2Cron({ startTime, weekly, remind }),
+        cron: this.parseToCron({ startTime, weekly, remind }),
       },
     )
 
     this.#mapper.set(todoId, jobId)
+  }
+
+  afterInsert(event: InsertEvent<TodoModel>): void | Promise<any> {
+    const { remind } = event.entity
+    if (!remind) return
+
+    this.scheduleTodo(event.entity)
+  }
+
+  afterUpdate({ entity }: UpdateEvent<TodoModel>): void | Promise<any> {
+    const todo = entity as TodoModel
+
+    const { remind, id: todoId } = todo
+    this.onTodoRemoved(todoId)
+
+    if (!remind) return
+    this.scheduleTodo(todo)
   }
 
   afterRemove(event: RemoveEvent<TodoModel>): void | Promise<any> {
