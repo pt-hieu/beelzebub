@@ -130,6 +130,15 @@ onMounted(() => {
 onUnmounted(() => {
   document.removeEventListener('click', handleClickOutsideTask)
 })
+
+function shouldShowTask(todo: Model.Todo) {
+  const [lastDayOfWeek] = weekDays.slice(-1)
+  if (todo.weekly) {
+    return lastDayOfWeek.isAfter(todo.startTime)
+  }
+
+  return true
+}
 </script>
 
 <template>
@@ -182,17 +191,18 @@ onUnmounted(() => {
     </div>
 
     <div class="col-span-7 relative">
-      <task-vue
-        v-for="todo in result?.todoes"
-        :key="todo.id"
-        :task-data="todo"
-        :is-loading="loading"
-        :week-days="weekDays"
-        :is-selected="
-          selectedTasks.some((selectedTask) => selectedTask.id === todo.id)
-        "
-        @click="handleTaskClick($event, todo)"
-      />
+      <template v-for="todo in result?.todoes" :key="todo.id">
+        <task-vue
+          v-if="shouldShowTask(todo)"
+          :task-data="todo"
+          :is-loading="loading"
+          :week-days="weekDays"
+          :is-selected="
+            selectedTasks.some((selectedTask) => selectedTask.id === todo.id)
+          "
+          @click="handleTaskClick($event, todo)"
+        />
+      </template>
     </div>
   </div>
 

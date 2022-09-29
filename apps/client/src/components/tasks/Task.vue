@@ -34,9 +34,18 @@ watch(
     ) as HTMLDivElement[]
 
     weekDays.forEach((day, index) => {
-      if (!day.clone().isSame(momentStarttime, 'date')) return
+      const clonedDay = day.clone()
+
+      const isWeekly = taskData.weekly
+      const isSameDate = clonedDay.isSame(momentStarttime, 'date')
+      const isSameWeekday =
+        clonedDay.format('ddd') === momentStarttime.format('ddd')
+
+      if (!isSameDate && !isWeekly) return
+      if (!isSameWeekday && isWeekly) return
+
       computedPosition.left =
-        weekDayElements[0]?.getBoundingClientRect().width * index + 'px'
+        weekDayElements[0].getBoundingClientRect().width * index + 'px'
     })
   },
   { immediate: true },
