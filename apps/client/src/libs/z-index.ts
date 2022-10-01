@@ -5,6 +5,7 @@ const zIndex = {
   MODAL_OVERLAY: 'z-[10]',
   SELECTED_REPOSITORY: 'z-[10]',
   DROPDOWN_OVERLAY: 'z-[1000]',
+  TOOLTIP: 'z-[1000]',
   TOAST: 'z-[9999]',
 }
 

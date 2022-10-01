@@ -9,6 +9,7 @@ import {
 import { useElementHover } from '@vueuse/core'
 
 import { findQuater } from '../libs/viewport'
+import zIndex from '../libs/z-index.js'
 
 type Props = {
   as: string | Component
@@ -109,6 +110,7 @@ onMounted(calcStyle)
         'rounded-md shadow-md text-blue text-sm',
         'ring-1 ring-blue',
         'dark:ring-cyan-tint dark:text-white/80 dark:bg-$blue dark:shadow-cyan-tint/30',
+        zIndex.TOOLTIP,
       ]"
     >
       {{ text }}
