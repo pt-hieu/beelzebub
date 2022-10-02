@@ -1,10 +1,12 @@
 <script lang="ts" setup>
 import type { Model } from '@beelzebub/types'
 import moment from 'moment'
-import { reactive, watch } from 'vue'
+import { onMounted, onUnmounted, reactive, watch } from 'vue'
 
 import { useWindowResize } from '../../composables/useWindowResize.js'
 import Tooltip from '../Tooltip.vue'
+import Confirm from '../Confirm.vue'
+import { pluralize } from '../../libs/text.js'
 
 type Props = {
   taskData: Model.Todo
@@ -15,6 +17,9 @@ type Props = {
 
 const { taskData, isSelected, weekDays } = defineProps<Props>()
 const wdResize = $(useWindowResize())
+
+const taskEle = $ref<HTMLDivElement>()
+const resizer = $ref<HTMLDivElement>()
 
 const computedPosition = reactive({ top: '0px', left: '0px', height: '0px' })
 watch(
@@ -50,28 +55,136 @@ watch(
   },
   { immediate: true },
 )
+
+let startY = $ref(0)
+let offsetY = $ref(0)
+let isMouseDown = $ref(false)
+
+let duration = $ref(taskData.duration || 0)
+const confirmRef = $ref<InstanceType<typeof Confirm>>()
+
+function abortDurationUpdate() {
+  duration = taskData.duration || 0
+  computedPosition.height = ((duration || 10) / 60) * 70 + 'px'
+}
+
+watch(
+  () => taskData,
+  (taskData) => {
+    duration = taskData.duration || 0
+  },
+)
+
+watch(
+  () => computedPosition.height,
+  (value) => {
+    const height = Number(value.split('px')[0])
+    if (Number.isNaN(height)) return
+
+    const minutes = Math.floor((height / 70) * 60)
+    duration = minutes
+  },
+)
+
+function resizerMouseDown(e: MouseEvent) {
+  const target = e.target as HTMLDivElement
+  if (!target.isSameNode(resizer)) return
+
+  isMouseDown = true
+
+  startY = e.y
+  window.addEventListener('mousemove', resizerMouseMove)
+}
+
+function resizerMouseUp() {
+  if (!isMouseDown) return
+  isMouseDown = false
+
+  window.removeEventListener('mousemove', resizerMouseMove)
+  if (duration === taskData.duration) return
+
+  confirmRef.open()
+}
+
+function resizerMouseMove(e: MouseEvent) {
+  if (!isMouseDown) return
+
+  offsetY = e.y - startY
+  startY = e.y
+
+  if (offsetY === 0) return
+
+  let [height] = computedPosition.height.split('px')
+  height = Math.max(Number(height) + offsetY, 80) + 'px'
+
+  computedPosition.height = height
+}
+
+onMounted(() => {
+  window.addEventListener('mousedown', resizerMouseDown)
+  window.addEventListener('mouseup', resizerMouseUp)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('mousedown', resizerMouseDown)
+  window.removeEventListener('mouseup', resizerMouseUp)
+
+  try {
+    window.removeEventListener('mousemove', resizerMouseMove)
+  } catch (e) {}
+})
 </script>
 
 <template>
   <div
     data-vue-type="task-component"
+    ref="taskEle"
     role="button"
     :style="computedPosition"
     :class="[
-      'absolute text-white p-2 text-left rounded-lg w-[calc((100vw-120px)/8-10px)] min-h-[80px]',
+      'absolute text-white p-2 text-left rounded-lg w-[calc((100vw-120px)/8-4px)] min-h-[80px] group',
       'hover:ring-1 ring-blue ring-offset-1 hover:shadow-lg shadow-blue duration-100',
       !!taskData.duration && 'bg-gradient-to-br from-blue to-blue-shade',
       !taskData.duration && 'bg-transparent bg-blue',
       'dark:from-$blue dark:to-$blue-shade dark:ring-1 dark:ring-cyan dark:shadow-cyan/30',
     ]"
   >
+    <div
+      ref="resizer"
+      :class="[
+        'absolute left-2 w-[calc(100%-16px)] h-[2px] bg-white rounded-full',
+        'cursor-n-resize group-hover:bottom-1 -bottom-3 duration-100',
+      ]"
+    />
+
+    <confirm
+      ref="confirmRef"
+      :ok-text="taskData.weekly ? 'Update this task only' : 'Update'"
+      :nd-buttons="
+        taskData.weekly
+          ? [
+              {
+                text: 'Update all tasks',
+                onClick: () => {},
+                icon: 'fa fa-globe-asia',
+              },
+            ]
+          : []
+      "
+      :message="`Are you sure you want to update duration from ${pluralize(
+        taskData.duration || 0,
+        'minute',
+      )} to ${pluralize(duration, 'minute')}`"
+      @cancel="abortDurationUpdate"
+    ></confirm>
+
     <div class="font-medium truncate">
       {{ taskData.title }}
     </div>
 
     <div class="text-sm">
       {{ moment(taskData.startTime).format('HH mm A') }}
-      <span v-if="!!taskData.duration">- {{ taskData.duration }} minutes</span>
+      <span v-if="!!taskData.duration">- {{ duration }} minutes</span>
 
       <tooltip
         v-if="taskData.weekly"

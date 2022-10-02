@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import type { ModalButton } from '../types'
 import ModalVue from './Modal.vue'
 
 type Props = {
@@ -7,6 +8,7 @@ type Props = {
   disabledModal?: boolean
   disabled?: boolean
   message: string
+  ndButtons?: ModalButton[]
 }
 
 const {
@@ -15,8 +17,9 @@ const {
   message,
   disabledModal = false,
   disabled = false,
+  ndButtons = [],
 } = defineProps<Props>()
-const emit = defineEmits(['ok'])
+const emit = defineEmits(['ok', 'cancel'])
 
 let visible = $ref(false)
 
@@ -40,6 +43,11 @@ const handleOkButtonClick = () => {
   emit('ok')
   visible = false
 }
+
+const handleCancelButtonClick = () => {
+  emit('cancel')
+  visible = false
+}
 </script>
 
 <template>
@@ -47,8 +55,9 @@ const handleOkButtonClick = () => {
     :visible="visible"
     :title="title"
     :ok-text="okText"
+    :nd-buttons="ndButtons"
     @ok="handleOkButtonClick"
-    @close="visible = false"
+    @close="handleCancelButtonClick"
   >
     <span class="dark:text-white/80">
       {{ message }}

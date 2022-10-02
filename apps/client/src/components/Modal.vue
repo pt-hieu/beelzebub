@@ -1,7 +1,10 @@
 <script lang="ts" setup>
 import { ref, watch } from 'vue'
+import type { ModalButton } from '@/types'
+
 import MotionVue from './Motion.vue'
 import Loading from './Loading.vue'
+
 import { useTrapFocus } from '../composables/useTrapFocus.js'
 import zIndex from '../libs/z-index'
 
@@ -12,6 +15,7 @@ type Props = {
   title?: string
   id?: string
   okDisabled?: boolean
+  ndButtons?: ModalButton[]
 }
 
 const props = defineProps<Props>()
@@ -112,15 +116,26 @@ export default {
               id="footer-container"
             >
               <button
-                class="button-3rd order-2 font-medium"
+                class="button-3rd font-medium"
                 @click="emit('close')"
               >
                 Cancel
               </button>
 
               <button
+                v-for="btn in props.ndButtons || []"
+                :key="btn.text"
+                @click="btn.onClick"
+                class="button-2nd"
+              >
+                <span v-if="btn.icon" :class="`${btn.icon} mr-2`" />{{
+                  btn.text
+                }}
+              </button>
+
+              <button
                 :disabled="okDisabled"
-                class="button order-3 font-medium"
+                class="button font-medium"
                 @click="emit('ok')"
               >
                 <loading :is-loading="isLoading || false">
