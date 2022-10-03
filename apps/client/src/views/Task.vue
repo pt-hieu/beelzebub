@@ -3,6 +3,7 @@ import type { Model } from '@beelzebub/types'
 import { useMutation, useQuery } from '@vue/apollo-composable'
 import { debounce } from 'lodash'
 import { markRaw, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
+import { onKeyStroke } from '@vueuse/core'
 
 import FooterVue from '../components/Footer.vue'
 import ModalVue from '../components/Modal.vue'
@@ -123,6 +124,22 @@ const moveForward = () => {
 const moveBackward = () => {
   currentDay = currentDay.clone().subtract(7, 'days')
 }
+
+onKeyStroke(
+  'ArrowLeft',
+  () => {
+    moveBackward()
+  },
+  { eventName: 'keydown' },
+)
+
+onKeyStroke(
+  'ArrowRight',
+  () => {
+    moveForward()
+  },
+  { eventName: 'keydown' },
+)
 
 onMounted(() => {
   document.addEventListener('click', handleClickOutsideTask)

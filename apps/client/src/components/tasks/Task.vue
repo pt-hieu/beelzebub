@@ -60,6 +60,15 @@ let startY = $ref(0)
 let offsetY = $ref(0)
 let isMouseDown = $ref(false)
 
+watch($$(isMouseDown), (isMouseDown) => {
+  if (isMouseDown) {
+    document.body.style.cursor = 'n-resize'
+    return
+  }
+
+  document.body.style.cursor = 'unset'
+})
+
 let duration = $ref(taskData.duration || 0)
 const confirmRef = $ref<InstanceType<typeof Confirm>>()
 
@@ -152,8 +161,9 @@ onUnmounted(() => {
     <div
       ref="resizer"
       :class="[
-        'absolute left-2 w-[calc(100%-16px)] h-[2px] bg-white rounded-full',
+        'absolute left-2 w-[calc(100%-16px)] h-[3px] bg-white rounded-full',
         'cursor-n-resize group-hover:bottom-1 -bottom-3 duration-100',
+        isMouseDown && 'bottom-1',
       ]"
     />
 
