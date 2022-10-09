@@ -20,4 +20,5 @@ export interface Todo extends Base {
   duration: number | null
   weekly: boolean
   remind: RemindType | null
+  meta: Record<string, Omit<Todo, 'meta'>>
 }

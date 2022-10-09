@@ -15,6 +15,7 @@ const TODO_FIELDS = gql`
     duration
     created_at
     weekly
+    meta
   }
 `
 
@@ -38,8 +39,12 @@ export const CREATE_TODO = gql`
 
 export const UPDATE_TODO = gql`
   ${TODO_FIELDS}
-  mutation UpdateTodo($input: UpdateTodo!, $id: String!) {
-    updateTodo(updateTodo: $input, id: $id) {
+  mutation UpdateTodo(
+    $input: UpdateTodo!
+    $id: String!
+    $options: UpdateTodoOptions
+  ) {
+    updateTodo(updateTodo: $input, id: $id, options: $options) {
       ...TodoFields
     }
   }

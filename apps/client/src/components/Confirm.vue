@@ -8,6 +8,7 @@ type Props = {
   disabledModal?: boolean
   disabled?: boolean
   message: string
+  isLoading?: boolean
   ndButtons?: ModalButton[]
 }
 
@@ -18,6 +19,7 @@ const {
   disabledModal = false,
   disabled = false,
   ndButtons = [],
+  isLoading = false,
 } = defineProps<Props>()
 const emit = defineEmits(['ok', 'cancel'])
 
@@ -56,6 +58,7 @@ const handleCancelButtonClick = () => {
     :title="title"
     :ok-text="okText"
     :nd-buttons="ndButtons"
+    :is-loading="isLoading"
     @ok="handleOkButtonClick"
     @close="handleCancelButtonClick"
   >

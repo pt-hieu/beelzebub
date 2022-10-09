@@ -1,6 +1,6 @@
 import { useMutation } from '@vue/apollo-composable'
-import { useToast } from '../pinia/toast.js'
-import { CREATE_LINK, GET_LINKS, type GetLinksRes } from '../queries/link.js'
+import { useToast } from '../pinia/toast'
+import { CREATE_LINK, GET_LINKS, type GetLinksRes } from '../queries/link'
 
 export const CREATE_LINK_TOAST_ID = 'create-link'
 type UseCreateLinkOptions = {

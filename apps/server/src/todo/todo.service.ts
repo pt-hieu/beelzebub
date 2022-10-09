@@ -1,8 +1,13 @@
 import { Event } from '@beelzebub/types'
 
-import { Injectable, OnApplicationBootstrap } from '@nestjs/common'
+import {
+  Injectable,
+  InternalServerErrorException,
+  OnApplicationBootstrap,
+} from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
 import { InjectRepository } from '@nestjs/typeorm'
+import _ from 'lodash'
 import { Between, Repository } from 'typeorm'
 
 import { TodoRemindEvent, TriggerRemindEvent } from './todo.event.js'
@@ -10,6 +15,7 @@ import { TodoLib } from './todo.lib.js'
 import { TodoModel } from './todo.model.js'
 
 import { SchedulerService } from '../misc/scheduler.service.js'
+import { asyncTryCatch, tryCatch } from '../misc/try.js'
 
 @Injectable()
 export class TodoService implements OnApplicationBootstrap {
@@ -81,8 +87,53 @@ export class TodoService implements OnApplicationBootstrap {
     })
   }
 
-  save(dto: Partial<TodoModel>) {
-    return this.repo.save(dto)
+  #validateDate(value: any): asserts value is Date {
+    if (typeof value !== 'string' && !(value instanceof Date)) {
+      throw new Error('Value is not a Date instance')
+    }
+  }
+
+  save(dto: Partial<TodoModel>): Promise<TodoModel>
+  save(target: Date | string, dto: Partial<TodoModel>): Promise<TodoModel>
+  async save(
+    targetOrDto: Date | string | Partial<TodoModel>,
+    dto?: Partial<TodoModel>,
+  ) {
+    let [result] = await asyncTryCatch(async () => {
+      this.#validateDate(targetOrDto)
+      if (!dto || !dto.id) return null
+
+      if (typeof targetOrDto === 'string') {
+        targetOrDto = new Date(targetOrDto)
+      }
+
+      targetOrDto = targetOrDto.getTime().toString()
+
+      const todo = await this.findById(dto.id)
+      return this.repo.save({
+        ...todo,
+        meta: {
+          ...todo.meta,
+          [targetOrDto]: {
+            ...todo.meta[targetOrDto],
+            ..._.omit(dto, 'id'),
+          },
+        },
+      })
+    })
+
+    if (result) return result
+
+    const [isDate] = tryCatch(() => {
+      this.#validateDate(targetOrDto)
+      return {}
+    })
+
+    if (isDate)
+      throw new InternalServerErrorException('[TodoService] - Method: /save/')
+
+    // @ts-expect-error: target type is already validated
+    return this.repo.save(targetOrDto)
   }
 
   findById(id: string) {

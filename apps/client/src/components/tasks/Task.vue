@@ -1,12 +1,14 @@
 <script lang="ts" setup>
 import type { Model } from '@beelzebub/types'
 import moment from 'moment'
-import { onMounted, onUnmounted, reactive, watch } from 'vue'
+import { markRaw, onMounted, onUnmounted, reactive, watch } from 'vue'
 
-import { useWindowResize } from '../../composables/useWindowResize.js'
 import Tooltip from '../Tooltip.vue'
 import Confirm from '../Confirm.vue'
-import { pluralize } from '../../libs/text.js'
+
+import { pluralize } from '../../libs/text'
+import { useWindowResize } from '../../composables/useWindowResize'
+import { useUpdateTask } from '../../mutations/update-todo'
 
 type Props = {
   taskData: Model.Todo
@@ -15,13 +17,58 @@ type Props = {
   isLoading?: boolean
 }
 
-const { taskData, isSelected, weekDays } = defineProps<Props>()
+const { taskData: initialData, isSelected, weekDays } = defineProps<Props>()
 const wdResize = $(useWindowResize())
 
 const taskEle = $ref<HTMLDivElement>()
 const resizer = $ref<HTMLDivElement>()
 
 const computedPosition = reactive({ top: '0px', left: '0px', height: '0px' })
+
+let taskDate = $ref<Date>()
+let taskData = $ref<Model.Todo>(initialData)
+
+const weekDayElements = markRaw<HTMLDivElement[]>(
+  Array.from(
+    document.querySelectorAll(`div[data-vue-type='week-day']`),
+  ) as HTMLDivElement[],
+)
+
+watch(
+  () => initialData,
+  ({ startTime }) => {
+    const momentStarttime = moment(startTime)
+
+    weekDays.forEach((day, index) => {
+      const clonedDay = day.clone()
+
+      const isWeekly = initialData.weekly
+      const isSameDate = clonedDay.isSame(momentStarttime, 'date')
+      const isSameWeekday =
+        clonedDay.format('ddd') === momentStarttime.format('ddd')
+
+      if (!isSameDate && !isWeekly) return
+      if (!isSameWeekday && isWeekly) return
+
+      taskDate = weekDays[index]
+        .clone()
+        .startOf('day')
+        .set('hour', momentStarttime.get('hour'))
+        .set('minute', momentStarttime.get('minute'))
+        .toDate()
+    })
+  },
+  { immediate: true },
+)
+
+watch(
+  () => [initialData, taskDate] as const,
+  ([initialData, taskDate]) => {
+    const timestamp = taskDate.getTime().toString()
+    taskData = { ...initialData, ...(initialData.meta[timestamp] || {}) }
+  },
+  { immediate: true },
+)
 watch(
   () => [taskData, wdResize] as const,
   ([{ duration, startTime }]) => {
@@ -34,14 +81,10 @@ watch(
         70 +
       'px'
 
-    const weekDayElements = Array.from(
-      document.querySelectorAll(`div[data-vue-type='week-day']`),
-    ) as HTMLDivElement[]
-
     weekDays.forEach((day, index) => {
       const clonedDay = day.clone()
 
-      const isWeekly = taskData.weekly
+      const isWeekly = initialData.weekly
       const isSameDate = clonedDay.isSame(momentStarttime, 'date')
       const isSameWeekday =
         clonedDay.format('ddd') === momentStarttime.format('ddd')
@@ -77,12 +120,9 @@ function abortDurationUpdate() {
   computedPosition.height = ((duration || 10) / 60) * 70 + 'px'
 }
 
-watch(
-  () => taskData,
-  (taskData) => {
-    duration = taskData.duration || 0
-  },
-)
+watch($$(taskData), (taskData) => {
+  duration = taskData.duration || 0
+})
 
 watch(
   () => computedPosition.height,
@@ -142,6 +182,37 @@ onUnmounted(() => {
     window.removeEventListener('mousemove', resizerMouseMove)
   } catch (e) {}
 })
+
+const { update, updating } = useUpdateTask()
+let updatingAllInstance = $ref(false)
+let updatingTargetOnly = $ref(false)
+
+function updateAllTaskInstance() {
+  updatingAllInstance = true
+
+  update({
+    id: taskData.id,
+    input: { duration },
+    options: { updateOnlyTarget: false },
+  })
+}
+
+function updateTargetTaskOnly() {
+  updatingTargetOnly = true
+
+  update({
+    id: taskData.id,
+    input: { duration },
+    options: { updateOnlyTarget: true, targetDate: taskDate },
+  })
+}
+
+watch(updating, (updating) => {
+  if (!updating) {
+    updatingAllInstance = false
+    updatingTargetOnly = false
+  }
+})
 </script>
 
 <template>
@@ -169,14 +240,16 @@ onUnmounted(() => {
 
     <confirm
       ref="confirmRef"
+      :is-loading="updatingTargetOnly"
       :ok-text="taskData.weekly ? 'Update this task only' : 'Update'"
       :nd-buttons="
         taskData.weekly
           ? [
               {
                 text: 'Update all tasks',
-                onClick: () => {},
+                onClick: updateAllTaskInstance,
                 icon: 'fa fa-globe-asia',
+                loading: updatingAllInstance,
               },
             ]
           : []
@@ -185,8 +258,9 @@ onUnmounted(() => {
         taskData.duration || 0,
         'minute',
       )} to ${pluralize(duration, 'minute')}`"
+      @ok="updateTargetTaskOnly"
       @cancel="abortDurationUpdate"
-    ></confirm>
+    />
 
     <div class="font-medium truncate">
       {{ taskData.title }}

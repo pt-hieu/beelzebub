@@ -115,10 +115,7 @@ export default {
               class="flex gap-2 items-center justify-end mt-4 border-t border-black/10 dark:border-cyan/10 pt-4"
               id="footer-container"
             >
-              <button
-                class="button-3rd font-medium"
-                @click="emit('close')"
-              >
+              <button class="button-3rd font-medium" @click="emit('close')">
                 Cancel
               </button>
 
@@ -128,9 +125,10 @@ export default {
                 @click="btn.onClick"
                 class="button-2nd"
               >
-                <span v-if="btn.icon" :class="`${btn.icon} mr-2`" />{{
-                  btn.text
-                }}
+                <loading :is-loading="btn.loading || false">
+                  <span v-if="btn.icon" :class="`${btn.icon} mr-2`" />
+                </loading>
+                {{ btn.text }}
               </button>
 
               <button

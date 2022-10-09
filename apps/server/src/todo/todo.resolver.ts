@@ -5,7 +5,12 @@ import { EventEmitter2 } from '@nestjs/event-emitter'
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 
 import { TodoRemindEvent, TriggerRemindEvent } from './todo.event.js'
-import { CreateTodo, GetManyTodo, UpdateTodo } from './todo.input.js'
+import {
+  CreateTodo,
+  GetManyTodo,
+  UpdateTodo,
+  UpdateTodoOptions,
+} from './todo.input.js'
 import { TodoModel } from './todo.model.js'
 import { TodoService } from './todo.service.js'
 
@@ -30,11 +35,21 @@ export class TodoResolver {
 
   @Mutation(() => TodoModel)
   async updateTodo(
-    @Args('updateTodo') dto: UpdateTodo,
     @Args('id', ParseUUIDPipe) id: string,
+    @Args('updateTodo') dto: UpdateTodo,
+    @Args('options', { nullable: true }) options: UpdateTodoOptions | null,
   ) {
     const todo = await this.todoService.findById(id)
     if (!todo) throw new NotFoundException('Todo not found')
+
+    if (
+      options &&
+      options.updateOnlyTarget &&
+      options.targetDate &&
+      todo.weekly
+    ) {
+      return this.todoService.save(options.targetDate, { id: todo.id, ...dto })
+    }
 
     return this.todoService.save({ ...todo, ...dto })
   }

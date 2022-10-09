@@ -3,6 +3,7 @@ import { Model } from '@beelzebub/types'
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql'
 import { Column, Entity } from 'typeorm'
 
+import { GraphQLJSON } from '../json.scalar.js'
 import { BaseModel } from '../misc/base.model.js'
 
 registerEnumType(Model.TodoCategorization, {
@@ -48,4 +49,8 @@ export class TodoModel extends BaseModel implements Model.Todo {
   })
   @Field(() => Model.RemindType, { nullable: true, defaultValue: null })
   remind: Model.RemindType
+
+  @Column({ type: 'jsonb', default: {} })
+  @Field(() => GraphQLJSON)
+  meta: Record<string, Omit<Model.Todo, 'meta'>>
 }
