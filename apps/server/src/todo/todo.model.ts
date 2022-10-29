@@ -51,6 +51,6 @@ export class TodoModel extends BaseModel implements Model.Todo {
   remind: Model.RemindType
 
   @Column({ type: 'jsonb', default: {} })
-  @Field(() => GraphQLJSON)
+  @Field(() => GraphQLJSON, { nullable: true })
   meta: Record<string, Omit<Model.Todo, 'meta'>>
 }

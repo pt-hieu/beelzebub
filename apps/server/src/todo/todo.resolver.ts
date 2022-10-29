@@ -1,8 +1,9 @@
 import { Event } from '@beelzebub/types'
 
-import { NotFoundException, ParseUUIDPipe } from '@nestjs/common'
+import { NotFoundException, UseInterceptors } from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
+import moment from 'moment'
 
 import { TodoRemindEvent, TriggerRemindEvent } from './todo.event.js'
 import {
@@ -11,10 +12,13 @@ import {
   UpdateTodo,
   UpdateTodoOptions,
 } from './todo.input.js'
+import { TodoInterceptor } from './todo.interceptor.js'
 import { TodoModel } from './todo.model.js'
+import { ParseTodoUUIDPipe, ParseTodoUUIDPipeReturnType } from './todo.pipe.js'
 import { TodoService } from './todo.service.js'
 
 @Resolver(() => TodoModel)
+@UseInterceptors(TodoInterceptor)
 export class TodoResolver {
   constructor(
     private todoService: TodoService,
@@ -35,27 +39,29 @@ export class TodoResolver {
 
   @Mutation(() => TodoModel)
   async updateTodo(
-    @Args('id', ParseUUIDPipe) id: string,
+    @Args('id', ParseTodoUUIDPipe)
+    { id, instanceNumber }: ParseTodoUUIDPipeReturnType,
     @Args('updateTodo') dto: UpdateTodo,
     @Args('options', { nullable: true }) options: UpdateTodoOptions | null,
   ) {
     const todo = await this.todoService.findById(id)
     if (!todo) throw new NotFoundException('Todo not found')
 
-    if (
-      options &&
-      options.updateOnlyTarget &&
-      options.targetDate &&
-      todo.weekly
-    ) {
-      return this.todoService.save(options.targetDate, { id: todo.id, ...dto })
+    if (options && options.updateOnlyTarget && todo.weekly) {
+      const targetDate = moment(todo.startTime)
+        .add(instanceNumber * 7, 'days')
+        .toDate()
+
+      return this.todoService.save(targetDate, { id: todo.id, ...dto })
     }
 
     return this.todoService.save({ ...todo, ...dto })
   }
 
   @Mutation(() => TodoModel)
-  async deleteTodo(@Args('id', ParseUUIDPipe) id: string) {
+  async deleteTodo(
+    @Args('id', ParseTodoUUIDPipe) { id }: ParseTodoUUIDPipeReturnType,
+  ) {
     const todo = await this.todoService.findById(id)
     if (!todo) throw new NotFoundException('Todo not found')
 

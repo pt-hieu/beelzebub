@@ -58,7 +58,7 @@ type TodoModel {
   duration: Float
   weekly: Boolean!
   remind: RemindType
-  meta: JSON!
+  meta: JSON
 }
 
 enum TodoCategorization {
@@ -89,8 +89,8 @@ input GetManyTodo {
 type Mutation {
   updateConfig(updateData: UpdateConfig!): ConfigModel!
   createTodo(createTodo: CreateTodo!): TodoModel!
-  updateTodo(id: String!, updateTodo: UpdateTodo!, options: UpdateTodoOptions): TodoModel!
-  deleteTodo(id: String!): TodoModel!
+  updateTodo(id: ParseTodoUUIDPipeReturnType!, updateTodo: UpdateTodo!, options: UpdateTodoOptions): TodoModel!
+  deleteTodo(id: ParseTodoUUIDPipeReturnType!): TodoModel!
   trigger: Boolean!
   updateRepo(id: String!, dto: UpdateRepositoryDto!): RepoModel!
   deleteRepo(id: String!): RepoModel!
@@ -120,6 +120,11 @@ input CreateTodo {
   remind: RemindType
 }
 
+input ParseTodoUUIDPipeReturnType {
+  id: String!
+  instanceNumber: Float!
+}
+
 input UpdateTodo {
   title: String
   content: String
@@ -132,7 +137,6 @@ input UpdateTodo {
 
 input UpdateTodoOptions {
   updateOnlyTarget: Boolean
-  targetDate: DateTime
 }
 
 input UpdateRepositoryDto {

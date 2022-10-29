@@ -8,7 +8,7 @@ import {
 import { EventEmitter2 } from '@nestjs/event-emitter'
 import { InjectRepository } from '@nestjs/typeorm'
 import _ from 'lodash'
-import { Between, Repository } from 'typeorm'
+import { Between, FindOptionsWhere, Repository } from 'typeorm'
 
 import { TodoRemindEvent, TriggerRemindEvent } from './todo.event.js'
 import { TodoLib } from './todo.lib.js'
@@ -71,16 +71,21 @@ export class TodoService implements OnApplicationBootstrap {
   findMany(): Promise<TodoModel[]>
   findMany(from: Date | string, to: Date | string): Promise<TodoModel[]>
   findMany(from?: Date | string, to?: Date | string) {
-    return this.repo.find({
-      where: [
+    let queries: FindOptionsWhere<TodoModel>[] = []
+
+    if (from && to) {
+      queries.push(
         {
-          ...(from &&
-            to && {
-              startTime: Between(new Date(from), new Date(to)),
-            }),
+          startTime: Between(new Date(from), new Date(to)),
         },
         { weekly: true },
-      ],
+      )
+    }
+
+    if (!queries.length) queries = undefined
+
+    return this.repo.find({
+      where: queries,
       order: {
         startTime: 'asc',
       },

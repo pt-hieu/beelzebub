@@ -1,6 +1,5 @@
 import { Model } from '@beelzebub/types'
 
-import { BadRequestException } from '@nestjs/common'
 import { Field, InputType, PartialType } from '@nestjs/graphql'
 import { Transform, Type } from 'class-transformer'
 import {
@@ -12,7 +11,7 @@ import {
   IsPositive,
 } from 'class-validator'
 
-import { TransformFucntion, toBoolean } from '../misc/transform.js'
+import { toBoolean } from '../misc/transform.js'
 
 @InputType()
 export class CreateTodo implements Omit<Model.Todo, keyof Model.Base | 'meta'> {
@@ -68,20 +67,6 @@ export class GetManyTodo {
 @InputType()
 export class UpdateTodo extends PartialType(CreateTodo) {}
 
-class UpdateTodoOptionsTransformer {
-  static targetDate: TransformFucntion<UpdateTodoOptions> = ({
-    key,
-    value,
-    obj,
-  }) => {
-    if (key !== 'targetDate') return
-    if (obj.updateOnlyTarget && !value)
-      throw new BadRequestException('Target Date is missing!')
-
-    return value
-  }
-}
-
 @InputType()
 export class UpdateTodoOptions {
   @Field({ nullable: true })
@@ -89,11 +74,4 @@ export class UpdateTodoOptions {
   @Transform(toBoolean)
   @IsOptional()
   updateOnlyTarget: boolean
-
-  @Field({ nullable: true })
-  @IsOptional()
-  @Transform(UpdateTodoOptionsTransformer.targetDate)
-  @Type(() => Date)
-  @IsDate()
-  targetDate: Date
 }
