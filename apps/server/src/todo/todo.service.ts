@@ -113,8 +113,8 @@ export class TodoService implements OnApplicationBootstrap {
       }
 
       targetOrDto = targetOrDto.getTime().toString()
-
       const todo = await this.findById(dto.id)
+
       return this.repo.save({
         ...todo,
         meta: {
@@ -138,7 +138,7 @@ export class TodoService implements OnApplicationBootstrap {
       throw new InternalServerErrorException('[TodoService] - Method: /save/')
 
     // @ts-expect-error: target type is already validated
-    return this.repo.save(targetOrDto)
+    return this.repo.save({ ...targetOrDto, meta: {} })
   }
 
   findById(id: string) {

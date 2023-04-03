@@ -25,3 +25,6 @@ install-server:
 icl: install-client
 install-client:
 	cd apps/client && rush add -p ${1} ${2}
+
+dev:
+	make tc sv -j2

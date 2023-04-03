@@ -20,14 +20,18 @@ export class TodoInterceptor implements NestInterceptor {
   ): Observable<any> | Promise<Observable<any>> {
     if (context.getType<GqlContextType>() === 'graphql') {
       const ctx = GqlExecutionContext.create(context)
+
       const method = ctx.getHandler().name
+      const resolver = ctx.getClass().name
+
+      const id = ctx.getArgs().id as string
 
       if (method === 'todoes') {
         return this.#handleQueryTodoes(ctx, next.handle)
       }
 
-      if (method !== 'trigger') {
-        return this.#handleMutationTodo(next.handle)
+      if (method !== 'trigger' && resolver === 'TodoResolver') {
+        return this.#handleMutationTodo(id, next.handle)
       }
     }
 
@@ -47,12 +51,27 @@ export class TodoInterceptor implements NestInterceptor {
     )
   }
 
-  #handleMutationTodo(next: () => Observable<TodoModel>) {
-    return next().pipe(map((todo) => this.#parseTodoMeta(todo, {})))
+  #handleMutationTodo(id: string, next: () => Observable<TodoModel>) {
+    return next().pipe(map((todo) => this.#parseTodoMeta({ ...todo, id }, {})))
   }
 
   #parseTodoMeta(todo: TodoModel, dto: GetManyTodo) {
     if (!todo.weekly) return todo
+
+    const [_id, instanceNumber] = todo.id.split('/#')
+    if (instanceNumber) {
+      const clonedTodo = _.cloneDeep(todo)
+      const timestamp = moment(todo.startTime)
+        .add(Number(instanceNumber) * 7, 'days')
+        .toDate()
+        .getTime()
+        .toString()
+
+      Object.assign(clonedTodo, clonedTodo.meta[timestamp] || {})
+      return clonedTodo
+    }
+
+    if (!dto.from || !dto.to) return todo
 
     const current = moment(todo.startTime)
     const end = moment(dto.to)

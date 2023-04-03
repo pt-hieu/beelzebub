@@ -89,8 +89,8 @@ input GetManyTodo {
 type Mutation {
   updateConfig(updateData: UpdateConfig!): ConfigModel!
   createTodo(createTodo: CreateTodo!): TodoModel!
-  updateTodo(id: ParseTodoUUIDPipeReturnType!, updateTodo: UpdateTodo!, options: UpdateTodoOptions): TodoModel!
-  deleteTodo(id: ParseTodoUUIDPipeReturnType!): TodoModel!
+  updateTodo(id: String!, updateTodo: UpdateTodo!, options: UpdateTodoOptions): TodoModel!
+  deleteTodo(id: String!): TodoModel!
   trigger: Boolean!
   updateRepo(id: String!, dto: UpdateRepositoryDto!): RepoModel!
   deleteRepo(id: String!): RepoModel!
@@ -118,11 +118,6 @@ input CreateTodo {
   duration: Float
   weekly: Boolean
   remind: RemindType
-}
-
-input ParseTodoUUIDPipeReturnType {
-  id: String!
-  instanceNumber: Float!
 }
 
 input UpdateTodo {

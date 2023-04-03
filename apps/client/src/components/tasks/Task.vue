@@ -17,7 +17,7 @@ type Props = {
   isLoading?: boolean
 }
 
-const { taskData: initialData, isSelected, weekDays } = defineProps<Props>()
+const { taskData, isSelected, weekDays } = defineProps<Props>()
 const wdResize = $(useWindowResize())
 
 const taskEle = $ref<HTMLDivElement>()
@@ -25,50 +25,12 @@ const resizer = $ref<HTMLDivElement>()
 
 const computedPosition = reactive({ top: '0px', left: '0px', height: '0px' })
 
-let taskDate = $ref<Date>()
-let taskData = $ref<Model.Todo>(initialData)
-
 const weekDayElements = markRaw<HTMLDivElement[]>(
   Array.from(
     document.querySelectorAll(`div[data-vue-type='week-day']`),
   ) as HTMLDivElement[],
 )
 
-watch(
-  () => initialData,
-  ({ startTime }) => {
-    const momentStarttime = moment(startTime)
-
-    weekDays.forEach((day, index) => {
-      const clonedDay = day.clone()
-
-      const isWeekly = initialData.weekly
-      const isSameDate = clonedDay.isSame(momentStarttime, 'date')
-      const isSameWeekday =
-        clonedDay.format('ddd') === momentStarttime.format('ddd')
-
-      if (!isSameDate && !isWeekly) return
-      if (!isSameWeekday && isWeekly) return
-
-      taskDate = weekDays[index]
-        .clone()
-        .startOf('day')
-        .set('hour', momentStarttime.get('hour'))
-        .set('minute', momentStarttime.get('minute'))
-        .toDate()
-    })
-  },
-  { immediate: true },
-)
-
-watch(
-  () => [initialData, taskDate] as const,
-  ([initialData, taskDate]) => {
-    const timestamp = taskDate.getTime().toString()
-    taskData = { ...initialData, ...(initialData.meta[timestamp] || {}) }
-  },
-  { immediate: true },
-)
 watch(
   () => [taskData, wdResize] as const,
   ([{ duration, startTime }]) => {
@@ -84,7 +46,7 @@ watch(
     weekDays.forEach((day, index) => {
       const clonedDay = day.clone()
 
-      const isWeekly = initialData.weekly
+      const isWeekly = taskData.weekly
       const isSameDate = clonedDay.isSame(momentStarttime, 'date')
       const isSameWeekday =
         clonedDay.format('ddd') === momentStarttime.format('ddd')
@@ -120,9 +82,12 @@ function abortDurationUpdate() {
   computedPosition.height = ((duration || 10) / 60) * 70 + 'px'
 }
 
-watch($$(taskData), (taskData) => {
-  duration = taskData.duration || 0
-})
+watch(
+  () => taskData,
+  (taskData) => {
+    duration = taskData.duration || 0
+  },
+)
 
 watch(
   () => computedPosition.height,
@@ -203,7 +168,7 @@ function updateTargetTaskOnly() {
   update({
     id: taskData.id,
     input: { duration },
-    options: { updateOnlyTarget: true, targetDate: taskDate },
+    options: { updateOnlyTarget: true },
   })
 }
 

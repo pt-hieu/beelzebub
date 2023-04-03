@@ -1,20 +1,19 @@
 import type { Model } from '@beelzebub/types'
 import { useMutation } from '@vue/apollo-composable'
+
 import { useToast } from '../pinia/toast'
 import { UPDATE_TODO } from '../queries/todo.js'
 
 type UseUpdateTaskOptions = {}
 
-type UpdateTaskOptions =
-  | { updateOnlyTarget: true; targetDate: Date }
-  | { updateOnlyTarget?: false; targetDate?: Date }
+type UpdateTaskOptions = { updateOnlyTarget: boolean }
 
 export const UPDATE_TASK_TOAST_ID = 'update-task'
 export const useUpdateTask = (options: UseUpdateTaskOptions = {}) => {
   const toast = useToast()
 
   const {
-    mutate: update,
+    mutate,
     loading: updating,
     onDone: onUpdated,
     onError: onUpdateFailed,
@@ -34,6 +33,10 @@ export const useUpdateTask = (options: UseUpdateTaskOptions = {}) => {
   onUpdated(() => {
     toast.add('Task updated', 'Success', UPDATE_TASK_TOAST_ID, 2)
   })
+
+  const update: typeof mutate = (...args) => {
+    return mutate(...args)
+  }
 
   return { update, updating }
 }

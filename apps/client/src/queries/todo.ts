@@ -15,7 +15,6 @@ const TODO_FIELDS = gql`
     duration
     created_at
     weekly
-    meta
   }
 `
 

@@ -39,11 +39,13 @@ export class TodoResolver {
 
   @Mutation(() => TodoModel)
   async updateTodo(
-    @Args('id', ParseTodoUUIDPipe)
-    { id, instanceNumber }: ParseTodoUUIDPipeReturnType,
+    @Args('id', { type: () => String }, ParseTodoUUIDPipe)
+    idObject: any,
     @Args('updateTodo') dto: UpdateTodo,
     @Args('options', { nullable: true }) options: UpdateTodoOptions | null,
   ) {
+    const { id, instanceNumber } = idObject as ParseTodoUUIDPipeReturnType
+
     const todo = await this.todoService.findById(id)
     if (!todo) throw new NotFoundException('Todo not found')
 
@@ -60,8 +62,10 @@ export class TodoResolver {
 
   @Mutation(() => TodoModel)
   async deleteTodo(
-    @Args('id', ParseTodoUUIDPipe) { id }: ParseTodoUUIDPipeReturnType,
+    @Args('id', { type: () => String }, ParseTodoUUIDPipe) idObject: any,
   ) {
+    const { id } = idObject as ParseTodoUUIDPipeReturnType
+
     const todo = await this.todoService.findById(id)
     if (!todo) throw new NotFoundException('Todo not found')
 

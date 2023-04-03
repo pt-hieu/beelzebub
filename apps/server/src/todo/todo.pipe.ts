@@ -12,12 +12,8 @@ type ParseTodoUUIDPipeOptions = {
   version?: UUIDVersion
 }
 
-@InputType()
-export class ParseTodoUUIDPipeReturnType {
-  @Field()
+export type ParseTodoUUIDPipeReturnType = {
   id: string
-
-  @Field()
   instanceNumber: number
 }
 
